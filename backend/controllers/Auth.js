@@ -23,7 +23,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { email, password } = req.body
-        const user = await UserModel.findOne({ email })
+        const user = await UserModel.findOne({ email }).lean()
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' })
         }
@@ -31,7 +31,7 @@ const login = async (req, res) => {
         if (!isValidPassword) {
             return res.status(400).json({ success: false, message: 'Invalid password' })
         }
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET)
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'default_secret')
         res.cookie('token',token,{
             httpOnly:true,
             secure:false,
@@ -39,12 +39,26 @@ const login = async (req, res) => {
 
 
         })
-        res.status(200).json({sucess: true, message: 'User login successfully', user,token})
+        res.status(200).json({
+            success: true,
+            message: 'User login successfully',
+            user: { id: user._id, name: user.name, email: user.email },
+            token
+        });
     } catch (error) {
         res.status(500).json({sucess: false, message: 'Internal server error' })
         console.error(error)
     }
 
 }
+const logout = async (req, res) => {
+    try{
+        res.clearCookie('token')
+        res.status(200).json({message:"User logout successfully"})
+    } catch (error) {
+        res.status(500).json({sucess: false, message: 'Internal server error' })
+        console.error(error)
+    }
+}
 
-export { register, login }
+export { register, login, logout }
