@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { post } from '../services/ApiEndpoint'
-import  { toast } from 'react-hot-toast';
-
+import { toast } from 'react-hot-toast';
 export default function Register() {
   const [name,setName]=useState('')
   const [email,setEmail]=useState('')
@@ -14,14 +13,12 @@ export default function Register() {
     try {
      const request= await post('/api/auth/register',{name,email,password})
      const reposne=request.data
-
-     if(request.status === 200){
-      toast.success(reposne.message)
-    }
-
+     if (request.status===200) {
+          toast.success(reposne.message)
+     }
      console.log(reposne)
     } catch (error) {
-      console.log(error.response.data)
+      console.log(error)
     }
   }
   return (
