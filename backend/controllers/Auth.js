@@ -42,7 +42,7 @@ const login = async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'User login successfully',
-            user: { id: user._id, name: user.name, email: user.email },
+            user: { id: user._id, name: user.name, email: user.email, role: user.role},
             token
         });
     } catch (error) {
@@ -61,4 +61,20 @@ const logout = async (req, res) => {
     }
 }
 
-export { register, login, logout }
+const checkuser=async(req,res)=>{
+    try {
+        const user=req.user
+        if (!user) {
+            res.status(404).json({message:'User not found'})
+        }
+        res.status(200).json(user)
+
+        
+    } catch (error) {
+        res.status(500).json({message:"Internal server error"})
+        console.log(error)
+        
+    }
+}
+
+export { register, login, logout, checkuser }
