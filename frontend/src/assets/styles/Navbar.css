@@ -63,3 +63,8 @@
 .logoutBtn:hover {
     color: #ddd;
 }
+
+.welcome-text{
+    color: white;
+    padding-left: 20px;
+}

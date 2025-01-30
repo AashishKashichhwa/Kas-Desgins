@@ -11,7 +11,7 @@ export default function Home() {
   const navigate=useNavigate()
   const dispatch=useDispatch()
   const gotoAdmin=()=>{
-        navigate('/admin')
+        navigate('/admin/home')
         
   }
   const handleLogout=async()=>{

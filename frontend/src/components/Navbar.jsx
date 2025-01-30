@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { post } from '../services/ApiEndpoint';
 import { Logout } from '../redux/AuthSlice';
 import { toast } from 'react-hot-toast';
-import '../assets/styles/Navbar.css'; // Updated CSS import path
+import '../assets/styles/Navbar.css';
 
 const Navbar = () => {
     const user = useSelector((state) => state.Auth.user);
@@ -27,23 +27,24 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-container">
-                <div className="logo">LOGO</div>
+                    <Link to="/"><div className="logo">Kas Design</div></Link>
+                
                 <ul className="nav-links">
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/service">Service</a></li>
-                    <li><a href="/projects">Projects</a></li>
-                    <li><a href="/contact">Contact Us</a></li>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/about">About</Link></li>
+                    <li><Link to="/services">Services</Link></li>
+                    <li><Link to="/projects">Projects</Link></li>
+                    <li><Link to="/contact">Contact Us</Link></li>
                 </ul>
                 <div className="auth-section">
                     {user ? (
-                        <>
-                            <span className="welcome-text">Welcome, {user.name}</span>
-                            <a href="/" className="logoutBtn"  onClick={handleLogout} >Logout</a>
-
-                        </>
+                        <div className="logged-in-auth">
+                           <Link to="/" className="logoutBtn" onClick={handleLogout}>Logout</Link>
+                            <span className="welcome-text">{user.name}</span>
+                        </div>
                     ) : (
                         <div className="login-signup">
-                            <a href="/login">Login</a> | <a href="/register">Sign Up</a>
+                           <Link to="/login">Login</Link> | <Link to="/register">Sign Up</Link>
                         </div>
                     )}
                 </div>

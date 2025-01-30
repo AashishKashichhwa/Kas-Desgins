@@ -48,11 +48,11 @@
 
 
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { post } from '../services/ApiEndpoint';
-import { Logout } from '../redux/AuthSlice';
-import { toast } from 'react-hot-toast';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { useNavigate } from 'react-router-dom';
+// import { post } from '../services/ApiEndpoint';
+// import { Logout } from '../redux/AuthSlice';
+// import { toast } from 'react-hot-toast';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
@@ -66,40 +66,13 @@ const HowWeWork = () => <section className="placeholder-section"><h2>How We Work
 const WhatPeopleThink = () => <section className="placeholder-section"><h2>What People Think</h2></section>;
 const LatestPosts = () => <section className="placeholder-section"><h2>Latest Posts</h2></section>;
 
+
 const UserHome = () => {
-    const user = useSelector((state) => state.Auth.user);
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-
-    const handleLogout = async () => {
-        try {
-            const request = await post('/api/auth/logout');
-            if (request.status === 200) {
-                dispatch(Logout());
-                toast.success(request.data.message);
-                navigate('/login');
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
     return (
         <div>
             <Navbar />
             <Hero />
             <div className='auth-container'>
-                {user ? (
-                    <div>
-                        <h2>Welcome, {user.name}</h2>
-                        <button className='logout-btn' onClick={handleLogout}>Logout</button>
-                    </div>
-                ) : (
-                    <div>
-                        <button className='login-btn' onClick={() => navigate('/login')}>Login</button>
-                        <button className='signup-btn' onClick={() => navigate('/signup')}>Sign Up</button>
-                    </div>
-                )}
             </div>
             <CreativeSolutions />
             <OurInteriors />

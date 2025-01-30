@@ -134,6 +134,7 @@ const Contact = () => {
     };
 
     return (
+        
         <main className="content" role="main">
           <h1 className="slogan">Make a reservation, we will contact you soon!</h1>
             <div className="reservation-form-container">
