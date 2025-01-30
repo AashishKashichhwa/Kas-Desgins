@@ -1,19 +1,11 @@
-// server/routes/routes.js
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const projectController = require('../controllers/projectController');
-const contactController = require('../controllers/contactController');
+import { createContact, getAllContacts, getContact, updateContact, deleteContact } from '../controllers/contactController.js'
 
-// Project Routes
-router.get('/projects', projectController.getProjects);
-router.post('/projects', projectController.addProject);
-router.get('/projects/:id', projectController.getProjectById);
-router.put('/projects/:id', projectController.updateProjectById);
-router.delete('/projects/:id', projectController.deleteProjectById);
+router.post('/contact', createContact);
+router.get('/contact', getAllContacts);
+router.get('/contact/:id', getContact);
+router.put('/contact/:id', updateContact);
+router.delete('/contact/:id', deleteContact);
 
-// Contact Routes
-router.get('/contacts', contactController.getContacts);
-router.post('/contacts', contactController.addContact);
-
-
-module.exports = router;
+export default router;

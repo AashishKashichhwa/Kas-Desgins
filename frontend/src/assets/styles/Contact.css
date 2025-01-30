@@ -1,0 +1,269 @@
+/* Reset some default styles */
+body, h1, h2, h3, h4, p, ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+/* General styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    background-color: #f8f8f8;
+    color: #333;
+}
+.content {
+    width: 90%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Navigation styles */
+nav {
+    background-color: #1e1e1e;
+    padding: 1rem 0;
+}
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    height: 60px;
+}
+.menu ul {
+    display: flex;
+}
+.menu ul li {
+    margin-left: 20px;
+}
+.menu ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.menu ul li a:hover {
+    color: #ffcc00;
+}
+.login-button{
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #e44d26;
+}
+.login-button:hover{
+    background-color: #ff5526;
+}
+
+
+/* Form styles */
+.reservation-form-container{
+    width: 80%;
+    margin: 1rem auto;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.reservationForm-form {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+}
+.fieldset {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+}
+.fieldset legend{
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+.fieldset label{
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+.fieldset input[type="text"],
+.fieldset input[type="tel"],
+.fieldset input[type="date"],
+    .fieldset input[type="time"],
+.fieldset input[type="number"],
+.fieldset textarea {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.fieldset textarea{
+    height: 100px;
+}
+
+.payment{
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.payment-options{
+    display: inline-flex;
+    align-items: center;
+}
+
+.reserve-btn, .reset-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    margin-right: 10px;
+}
+
+.reserve-btn {
+    background-color: #4caf50;
+}
+.reset-btn {
+    background-color: #f44336;
+}
+.reserve-btn:hover {
+    background-color: #43a047;
+}
+.reset-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* History styles */
+.history-container{
+    margin: 1rem auto;
+    width: 80%;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.history{
+    margin-bottom: 20px;
+}
+.section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+.check-history{
+    margin-bottom: 10px;
+    text-align: center;
+}
+.check-history a{
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+}
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+.history-table th, .history-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+.history-table th{
+    background-color: #f2f2f2;
+}
+
+/* Footer styles */
+footer {
+    color: white;
+    padding: 2rem 0;
+    text-align: center;
+}
+.containerfooter {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+}
+.footer-section {
+    width: 30%;
+    text-align: left;
+}
+
+.footer-section h2{
+    margin-bottom: 10px;
+}
+.footer-section p{
+    margin-bottom: 10px;
+}
+
+.logo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo-section img{
+    height: 80px;
+    margin-bottom: 10px;
+}
+.social-links {
+    display: flex;
+    margin-top: 10px;
+}
+.social-links a{
+    margin-right: 10px;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.payment-partners {
+    display: flex;
+    margin-top: 10px;
+}
+.payment-partners img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.copyright{
+    margin-top: 20px;
+}
+.validation{
+    text-align: center;
+    margin-top: 20px;
+    color: red;
+}
+    .messages {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+        z-index: 1000;
+    }
+.message {
+    background-color: #4caf50;
+        color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.error{
+    color: red;
+    margin-bottom: 10px;
+}
