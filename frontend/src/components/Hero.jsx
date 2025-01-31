@@ -1,24 +1,78 @@
 import React from 'react';
 import '../assets/styles/Hero.css';
-import darkInterior from '../assets/images/dark-interior.jpeg'; // Import the image
+import image1 from '../assets/images/image1.jpeg';
+import image2 from '../assets/images/image2.jpeg';
+import image3 from '../assets/images/image3.jpeg';
 
 const Hero = () => {
-  return (
-    <section className="hero">
-      <div className="hero-container">
-        <div className="hero-content">
-          <h1 className="hero-title">Design Your Space For Living</h1>
-          <img className= "bgImage" src={darkInterior} alt="Interior" /> {/* Use the imported variable */}
-          <p className="hero-description">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text ever
-            since the 1500s, when
-          </p>
-          <button className="hero-button">Learn more</button>
-        </div>
-      </div>
-    </section>
-  );
+    return (
+        <section className="hero">
+            <div className="hero-container">
+                <div className='sketchup'>
+                    <div className="hero-content">
+                        <h1 className="hero-title">Design Your Space For Living</h1>
+                        <p className="hero-description">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting
+                            industry. Lorem Ipsum has been the industry's standard dummy text ever
+                            since the 1500s, when
+                        </p>
+                        <button className="hero-button">Learn more</button>
+                    </div>
+                    <div className="sketchfab-embed-wrapper">
+                        <iframe
+                            title="The Smoking Room"
+                            frameBorder="0"
+                            allowFullScreen
+                            mozallowfullscreen="true"
+                            webkitallowfullscreen="true"
+                            allow="autoplay; fullscreen; xr-spatial-tracking"
+                            xr-spatial-tracking
+                            execution-while-out-of-viewport
+                            execution-while-not-rendered
+                            web-share
+                            src="https://sketchfab.com/models/2247ed77976a40b6ae81271cd6b149c8/embed?ui_infos=0&ui_watermark_link=0&ui_watermark=0"
+                        >
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+           <section className='sections'>
+              <div className='section-container'>
+               <div className='section-text'>
+                 <h2 className='section-title'>Creative Solutions by Professional</h2>
+                   <p className='section-description'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+                <div className='section-cards'>
+                      <div className='card'>
+                       <p>53k</p>
+                        <p>Happy Client</p>
+                    </div>
+                   <div className='card'>
+                       <p>10k</p>
+                      <p>Projects Done</p>
+                  </div>
+                  <div className='card'>
+                        <p>120</p>
+                         <p>Get Award</p>
+                      </div>
+                </div>
+                </div>
+                  <div className='section-image'>
+                      <img src={image1} alt="" />
+                       <img src={image2} alt="" />
+                    </div>
+                </div>
+              <div className='section-container2'>
+                 <div className='section-image section-image-bottom'>
+                      <img src={image3} alt="" />
+                  </div>
+                   <div className='section-text section-text-bottom'>
+                    <h2 className='section-title'>Our interiors designed to last a lifetime</h2>
+                    <p className='section-description'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since</p>
+                  </div>
+              </div>
+           </section>
+        </section>
+    );
 };
 
 export default Hero;
