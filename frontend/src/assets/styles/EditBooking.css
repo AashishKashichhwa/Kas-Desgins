@@ -1,0 +1,25 @@
+.edit-btn {
+    background-color: #007bff;
+    /* Blue */
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 5px;
+    /* Add some space between buttons */
+}
+
+.action {
+    display: flex;
+}
+
+
+.edit-btn:hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+}

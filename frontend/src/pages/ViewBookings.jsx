@@ -1,8 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import '../assets/styles/EditBooking.css';
+import { toast } from 'react-hot-toast'; // Import toast
 
-const ViewBookings = ({ bookings, handleDelete, handleEdit }) => {
-    const navigate = useNavigate();
+const ViewBookings = ({ bookings, handleDelete }) => {
+
+    const handleDeleteClick = (id) => {
+        const confirmDelete = window.confirm("Do you really want to delete this booking?");
+        if (confirmDelete) {
+            handleDelete(id);
+        }
+    };
 
     return (
         <div className="history-container">
@@ -32,9 +40,9 @@ const ViewBookings = ({ bookings, handleDelete, handleEdit }) => {
                                     <td>{reservation.time}</td>
                                     <td>{reservation.comments}</td>
                                     <td>{reservation.status}</td>
-                                    <td>
-                                        <button className="edit-btn" onClick={() => handleEdit(reservation._id)}>EDIT</button>
-                                        <button className="cancel-btn" onClick={() => handleDelete(reservation._id)}>Cancel</button>
+                                    <td className='action'>
+                                    <Link to={`/admin/editbooking/${reservation._id}`} className="edit-btn">Edit</Link>
+                                        <button className="delete-btn" onClick={() => handleDeleteClick(reservation._id)}>Delete</button> {/* Updated text */}
                                     </td>
                                 </tr>
                             ))}

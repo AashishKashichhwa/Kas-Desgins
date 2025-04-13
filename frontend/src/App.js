@@ -7,7 +7,7 @@ import Contact from './pages/Contact';
 import Home from './pages/Home';
 import About from './pages/About';
 import Login from './pages/Login';
-import Register from './pages/Register'; // Import Register
+import Register from './pages/Register';
 import { Toaster } from 'react-hot-toast';
 import PublicLayout from './layout/PublicLayout';
 import UserLayout from './layout/UserLayout';
@@ -23,7 +23,8 @@ import ManageProjects from './pages/ManageProjects';
 import ManageUsers from './pages/ManageUsers';
 import ManageBookings from './pages/ManageBookings';
 import AddProject from './pages/AddProject';
-import EditUser from './pages/EditUser'; // Import EditUser Component
+import EditUser from './pages/EditUser';
+import EditBooking from './pages/EditBooking'; // Import EditBooking
 
 
 function App() {
@@ -47,13 +48,13 @@ function AppContent({ user }) {
     const location = useLocation();
 
     useEffect(() => {
-        const publicPaths = ['/', '/login', '/contact', '/about', '/projects', '/services', '/register']; //Added register
+        const publicPaths = ['/', '/login', '/contact', '/about', '/projects', '/services', '/register'];
          if (!user) {
              if (!publicPaths.includes(location.pathname)) {
                  navigate('/login');
              }
          } else if (user) {
-             if (user.role === 'admin' && !location.pathname.startsWith('/admin') && location.pathname !== '/register') { //Added register check
+             if (user.role === 'admin' && !location.pathname.startsWith('/admin') && location.pathname !== '/register') {
                  navigate('/admin');
              } else if (user.role !== 'admin' && !location.pathname.startsWith('/userhome') && !publicPaths.includes(location.pathname)) {
                 navigate('/userhome');
@@ -72,7 +73,7 @@ function AppContent({ user }) {
                 <Route path="/about" element={<About />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/services" element={<Services />} />
-                <Route path="register" element={<Register />} />  {/* Ensure this is correctly nested */}
+                <Route path="register" element={<Register />} />
             </Route>
 
             <Route path='/userhome' element={<UserLayout />}>
@@ -83,11 +84,12 @@ function AppContent({ user }) {
             <Route path='/admin' element={<AdminDashboard />} />
             <Route path='/admin/home' element={<AdminHome />} />
             <Route path="/admin/bookings" element={<ManageBookings />} />
+            <Route path="/admin/editbooking/:id" element={<EditBooking />} /> {/* ADD THIS LINE */}
             <Route path="/admin/users" element={<ManageUsers />} />
             <Route path="/admin/projects" element={<ManageProjects />} />
             <Route path='/admin/add-project' element={<AddProject />} />
-            <Route path="/admin/edituser/:id" element={<EditUser />} /> {/* Add EditUser Route */}
-            <Route path="/register" element={<Register />} />  {/* Move register page out from PublicLayout */}
+            <Route path="/admin/edituser/:id" element={<EditUser />} />
+            <Route path="/register" element={<Register />} />
 
 
         </Routes>

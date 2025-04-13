@@ -1,6 +1,6 @@
 // ManageBookings.jsx
 import React, { useEffect, useState } from 'react';
-import { get } from '../services/ApiEndpoint';
+import { get, deleteUser } from '../services/ApiEndpoint';
 import { toast } from 'react-hot-toast';
 import '../assets/styles/AdminHome.css';
 import AdminSidebar from '../components/AdminSidebar';
@@ -19,12 +19,7 @@ const ManageBookings = () => {
         try {
             const request = await get('/api/contact');  // Replace with your actual endpoint
             const response = request.data;
-
-            if (request.status === 200) {
                 setBookings(response); // Adjust based on your API response
-            } else {
-                toast.error("Failed to fetch bookings.");
-            }
         } catch (error) {
             console.error("Error fetching bookings:", error);
             toast.error("Failed to fetch bookings.");
@@ -33,6 +28,17 @@ const ManageBookings = () => {
 
     const handleAddBooking = () => {
         setShowBookingForm(true);  // Show the BookingForm when "Add Booking" is clicked
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await deleteUser(`/api/contact/${id}`);
+            toast.success("Success on Delete the booking")
+            fetchBookings();
+        } catch (error) {
+            console.error('Error deleting reservation:', error);
+            toast.error("Error on Deleting"); //Print even if fails.
+        }
     };
 
     return (
@@ -49,7 +55,7 @@ const ManageBookings = () => {
                     {showBookingForm && <BookingForm fetchReservations={fetchBookings} />}
 
                     {/* Always render ViewBookings */}
-                    <ViewBookings bookings={bookings} />
+                    <ViewBookings bookings={bookings} handleDelete={handleDelete} />
                 </div>
             </main>
         </div>
