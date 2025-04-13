@@ -1,45 +1,103 @@
 /* Admin.css */
 .admin-container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
-  }
-  
-  .admin-container h2 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #333333;
-  }
-  
-  .admin-container table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .admin-container th, .admin-container td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #dddddd;
-  }
-  
-  .admin-container th {
-    background-color: #f2f2f2;
-  }
-  
-  .admin-container button {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    background-color: #dc3545;
-    color: white;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .admin-container button:hover {
-    background-color: #c82333;
-  }
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.home-container {
+  max-width: 600%;
+  height: 400px;
+  margin: 50px auto;
+  margin-left: 450px;
+  padding: 60px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  font-size:300%;
+}
+
+.admin-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333333;
+}
+
+.admin-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-container th, .admin-container td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #dddddd;
+}
+
+.admin-container th {
+  background-color: #f2f2f2;
+}
+
+.admin-container button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #dc3545;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 5px; /* added to give space between delete button and edit button */
+}
+
+.admin-container button:hover {
+  background-color: #c82333;
+}
+
+.manage-users-header {
+  display: flex;
+  justify-content: space-between; /* Aligns items to opposite ends */
+  align-items: center;         /* Vertically centers items */
+  margin-bottom: 10px;        /* Adds some space below the header */
+}
+
+.add-user-button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.add-user-button:hover {
+  background-color: #3e8e41; /* Darker green on hover */
+}
+
+.action{
+  display: flex;
+}
+.edit-button {
+background-color: #007bff; /* Blue */
+border: none;
+color: white;
+padding: 8px 12px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 14px;
+cursor: pointer;
+border-radius: 4px;
+margin-right: 5px; /* Add some space between buttons */
+}
+
+.edit-button:hover {
+background-color: #0056b3; /* Darker blue on hover */
+}

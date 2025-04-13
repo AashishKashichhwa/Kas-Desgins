@@ -1,68 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import {  deleteUser, get } from '../services/ApiEndpoint';
-import  { toast } from 'react-hot-toast';
-import '../assets/styles/AdminHome.css'; // Import the CSS
-export default function Admin() {
-  const [users, setUsers] = useState([]);
-    const [userDeleted, setUserDeleted] = useState(false);
+import { deleteUser, get } from '../services/ApiEndpoint';
+import '../assets/styles/AdminHome.css';
+import AdminSidebar from '../components/AdminSidebar';
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { post } from '../services/ApiEndpoint'
+import { Logout } from '../redux/AuthSlice'
+import { toast } from 'react-hot-toast';
 
+const AdminHome = () => {
+  const user=useSelector((state)=>state.Auth.user)
+  console.log(user)
+  const navigate=useNavigate()
+  const dispatch=useDispatch()
+  const gotoAdmin=()=>{
+        navigate('/admin/home')
+        
+  }
 
-  useEffect(() => {
-    const GetUsers = async () => {
+    const handleLogout=async()=>{
       try {
-        const request = await get('/api/admin/getuser');
-        const response = request.data;
-        if (request.status === 200) {
-          setUsers(response.users);
-        }
+        const request= await post('/api/auth/logout')
+        const response= request.data;
+         if (request.status===200) {
+             dispatch(Logout())
+             toast.success(response.message)
+            navigate('/login')
+         }
       } catch (error) {
-        console.log(error);
-      }
-    };
-    GetUsers();
-  }, [userDeleted]);
-
-  const handleDelete = async (id) => {
-    try {
-      const request = await deleteUser(`/api/admin/deleteuser/${id}`);
-      const response = request.data;
-      if (request.status === 200) {
-        toast.success(response.message);
-          setUserDeleted(!userDeleted)
-      }
-    } catch (error) {
-      if (error.response) {
-        toast.error(error.response.data.message);
+        console.log(error)
       }
     }
-  };
 
-  return (
-    <>
-      <div className="admin-container">
-        <h2>Manage Users</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-             {users &&
-              users.map((elem) => (
-                <tr key={elem._id}>
-                  <td>{elem.name}</td>
-                  <td>{elem.email}</td>
-                  <td>
-                    <button onClick={() => handleDelete(elem._id)}>Delete</button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+    return (
+         <div className="admin-page-container">
+            <AdminSidebar/>
+            <div className='home-container'>
+      <div className='user-card'>
+        <h2> Welcome,{user && user.name}</h2>
+        <button className='logout-btn' onClick={handleLogout}>Logout</button>
+        
       </div>
-    </>
-  );
+     </div>
+
+        </div>
+    );
 }
+
+export default AdminHome;

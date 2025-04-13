@@ -1,0 +1,179 @@
+.admin-page-container {
+  display: flex; /* Use flexbox for layout */
+  min-height: 100vh; /* Ensure full height */
+}
+
+.sidebar {
+  background-color: #333;
+  color: white;
+  width: 250px; /* Fixed width for the sidebar */
+  padding: 20px;
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  position: fixed; /* Fixed position */
+  height: 100vh; /* Full height */
+  overflow-y: auto; /* Enable vertical scrolling if content overflows */
+}
+
+.sidebar-brand {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center; /* Center the brand name */
+}
+
+.sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1; /* Fill remaining space */
+  display: flex;
+  flex-direction: column; /* Stack links vertically */
+}
+
+.sidebar-item {
+  margin-bottom: 10px; /* Space between links */
+}
+
+.sidebar-link {
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  display: block; /* Make links fill the entire list item width */
+}
+
+.sidebar-link:hover {
+  background-color: #555;
+}
+
+.logout-button {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%; /* Make the button fill the sidebar width */
+  text-align: left; /* Align text to the left */
+  margin-top: auto; /* Push to the bottom */
+}
+
+.logout-button:hover {
+  background-color: #b71c1c;
+}
+
+.main-content {
+  flex-grow: 1; /* Take up the remaining space */
+  padding: 20px;
+  margin-left: 250px; /* Add margin to the left to account for the sidebar */
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+  .admin-page-container {
+    flex-direction: column; /* Stack vertically on smaller screens */
+  }
+
+  .sidebar {
+    width: 100%; /* Take up full width */
+    height: auto; /* Adjust height */
+    position: static; /* Remove fixed positioning */
+    overflow-y: visible; /* Disable vertical scroll */
+  }
+
+  .main-content {
+    margin-left: 0; /* Remove left margin */
+  }
+}.admin-page-container {
+    display: flex; /* Use flexbox for layout */
+    min-height: 100vh; /* Ensure full height */
+  }
+  
+  .sidebar {
+    background-color: #333;
+    color: white;
+    width: 250px; /* Fixed width for the sidebar */
+    padding: 20px;
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    position: fixed; /* Fixed position */
+    height: 100vh; /* Full height */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+  }
+  
+  .sidebar-brand {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center; /* Center the brand name */
+  }
+  
+  .sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1; /* Fill remaining space */
+    display: flex;
+    flex-direction: column; /* Stack links vertically */
+  }
+  
+  .sidebar-item {
+    margin-bottom: 10px; /* Space between links */
+  }
+  
+  .sidebar-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    display: block; /* Make links fill the entire list item width */
+  }
+  
+  .sidebar-link:hover {
+    background-color: #555;
+  }
+  
+  .logout-button {
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%; /* Make the button fill the sidebar width */
+    text-align: left; /* Align text to the left */
+    margin-top: auto; /* Push to the bottom */
+  }
+  
+  .logout-button:hover {
+    background-color: #b71c1c;
+  }
+  
+  .main-content {
+    flex-grow: 1; /* Take up the remaining space */
+    padding: 20px;
+    margin-left: 250px; /* Add margin to the left to account for the sidebar */
+  }
+  
+  /* Responsive design adjustments */
+  @media (max-width: 768px) {
+    .admin-page-container {
+      flex-direction: column; /* Stack vertically on smaller screens */
+    }
+  
+    .sidebar {
+      width: 100%; /* Take up full width */
+      height: auto; /* Adjust height */
+      position: static; /* Remove fixed positioning */
+      overflow-y: visible; /* Disable vertical scroll */
+    }
+  
+    .main-content {
+      margin-left: 0; /* Remove left margin */
+    }
+  }
