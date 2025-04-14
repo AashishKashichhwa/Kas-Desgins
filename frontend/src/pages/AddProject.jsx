@@ -10,6 +10,7 @@ const AddProject = ({ fetchProjects }) => {
     const [projectDescription, setProjectDescription] = useState('');
     const [category, setCategory] = useState('');
     const [image, setImage] = useState(null);
+    const [project3DVisualization, setProject3DVisualization] = useState(''); // State for iframe code
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -19,6 +20,8 @@ const AddProject = ({ fetchProjects }) => {
             formData.append('name', projectName);
             formData.append('description', projectDescription);
             formData.append('category', category);
+            formData.append('project3DVisualization', project3DVisualization); // Append iframe code
+
             if (image) {
                 formData.append('image', image);
             }
@@ -36,7 +39,7 @@ const AddProject = ({ fetchProjects }) => {
                 setProjectDescription('');
                 setCategory('');
                 setImage(null);
-
+                setProject3DVisualization(''); // Reset iframe code
                 fetchProjects();
                 navigate('/admin/projects');
             } else {
@@ -92,6 +95,14 @@ const AddProject = ({ fetchProjects }) => {
                         id="projectImage"
                         accept="image/*"
                         onChange={handleImageChange}
+                    />
+                </div>
+                 <div className="form-group">
+                    <label htmlFor="project3DVisualization">Project 3D Visualization (Iframe Code):</label>
+                    <textarea
+                        id="project3DVisualization"
+                        value={project3DVisualization}
+                        onChange={(e) => setProject3DVisualization(e.target.value)}
                     />
                 </div>
                 <button type="submit">Add Project</button>

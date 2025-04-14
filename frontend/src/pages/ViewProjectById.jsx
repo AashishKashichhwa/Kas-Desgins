@@ -1,0 +1,41 @@
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { get } from '../services/ApiEndpoint';
+
+const ViewProjectById = () => {
+    const { id } = useParams();
+    const [project, setProject] = useState(null);
+
+    useEffect(() => {
+        const fetchProject = async () => {
+            const res = await get(`/api/projects/${id}`);
+            setProject(res.data);
+        };
+        fetchProject();
+    }, [id]);
+
+    if (!project) return <p>Loading...</p>;
+
+    return (
+        <div className="project-details">
+            <h2>{project.name}</h2>
+            <p><strong>Category:</strong> {project.category}</p>
+            <p>{project.description}</p>
+            {project.image && (
+                <img
+                    src={`http://localhost:4000${project.image}`}
+                    alt={project.name}
+                    style={{ maxWidth: '100%', borderRadius: '8px' }}
+                />
+            )}
+            {project.project3DVisualization && (
+                <div
+                    className="iframe-container"
+                    dangerouslySetInnerHTML={{ __html: project.project3DVisualization }}
+                />
+            )}
+        </div>
+    );
+};
+
+export default ViewProjectById;
