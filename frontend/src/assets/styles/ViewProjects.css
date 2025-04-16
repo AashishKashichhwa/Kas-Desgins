@@ -1,5 +1,6 @@
 .project-card {
-    width: 250px;
+    width: 100%;
+    max-width: 300px; /* Width of each card */
     height: 250px;
     background-color: #fff;
     border-radius: 8px;
@@ -9,36 +10,70 @@
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .project-image {
     width: 100%;
-    height: 70%; /* Image takes up 70% of the box */
+    height: 150px; /* Fixed height for the image */
     object-fit: cover;
 }
 
-.project-name {
-    width: 100%;
-    height: 30%; /* Text takes up 30% of the box */
-    padding: 5px;
+.project-info {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     text-align: center;
-    font-size: 14px;
+    height: 100px; /* Reduced height to make the name and category take up less space */
+}
+
+.project-name {
+    font-size: 14px; /* Smaller font size */
+    font-weight: bold;
     color: #333;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.project-category {
+    font-size: 12px; /* Smaller font size */
+    color: #007BFF; /* Blue color for category */
+    margin-top: 3px; /* Reduced space between name and category */
     font-weight: bold;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .project-grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); /* Adjusted for 250px box + margin */
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr); /* 4 items per row */
+    gap: 20px; /* Space between items */
     padding: 20px;
-    justify-items: center;
+    justify-items: center; /* Center items horizontally */
 }
 
-.project-grid{
-    display: flex;
+.project-grid-container .project-card {
+    margin: 0 auto; /* Center each card within the grid cell */
+}
+
+@media (max-width: 1200px) {
+    .project-grid-container {
+        grid-template-columns: repeat(3, 1fr); /* 3 items per row on medium screens */
+    }
+}
+
+@media (max-width: 900px) {
+    .project-grid-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 items per row on small screens */
+    }
+}
+
+@media (max-width: 600px) {
+    .project-grid-container {
+        grid-template-columns: 1fr; /* 1 item per row on very small screens */
+    }
 }

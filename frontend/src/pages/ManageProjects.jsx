@@ -10,11 +10,12 @@ const ManageProjects = () => {
             <AdminSidebar />
             <main className="main-content">
                 <div className="admin-container">
+                <div className="manage-users-header">
                     <h2>Manage Projects</h2>
                     <Link to="/admin/add-project">
-                        <button className="add-project-button">Add Project</button>
+                        <button className="addProjectButton">Add Project</button>
                     </Link>
-
+                </div>
                     <ViewProjects />
                 </div>
             </main>

@@ -261,6 +261,7 @@ import ViewBookings from './ViewBookings';
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import '../assets/styles/Contact.css';
+import roomImage from '../assets/images/Contact.jpg';
 
 const Contact = () => {
     return (
@@ -269,9 +270,11 @@ const Contact = () => {
             <Navbar/>
 
             <h1 className="slogan">Make a reservation, we will contact you soon!</h1>
+            <div className='bookingContent'>
+                <BookingForm />
+                <img src={roomImage} alt="Room" className="image" />
 
-            <BookingForm />
-
+            </div>
             <ViewBookings />
 
             <Footer />

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/styles/Hero.css';
 import image1 from '../assets/images/image1.jpeg';
-import image2 from '../assets/images/image2.jpeg';
+import image2 from '../assets/images/image2.jpg';
 import image3 from '../assets/images/image3.jpeg';
 
 const Hero = () => {

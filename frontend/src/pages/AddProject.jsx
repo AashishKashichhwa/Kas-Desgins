@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { post } from '../services/ApiEndpoint'; // Assuming you have a service for API calls
-import '../assets/styles/AdminHome.css'; // To maintain a similar look
-import '../assets/styles/AddProject.css'; // To maintain a side bar
+import axios from 'axios'; // ✅ Use axios directly for FormData upload
+import '../assets/styles/AdminHome.css';
+import '../assets/styles/AddProject.css';
 import { useNavigate } from 'react-router-dom';
 
 const AddProject = ({ fetchProjects }) => {
@@ -10,44 +10,44 @@ const AddProject = ({ fetchProjects }) => {
     const [projectDescription, setProjectDescription] = useState('');
     const [category, setCategory] = useState('');
     const [image, setImage] = useState(null);
-    const [project3DVisualization, setProject3DVisualization] = useState(''); // State for iframe code
+    const [project3DVisualization, setProject3DVisualization] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
             const formData = new FormData();
             formData.append('name', projectName);
             formData.append('description', projectDescription);
             formData.append('category', category);
-            formData.append('project3DVisualization', project3DVisualization); // Append iframe code
+            formData.append('project3DVisualization', project3DVisualization);
 
             if (image) {
                 formData.append('image', image);
             }
 
-            const request = await post('/api/projects/add', formData, {
+            const res = await axios.post('http://localhost:4000/api/projects/add', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data', // Important for file uploads
+                    'Content-Type': 'multipart/form-data',
                 },
             });
-            const response = request.data;
 
-            if (request.status === 201) {
-                toast.success(response.message);
+            if (res.status === 201) {
+                toast.success(res.data.message);
                 setProjectName('');
                 setProjectDescription('');
                 setCategory('');
                 setImage(null);
-                setProject3DVisualization(''); // Reset iframe code
-                fetchProjects();
+                setProject3DVisualization('');
+                if (fetchProjects) fetchProjects();
                 navigate('/admin/projects');
             } else {
-                toast.error("Failed to add project.");
+                toast.error('Failed to add project.');
             }
         } catch (error) {
-            console.error("Error adding project:", error);
-            toast.error("Failed to add project.");
+            console.error('Error adding project:', error);
+            toast.error('Error adding project');
         }
     };
 
@@ -97,7 +97,7 @@ const AddProject = ({ fetchProjects }) => {
                         onChange={handleImageChange}
                     />
                 </div>
-                 <div className="form-group">
+                <div className="form-group">
                     <label htmlFor="project3DVisualization">Project 3D Visualization (Iframe Code):</label>
                     <textarea
                         id="project3DVisualization"

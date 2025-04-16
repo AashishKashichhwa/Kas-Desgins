@@ -77,7 +77,7 @@ const BookingForm = ({ fetchReservations }) => {
                 <fieldset className="fieldset">
                     <legend>Reservation Information</legend>
 
-                    <div className="form-group">
+                    <div className="form-groups">
                         <label htmlFor="name">Name:</label>
                         <input
                             type="text"
@@ -90,7 +90,7 @@ const BookingForm = ({ fetchReservations }) => {
                         {formErrors.name && <span className="error">{formErrors.name}</span>}
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-groups">
                         <label htmlFor="phone">Phone no.:</label>
                         <input
                             type="tel"
@@ -106,7 +106,7 @@ const BookingForm = ({ fetchReservations }) => {
                         {formErrors.phone && <span className="error">{formErrors.phone}</span>}
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-groups">
                         <label htmlFor="date">Date:</label>
                         <input
                             type="date"
@@ -119,7 +119,7 @@ const BookingForm = ({ fetchReservations }) => {
                         {formErrors.date && <span className="error">{formErrors.date}</span>}
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-groups">
                         <label htmlFor="time">Time:</label>
                         <input
                             type="time"
@@ -132,7 +132,7 @@ const BookingForm = ({ fetchReservations }) => {
                         {formErrors.time && <span className="error">{formErrors.time}</span>}
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-groups">
                         <label htmlFor="comments">Comments:</label>
                         <textarea
                             id="comments"

@@ -9,13 +9,17 @@ const ViewProjectsById = () => {
 
     useEffect(() => {
         const fetchProject = async () => {
-            const res = await get(`/api/projects/${id}`);
-            setProject(res.data);
+            try {
+                const res = await get(`/api/projects/${id}`);
+                setProject(res.data);
+            } catch (error) {
+                console.error("Error fetching project by ID:", error);
+            }
         };
         fetchProject();
     }, [id]);
 
-    if (!project) return <p>Loading...</p>;
+    if (!project) return <p>Loading project details...</p>;
 
     return (
         <div className="project-details">

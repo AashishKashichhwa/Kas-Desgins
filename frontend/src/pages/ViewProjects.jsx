@@ -15,12 +15,28 @@ const ViewProjects = () => {
         fetchProjects();
     }, []);
 
+    const handleProjectClick = (id) => {
+        navigate(`/admin/projects/${id}`);
+    };
+
     return (
-        <div className="project-grid">
+        <div className="project-grid-container">
             {projects.map(project => (
-                <div key={project._id} className="project-card" onClick={() => navigate(`/projects/${project._id}`)}>
-                    <img src={`http://localhost:4000${project.image}`} alt={project.name} />
-                    <h3>{project.name}</h3>
+                <div
+                    key={project._id}
+                    className="project-card"
+                    onClick={() => handleProjectClick(project._id)}
+                >
+                    <img
+                        src={`http://localhost:4000${project.image}`}
+                        alt={project.name}
+                        className="project-image"
+                    />
+                    <div className="project-info">
+                        <div className="project-name">{project.name}</div>
+                        {/* Display the category instead of description */}
+                        <div className="project-category">{project.category}</div>
+                    </div>
                 </div>
             ))}
         </div>

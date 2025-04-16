@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../assets/styles/EditBooking.css';
+import '../assets/styles/ViewBookings.css';
 // import { toast } from 'react-hot-toast';
 import PropTypes from 'prop-types';
 
