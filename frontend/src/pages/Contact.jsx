@@ -258,16 +258,23 @@
 import React from 'react';
 import BookingForm from './BookingForm';
 import ViewBookings from './ViewBookings';
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 import '../assets/styles/Contact.css';
 
 const Contact = () => {
     return (
+
         <main className="content" role="main">
+            <Navbar/>
+
             <h1 className="slogan">Make a reservation, we will contact you soon!</h1>
 
             <BookingForm />
 
             <ViewBookings />
+
+            <Footer />
         </main>
     );
 };

@@ -11,15 +11,6 @@ body {
     background-color: #f8f8f8;
     color: #333;
 }
-.content {
-    width: 90%;
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #ffffff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
 
 /* Navigation styles */
 nav {
@@ -150,7 +141,7 @@ nav {
     margin: 1rem auto;
     width: 80%;
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #1a1818;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
@@ -179,9 +170,9 @@ nav {
     margin-bottom: 15px;
 }
 .history-table th, .history-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #444;
 }
 .history-table th{
     background-color: #f2f2f2;

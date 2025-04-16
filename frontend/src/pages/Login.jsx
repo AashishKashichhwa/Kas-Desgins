@@ -4,8 +4,7 @@ import { post } from '../services/ApiEndpoint';
 import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { SetUser } from '../redux/AuthSlice';
-import '../assets/styles/Login.css'; // Import the CSS
-// import Navbar from '../components/Navbar';
+import '../assets/styles/Login.css';
 
 export default function Login() {
     const user = useSelector((state) => state.Auth.user);
@@ -18,7 +17,6 @@ export default function Login() {
         navigate('/');
     }
 
-    // Redirect if already logged in
     if (user) {
         navigate(user.role === 'admin' ? '/admin' : '/user-home');
     }
@@ -42,7 +40,7 @@ export default function Login() {
 
     return (
         <>
-            {/* <Navbar /> */}
+            <div className="login-background"></div>
             <div className="login-container">
                 <div className='loginTitle'>
                     <h2>Login</h2>
@@ -76,4 +74,3 @@ export default function Login() {
         </>
     );
 }
-

@@ -1,10 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../assets/styles/Hero.css';
 import image1 from '../assets/images/image1.jpeg';
 import image2 from '../assets/images/image2.jpeg';
 import image3 from '../assets/images/image3.jpeg';
 
 const Hero = () => {
+    const navigate = useNavigate(); // Get the navigate function from React Router
+
+    const handleLearnMore = () => {
+        navigate('/about'); // Navigate to the About page when button is clicked
+    };
+
     return (
         <section className="hero">
             <div className="hero-container">
@@ -12,11 +19,12 @@ const Hero = () => {
                     <div className="hero-content">
                         <h1 className="hero-title">Design Your Space For Living</h1>
                         <p className="hero-description">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting
-                            industry. Lorem Ipsum has been the industry's standard dummy text ever
-                            since the 1500s, when
+                        At Kas Designs, we specialize in a range of services including architectural design,
+            interior styling, lighting installation, and flow planning. Whether it's a residential
+            haven, a modern workspace, or a boutique commercial spot — we approach every project with
+            precision, creativity, and a commitment to excellence.
                         </p>
-                        <button className="hero-button">Learn more</button>
+                        <button className="hero-button" onClick={handleLearnMore}>Learn more</button>
                     </div>
                     <div className="sketchfab-embed-wrapper">
                         <iframe

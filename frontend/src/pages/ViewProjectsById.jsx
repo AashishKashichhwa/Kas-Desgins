@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { get } from '../services/ApiEndpoint';
+import '../assets/styles/ViewProjectsById.css';
 
-const ViewProjectById = () => {
+const ViewProjectsById = () => {
     const { id } = useParams();
     const [project, setProject] = useState(null);
 
@@ -38,4 +39,4 @@ const ViewProjectById = () => {
     );
 };
 
-export default ViewProjectById;
+export default ViewProjectsById;

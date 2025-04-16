@@ -46,10 +46,12 @@ const ManageBookings = () => {
             <AdminSidebar />
             <main className="main-content">
                 <div className="admin-container">
+                <div className="manage-users-header">
                     <h2>Manage Bookings</h2>
 
                     {/* Button to toggle the visibility of BookingForm */}
-                    <button onClick={handleAddBooking}>Add Booking</button>
+                    <button className='addBooking' onClick={handleAddBooking}>Add Booking</button>
+                    </div>
 
                     {/* Conditionally render BookingForm if showBookingForm is true */}
                     {showBookingForm && <BookingForm fetchReservations={fetchBookings} />}

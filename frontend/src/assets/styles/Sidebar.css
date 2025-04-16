@@ -43,6 +43,12 @@
   transition: background-color 0.3s;
   display: block; /* Make links fill the entire list item width */
 }
+.sidebar-link.active {
+  background-color: #4caf50;
+  color: #fff;
+  font-weight: bold;
+}
+
 
 .sidebar-link:hover {
   background-color: #555;

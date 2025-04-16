@@ -1,0 +1,75 @@
+.about-container {
+    background-color: #121212;
+    color: #e0e0e0; /* light grey text */
+    min-height: 100vh;
+  }
+  
+  .about-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+  }
+  
+  .section {
+    margin-bottom: 3rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+    border-left: 4px solid #888; /* medium grey accent */
+    color: #ffffff;
+  }
+  
+  .section-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #cccccc;
+    margin-bottom: 1.2rem;
+    width: auto;
+  }
+  
+  .highlight {
+    color: #ffffff;
+    font-weight: 600;
+  }
+  
+  .testimonial-box {
+    background-color: #2b2b2b;
+    padding: 1.5rem;
+    border-radius: 10px;
+    border: 1px solid #3a3a3a;
+  }
+  
+  .testimonial-text {
+    font-style: italic;
+    color: #bbbbbb;
+    margin-bottom: 1rem;
+  }
+  
+  .testimonial-author {
+    font-weight: bold;
+    color: #a3e635; /* soft lime for accent */
+  }
+  
+  .contact-list {
+    list-style: none;
+    padding-left: 0;
+    color: #d0d0d0;
+  }
+  
+  .contact-list li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .contact-list a {
+    color: #9fd4ff; /* soft blue */
+    text-decoration: none;
+  }
+  
+  .contact-list a:hover {
+    text-decoration: underline;
+  }
+  

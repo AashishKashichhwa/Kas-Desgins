@@ -19,7 +19,7 @@
     left: 0;
     padding: 2rem;
     width: 220%;
-    height: 140%;
+    height: 125%;
     z-index: -1;
 }
 
@@ -75,7 +75,7 @@
    display: flex;
    align-items: center;
    gap: 4rem;
-   background: white;
+   background: #2d2d2d;
    color: #0f0f0f;
    min-height: 32vh;
 
@@ -88,7 +88,7 @@
      display: flex;
      align-items: center;
      gap: 4rem;
-     background: rgb(213, 240, 238);
+     background: rgb(15 15 15);
      color: #0f0f0f;
      min-height: 32vh;
   

@@ -1,92 +1,104 @@
-/* Login.css (Dark Theme with #333333 and Similar Shades) */
+/* Login.css (Dark Theme with Background Image) */
 .login-container {
-    max-width: 400px;
-    margin: 100px auto;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
-    background-color: #1a1a1a; /* Darker Background */
-    color: #e0e0e0; /* Lighter Text */
-  }
-  
-  .loginTitle {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .loginTitle h2 {
-    text-align: left;
-    margin-bottom: 30px;
-    color: #e0e0e0; /* Lighter Text */
-    padding-left: 160px;
-  }
-  
-  .close{
-    position: relative;
-      font-size: 1.5em;
-      cursor: pointer;
-      color: #888888;
-  }
-  
-  .input-group {
-    margin-bottom: 20px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #e0e0e0; /* Lighter Label Text */
-  }
-  
-  input[type="email"],
-  input[type="password"] {
-    width: 100%;
-    padding: 12px;
-    border-radius: 5px;
-    border: 1px solid #444444; /* Slightly Lighter Input Border */
-    background-color: #333333; /* Darker Input Background */
-    color: #e0e0e0; /* Lighter Input Text */
-    font-size: 16px;
-    padding-right: 0px;
-    padding-left: 0px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
-  
-  input[type="email"]::placeholder,
-  input[type="password"]::placeholder {
-      color: #bbbbbb; /* Medium Grey */
-  }
-  
-  button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    background-color: #e74c3c;
-    color: #e0e0e0; /* Slightly Lighter Button Text */
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #c0392b;
-  }
-  
-  .register-link {
-    text-align: center;
-    margin-top: 20px;
-    color: #bbbbbb; /* Medium Gray */
-  }
-  
-  .register-link a {
-    color: #3498db;
-    text-decoration: none;
-  }
-  
-  .register-link a:hover {
-    text-decoration: underline;
-  }
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
+  background-color: rgba(26, 26, 26, 0.9); /* Dark semi-transparent background */
+  color: #e0e0e0; /* Lighter Text */
+  position: relative;
+  z-index: 1;
+}
+
+/* Add this new class for the background container */
+.login-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../images/image1.jpeg'); /* Replace with your image path */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+
+.loginTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.loginTitle h2 {
+  text-align: left;
+  margin-bottom: 30px;
+  color: #e0e0e0;
+  padding-left: 160px;
+}
+
+.close {
+  position: relative;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #888888;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #e0e0e0;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 5px;
+  border: 1px solid #444444;
+  background-color: rgba(51, 51, 51, 0.8); /* Semi-transparent input background */
+  color: #e0e0e0;
+  font-size: 16px;
+}
+
+input[type="email"]::placeholder,
+input[type="password"]::placeholder {
+  color: #bbbbbb;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #e74c3c;
+  color: #e0e0e0;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #c0392b;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 20px;
+  color: #bbbbbb;
+}
+
+.register-link a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}

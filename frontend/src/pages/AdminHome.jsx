@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { deleteUser, get } from '../services/ApiEndpoint';
+// import React, { useEffect, useState } from 'react';
+import React from 'react';
+// import { deleteUser, get } from '../services/ApiEndpoint';
 import '../assets/styles/AdminHome.css';
 import AdminSidebar from '../components/AdminSidebar';
 import { useSelector, useDispatch } from 'react-redux'
@@ -13,10 +14,10 @@ const AdminHome = () => {
   console.log(user)
   const navigate=useNavigate()
   const dispatch=useDispatch()
-  const gotoAdmin=()=>{
-        navigate('/admin/home')
+  // const gotoAdmin=()=>{
+  //       navigate('/admin/home')
         
-  }
+  // }
 
     const handleLogout=async()=>{
       try {

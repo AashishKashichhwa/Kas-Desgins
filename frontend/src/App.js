@@ -13,18 +13,20 @@ import PublicLayout from './layout/PublicLayout';
 import UserLayout from './layout/UserLayout';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from './redux/AuthSlice';
-import AdminDashboard from './pages/AdminDashboard';
+// import AdminDashboard from './pages/AdminDashboard';
 import UserHome from './pages/UserHome';
 import './assets/styles/style.css';
 import AdminHome from './pages/AdminHome';
 import Services from './pages/Services';
-import ViewBookings from './pages/ViewBookings';
+// import ViewBookings from './pages/ViewBookings';
 import ManageProjects from './pages/ManageProjects';
 import ManageUsers from './pages/ManageUsers';
 import ManageBookings from './pages/ManageBookings';
 import AddProject from './pages/AddProject';
 import EditUser from './pages/EditUser';
 import EditBooking from './pages/EditBooking'; // Import EditBooking
+// import ViewProjects from './pages/ViewProjects';
+import ViewProjectsById from './pages/ViewProjectsById';
 
 
 function App() {
@@ -72,6 +74,7 @@ function AppContent({ user }) {
                  <Route path="/contact" element={<Contact />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/projects" element={<Projects />} />
+                <Route path="/projects/:id" element={<ViewProjectsById />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="register" element={<Register />} />
             </Route>
@@ -81,13 +84,14 @@ function AppContent({ user }) {
             </Route>
 
             {/* Admin Routes - IMPORTANT: Ensure these are accessible only to admin users */}
-            <Route path='/admin' element={<AdminDashboard />} />
+            <Route path='/admin' element={<AdminHome />} />
             <Route path='/admin/home' element={<AdminHome />} />
             <Route path="/admin/bookings" element={<ManageBookings />} />
             <Route path="/admin/editbooking/:id" element={<EditBooking />} /> {/* ADD THIS LINE */}
             <Route path="/admin/users" element={<ManageUsers />} />
             <Route path="/admin/projects" element={<ManageProjects />} />
             <Route path='/admin/add-project' element={<AddProject />} />
+            <Route path="admin/projects/:id" element={<ViewProjectsById />} />
             <Route path="/admin/edituser/:id" element={<EditUser />} />
             <Route path="/register" element={<Register />} />
 

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import '../assets/styles/Bookingform.css';
 
 const BookingForm = ({ fetchReservations }) => {
     const [formData, setFormData] = useState({
@@ -47,13 +49,18 @@ const BookingForm = ({ fetchReservations }) => {
                 if (response.ok) {
                     setMessage('Reservation done successfully');
                     setFormData({ name: '', phone: '', date: '', time: '', comments: '' });
-                    fetchReservations(); // Call fetchReservations to update the list after successful submission
+                    
+                    // Check if fetchReservations exists and is a function before calling it
+                    if (fetchReservations && typeof fetchReservations === 'function') {
+                        fetchReservations();
+                    }
                 } else {
-                    setMessage('Error in reservation');
+                    const errorData = await response.json();
+                    setMessage(errorData.message || 'Error in reservation');
                 }
             } catch (error) {
                 console.error('Error submitting form:', error);
-                setMessage('Error in reservation');
+                setMessage('Error submitting reservation. Please try again.');
             }
         }
     };
@@ -61,7 +68,7 @@ const BookingForm = ({ fetchReservations }) => {
     const clearForm = () => {
         setFormData({ name: '', phone: '', date: '', time: '', comments: '' });
         setFormErrors({});
-        setMessage(null); // Reset message when clearing form
+        setMessage(null);
     };
 
     return (
@@ -70,63 +77,75 @@ const BookingForm = ({ fetchReservations }) => {
                 <fieldset className="fieldset">
                     <legend>Reservation Information</legend>
 
-                    <label htmlFor="name">Name:</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                    />
-                    {formErrors.name && <span className="error">{formErrors.name}</span>}
+                    <div className="form-group">
+                        <label htmlFor="name">Name:</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            className={formErrors.name ? 'error-input' : ''}
+                        />
+                        {formErrors.name && <span className="error">{formErrors.name}</span>}
+                    </div>
 
-                    <label htmlFor="phone">Phone no.:</label>
-                    <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        pattern="[0-9]{10}"
-                        maxLength="10"
-                        title="Please enter a valid 10-digit phone number"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        required
-                    />
-                    {formErrors.phone && <span className="error">{formErrors.phone}</span>}
+                    <div className="form-group">
+                        <label htmlFor="phone">Phone no.:</label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            pattern="[0-9]{10}"
+                            maxLength="10"
+                            title="Please enter a valid 10-digit phone number"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            className={formErrors.phone ? 'error-input' : ''}
+                        />
+                        {formErrors.phone && <span className="error">{formErrors.phone}</span>}
+                    </div>
 
-                    <label htmlFor="date">Date:</label>
-                    <input
-                        type="date"
-                        id="date"
-                        name="date"
-                        value={formData.date}
-                        onChange={handleChange}
-                        required
-                    />
-                    {formErrors.date && <span className="error">{formErrors.date}</span>}
+                    <div className="form-group">
+                        <label htmlFor="date">Date:</label>
+                        <input
+                            type="date"
+                            id="date"
+                            name="date"
+                            value={formData.date}
+                            onChange={handleChange}
+                            className={formErrors.date ? 'error-input' : ''}
+                        />
+                        {formErrors.date && <span className="error">{formErrors.date}</span>}
+                    </div>
 
-                    <label htmlFor="time">Time:</label>
-                    <input
-                        type="time"
-                        id="time"
-                        name="time"
-                        value={formData.time}
-                        onChange={handleChange}
-                        required
-                    />
-                    {formErrors.time && <span className="error">{formErrors.time}</span>}
+                    <div className="form-group">
+                        <label htmlFor="time">Time:</label>
+                        <input
+                            type="time"
+                            id="time"
+                            name="time"
+                            value={formData.time}
+                            onChange={handleChange}
+                            className={formErrors.time ? 'error-input' : ''}
+                        />
+                        {formErrors.time && <span className="error">{formErrors.time}</span>}
+                    </div>
 
-                    <label htmlFor="comments">Comments:</label>
-                    <textarea
-                        id="comments"
-                        name="comments"
-                        value={formData.comments}
-                        onChange={handleChange}
-                    ></textarea>
+                    <div className="form-group">
+                        <label htmlFor="comments">Comments:</label>
+                        <textarea
+                            id="comments"
+                            name="comments"
+                            value={formData.comments}
+                            onChange={handleChange}
+                        ></textarea>
+                    </div>
 
-                    <button type="submit" className="reserve-btn">Reserve</button>
-                    <button type="reset" className="reset-btn" onClick={clearForm}>Reset</button>
+                    <div className="form-actions">
+                        <button type="submit" className="reserve-btn">Reserve</button>
+                        <button type="button" className="reset-btn" onClick={clearForm}>Reset</button>
+                    </div>
                 </fieldset>
             </form>
 
@@ -138,6 +157,16 @@ const BookingForm = ({ fetchReservations }) => {
             )}
         </div>
     );
+};
+
+// PropTypes validation
+BookingForm.propTypes = {
+    fetchReservations: PropTypes.func
+};
+
+// Default props
+BookingForm.defaultProps = {
+    fetchReservations: null
 };
 
 export default BookingForm;
