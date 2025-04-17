@@ -1,66 +1,69 @@
 .project-details {
-    max-width: 900px;
-    margin: 30px auto;
+    /* margin: 30px auto; */
     padding: 20px;
-    background-color: #121212; /* Dark background */
-    border-radius: 12px;
+    background-color: #121212;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center contents */
-    text-align: center;
-}
-
-.project-title {
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 16px;
     color: #e0e0e0;
+    font-family: 'Arial', sans-serif;
 }
 
-.project-category {
-    font-size: 18px;
-    color: #bbb;
-    margin-bottom: 12px;
+.project-top {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+    /* margin-bottom: 30px; */
 }
 
-.project-description {
-    font-size: 17px;
+.project-info {
+    flex: 2 2;
+    min-width: 280px;
+    margin-top: 100px;
+    max-width: 50%;
+}
+
+.project-info p {
+    margin-bottom: 1rem;
+    font-size: 16px;
+    line-height: 1.5;
     color: #ddd;
-    line-height: 1.6;
-    margin-bottom: 25px;
-    max-width: 80%;
 }
 
-.project img {
-    width: 400px;
-    height: 550px;
-    object-fit: cover;
+.project-info p strong {
+    color: #fff;
+}
+
+.project-image-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 280px;
+}
+
+.project-image {
+    max-width: 100%;
+    height: auto;
     border-radius: 10px;
-    margin-bottom: 25px;
+    object-fit: cover;
+    max-height: 500px;
+    border: 1px solid #333;
 }
 
 .project-iframe-container {
     width: 100%;
-    max-width: 800px;
-    height: 500px;
-    margin-top: 20px;
+    max-width: 100%;
+    height: 300%;
     border: none;
     border-radius: 10px;
     overflow: hidden;
     background-color: #1d1d1d;
+    margin-top: 30px;
 }
 
 .project-iframe-container iframe {
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
     border: none;
     border-radius: 10px;
-}
-
-/* Optional global style */
-body {
-    background-color: #121212;
-    color: #e0e0e0;
-    font-family: 'Arial', sans-serif;
 }

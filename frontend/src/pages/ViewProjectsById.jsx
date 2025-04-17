@@ -23,19 +23,26 @@ const ViewProjectsById = () => {
 
     return (
         <div className="project-details">
-            <h2>{project.name}</h2>
-            <p><strong>Category:</strong> {project.category}</p>
-            <p>{project.description}</p>
-            {project.image && (
-                <img
-                    src={`http://localhost:4000${project.image}`}
-                    alt={project.name}
-                    style={{ maxWidth: '100%', borderRadius: '8px' }}
-                />
-            )}
+            <div className="project-top">
+                <div className="project-info">
+                    <p><strong>Name:</strong> {project.name}</p>
+                    <p><strong>Description:</strong> {project.description}</p>
+                    <p><strong>Category:</strong> {project.category}</p>
+                </div>
+                {project.image && (
+                    <div className="project-image-container">
+                        <img
+                            src={`http://localhost:4000${project.image}`}
+                            alt={project.name}
+                            className="project-image"
+                        />
+                    </div>
+                )}
+            </div>
+
             {project.project3DVisualization && (
                 <div
-                    className="iframe-container"
+                    className="project-iframe-container"
                     dangerouslySetInnerHTML={{ __html: project.project3DVisualization }}
                 />
             )}

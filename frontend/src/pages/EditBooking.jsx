@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { get, put } from '../services/ApiEndpoint';
 import { toast } from 'react-hot-toast';
+import '../assets/styles/EditBooking.css';
 
 const EditBooking = () => {
     const { id } = useParams();

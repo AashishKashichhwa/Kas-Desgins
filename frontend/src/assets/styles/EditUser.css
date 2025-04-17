@@ -1,16 +1,16 @@
 /* EditUser.css */
 .edit-user-container {
     max-width: 600px;
-    margin: 20px auto;
+    margin: 100px auto;
     padding: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #f9f6f6;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    /* background-color: #f9f9f9; */
 }
 
 .edit-user-container h2 {
     text-align: center;
-    color: #333;
+    color: #ffffff;
 }
 
 .form-group {
@@ -20,15 +20,23 @@
 .form-group label {
     display: block;
     margin-bottom: 5px;
-    color: #555;
+    color: #ffffff;
 }
 
 .form-group input {
+    color: white;
     width: 100%;
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
+    background-color: black;
+}
+
+.form-group-role select{
+    background-color: black;
+    color: white;
+    margin-bottom: 10px;
 }
 
 .edit-user-container button {

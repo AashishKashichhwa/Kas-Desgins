@@ -87,7 +87,7 @@ const EditUser = () => {
                     onChange={(e) => setEmail(e.target.value)}
                 />
             </div>
-            <div className="form-group">
+            <div className="form-group-role">
                 <label htmlFor="role">Role:</label>
                 <select
                     id="role"

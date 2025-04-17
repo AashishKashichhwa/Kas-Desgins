@@ -1,7 +1,8 @@
+// AddProject.jsx
+
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import axios from 'axios'; // ✅ Use axios directly for FormData upload
-import '../assets/styles/AdminHome.css';
+import axios from 'axios';
 import '../assets/styles/AddProject.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -56,56 +57,61 @@ const AddProject = ({ fetchProjects }) => {
     };
 
     return (
-        <div className="admin-container">
-            <h2>Add New Project</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="projectName">Project Name:</label>
+        <div className="add-project-container">
+            <h2 className="add-project-title">Add New Project</h2>
+            <form onSubmit={handleSubmit} className="add-project-form">
+                <div className="add-project-group">
+                    <label htmlFor="projectName" className="add-project-label">Project Name:</label>
                     <input
                         type="text"
                         id="projectName"
                         value={projectName}
                         onChange={(e) => setProjectName(e.target.value)}
                         required
+                        className="add-project-input"
                     />
                 </div>
-                <div className="form-group">
-                    <label htmlFor="projectDescription">Project Description:</label>
+                <div className="add-project-group">
+                    <label htmlFor="projectDescription" className="add-project-label">Project Description:</label>
                     <textarea
                         id="projectDescription"
                         value={projectDescription}
                         onChange={(e) => setProjectDescription(e.target.value)}
                         required
+                        className="add-project-textarea"
                     ></textarea>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="projectCategory">Category:</label>
+                <div className="add-project-group">
+                    <label htmlFor="projectCategory" className="add-project-label">Category:</label>
                     <input
                         type="text"
                         id="projectCategory"
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
                         required
+                        className="add-project-input"
                     />
                 </div>
-                <div className="form-group">
-                    <label htmlFor="projectImage">Project Image:</label>
+                <div className="add-project-group">
+                    <label htmlFor="projectImage" className="add-project-label">Project Image:</label>
                     <input
                         type="file"
                         id="projectImage"
                         accept="image/*"
                         onChange={handleImageChange}
+                        className="add-project-input"
                     />
                 </div>
-                <div className="form-group">
-                    <label htmlFor="project3DVisualization">Project 3D Visualization (Iframe Code):</label>
+                <div className="add-project-group">
+                    <label htmlFor="project3DVisualization" className="add-project-label">Project 3D Visualization (Iframe Code):</label>
                     <textarea
                         id="project3DVisualization"
                         value={project3DVisualization}
                         onChange={(e) => setProject3DVisualization(e.target.value)}
+                        className="add-project-textarea"
                     />
                 </div>
-                <button type="submit">Add Project</button>
+                <button type="submit" className="add-project-button">Add Project</button>
             </form>
         </div>
     );
