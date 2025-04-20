@@ -256,8 +256,8 @@
 
 /// Contact.jsx
 import React from 'react';
-import BookingForm from './BookingForm';
-import ViewBookings from './ViewBookings';
+import BookingForm from '../components/BookingForm';
+import ViewBookings from '../components/ViewBookings';
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import '../assets/styles/Contact.css';

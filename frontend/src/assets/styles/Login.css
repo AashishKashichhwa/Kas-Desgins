@@ -35,7 +35,7 @@
   text-align: left;
   margin-bottom: 30px;
   color: #e0e0e0;
-  padding-left: 160px;
+  /* padding-left: 120px; */
 }
 
 .close {
@@ -58,7 +58,7 @@ label {
 
 input[type="email"],
 input[type="password"] {
-  width: 100%;
+  width: 95%;
   padding: 12px;
   border-radius: 5px;
   border: 1px solid #444444;

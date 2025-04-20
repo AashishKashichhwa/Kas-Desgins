@@ -17,13 +17,13 @@ import UserHome from './pages/UserHome';
 import './assets/styles/style.css';
 import AdminHome from './pages/AdminHome';
 import Services from './pages/Services';
-import ManageProjects from './pages/ManageProjects';
-import ManageUsers from './pages/ManageUsers';
-import ManageBookings from './pages/ManageBookings';
-import AddProject from './pages/AddProject';
-import EditUser from './pages/EditUser';
-import EditBooking from './pages/EditBooking';
-import ViewProjectsById from './pages/ViewProjectsById';
+import ManageProjects from './components/ManageProjects';
+import ManageUsers from './components/ManageUsers';
+import ManageBookings from './components/ManageBookings';
+import AddProject from './components/AddProject';
+import EditUser from './components/EditUser';
+import EditBooking from './components/EditBooking';
+import ViewProjectsById from './components/ViewProjectsById';
 
 function App() {
     const user = useSelector((state) => state.Auth.user);

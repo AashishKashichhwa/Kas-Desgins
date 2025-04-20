@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminSidebar from '../components/AdminSidebar';
+import AdminSidebar from './AdminSidebar';
 import ViewProjects from './ViewProjects';
 import { Link } from 'react-router-dom';
 import '../assets/styles/AdminHome.css';

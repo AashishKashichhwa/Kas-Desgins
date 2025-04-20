@@ -10,6 +10,9 @@ export default function Register() {
   const [password, setPassword] = useState('')
   const navigate = useNavigate(); // Initialize useNavigate
 
+  const handleClose = () => {
+    navigate('/login');
+}
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -30,8 +33,14 @@ export default function Register() {
 
   return (
     <>
+    <div className="register-background"></div>
       <div className='register-container'>
-        <h2>Register</h2>
+      <div className='registerTitle'>
+                    <h2>Register</h2>
+                    <div className="close" onClick={handleClose}>
+                        <i className="fas fa-times"></i>
+                    </div>
+                </div>
         <form onSubmit={handleSubmit}>
           <div className='input-group'>
             <label htmlFor="username">Username</label>

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { get, deleteUser } from '../services/ApiEndpoint';
 import { toast } from 'react-hot-toast';
 import '../assets/styles/AdminHome.css';
-import AdminSidebar from '../components/AdminSidebar';
+import AdminSidebar from './AdminSidebar';
 import BookingForm from './BookingForm';  // Import BookingForm
 import ViewBookings from './ViewBookings';  // Import ViewBookings
 

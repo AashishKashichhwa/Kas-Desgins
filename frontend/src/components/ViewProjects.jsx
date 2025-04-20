@@ -32,7 +32,7 @@ const ViewProjects = () => {
                         alt={project.name}
                         className="project-image"
                     />
-                    <div className="project-info">
+                    <div className="project-infos">
                         <div className="project-name">{project.name}</div>
                         {/* Display the category instead of description */}
                         <div className="project-category">{project.category}</div>

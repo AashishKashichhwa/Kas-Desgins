@@ -1,3 +1,4 @@
+// ContactController.js 
 import Contact from '../models/Contact.js'; // Make sure to include the .js extension
 
 // Create a new contact

@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import ViewProjects from './ViewProjects';
+import ViewProjects from '../components/ViewProjects';
 import  '../assets/styles/Projects.css';
 
 const Project = () => {

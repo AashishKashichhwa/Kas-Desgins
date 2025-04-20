@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { deleteUser, get } from '../services/ApiEndpoint';
 import { toast } from 'react-hot-toast';
 import '../assets/styles/AdminHome.css';
-import AdminSidebar from '../components/AdminSidebar';
+import AdminSidebar from './AdminSidebar';
 import { Link } from 'react-router-dom'; // Import Link
 
 const ManageUsers = () => {

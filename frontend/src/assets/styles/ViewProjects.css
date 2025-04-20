@@ -2,7 +2,7 @@
     width: 100%;
     max-width: 300px; /* Width of each card */
     height: 250px;
-    background-color: #fff;
+    background-color: #131212;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -19,7 +19,7 @@
     object-fit: cover;
 }
 
-.project-info {
+.project-infos {
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -31,7 +31,7 @@
 .project-name {
     font-size: 14px; /* Smaller font size */
     font-weight: bold;
-    color: #333;
+    color: #ffff;
     margin-bottom: 5px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -40,7 +40,7 @@
 
 .project-category {
     font-size: 12px; /* Smaller font size */
-    color: #007BFF; /* Blue color for category */
+    color: #ffff; /* Blue color for category */
     margin-top: 3px; /* Reduced space between name and category */
     font-weight: bold;
     overflow: hidden;
