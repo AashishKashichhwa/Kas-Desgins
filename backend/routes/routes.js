@@ -17,6 +17,7 @@ import {
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs'; // Import the fs module
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,7 +27,10 @@ const router = express.Router();
 // Multer config
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '../uploads'));
+        const uploadPath = path.join(__dirname, '../uploads');
+        // Ensure the uploads directory exists
+        fs.mkdirSync(uploadPath, { recursive: true });
+        cb(null, uploadPath);
     },
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
@@ -44,7 +48,9 @@ router.delete('/contact/:id', deleteContact);
 
 // Project routes
 router.get('/projects', getProjects);
-router.post('/projects/add', upload.single('image'), addProject); // ✅ File upload handled
+//router.post('/projects/add', upload.single('image'), addProject); // ✅ File upload handled
+const MAX_IMAGE_COUNT = 10; // Adjust the maximum number of images as needed
+router.post('/projects/add', upload.array('images', MAX_IMAGE_COUNT), addProject);
 router.get('/projects/:id', getProjectById);
 router.put('/projects/:id', updateProjectById);
 router.delete('/projects/:id', deleteProjectById);

@@ -1,4 +1,3 @@
-// ProjectController.js 
 import Project from '../models/Project.js';
 
 // Add a new project
@@ -6,23 +5,27 @@ const addProject = async (req, res) => {
     try {
         const { name, description, category, project3DVisualization } = req.body;
 
-        const imagePath = req.file ? `/uploads/${req.file.filename}` : '';
+        let imagePaths = [];
+        if (req.files && req.files.length > 0) {
+            imagePaths = req.files.map(file => `/uploads/${file.filename}`);
+        }
 
         const newProject = new Project({
             name,
             description,
             category,
-            image: imagePath, // ✅ Fixed field name
+            images: imagePaths, // Changed from 'image' to 'images'
             project3DVisualization
         });
 
         await newProject.save();
         res.status(201).json({ message: 'Project created successfully', project: newProject });
     } catch (error) {
-        console.error(error);
+        console.error('Error in addProject:', error); // More specific logging
         res.status(500).json({ message: 'Error creating project', error: error.message });
     }
 };
+
 
 // Get all projects
 const getProjects = async (req, res) => {

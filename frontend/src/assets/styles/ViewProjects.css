@@ -1,3 +1,4 @@
+
 .project-card {
     width: 100%;
     max-width: 300px; /* Width of each card */
@@ -11,12 +12,28 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    position: relative;  /* Add position relative */
+}
+
+.project-image-container {
+    width: 100%;
+    height: 150px; /* Fixed height for the image */
+    overflow: hidden;  /* Hide any overflowing image content */
+    position: relative; /* Add position relative */
 }
 
 .project-image {
     width: 100%;
-    height: 150px; /* Fixed height for the image */
+    height: 100%;
     object-fit: cover;
+    position: absolute; /* Take the image out of the normal flow */
+    top: 0;
+    left: 0;
+    transition: opacity 0.5s ease-in-out; /* Add transition for a smooth fade */
+}
+
+.project-image:not(:first-child) {
+    opacity: 0; /* Initially hide all images except the first one */
 }
 
 .project-infos {
