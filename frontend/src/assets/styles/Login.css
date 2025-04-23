@@ -72,7 +72,7 @@ input[type="password"]::placeholder {
   color: #bbbbbb;
 }
 
-button {
+form button {
   width: 100%;
   padding: 12px;
   border: none;
@@ -84,7 +84,7 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
+form button:hover {
   background-color: #c0392b;
 }
 
