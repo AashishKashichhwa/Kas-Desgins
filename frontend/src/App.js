@@ -12,18 +12,20 @@ import PublicLayout from './layout/PublicLayout';
 import UserLayout from './layout/UserLayout';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from './redux/AuthSlice';
+//Take to note all from these are import
 
 import UserHome from './pages/UserHome';
 import './assets/styles/style.css';
 import AdminHome from './pages/AdminHome';
 import Services from './pages/Services';
-import ManageProjects from './components/ManageProjects';
-import ManageUsers from './components/ManageUsers';
-import ManageBookings from './components/ManageBookings';
-import AddProject from './components/AddProject';
-import EditUser from './components/EditUser';
-import EditBooking from './components/EditBooking';
-import ViewProjectsById from './components/ViewProjectsById';
+import ManageProjects from './components/ManageProjects';  //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
+import ManageUsers from './components/ManageUsers';  //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
+import ManageBookings from './components/ManageBookings';  //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
+import AddProject from './components/AddProject';   //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
+import EditUser from './components/EditUser';   //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
+import EditBooking from './components/EditBooking';  //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
+import ViewProjectsById from './components/ViewProjectsById';   //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
+import EditProjects from './components/EditProjects';         //Edit project also is required, with it, the whole code runs
 
 function App() {
     const user = useSelector((state) => state.Auth.user);
@@ -85,7 +87,9 @@ function AppContent({ user }) {
             <Route path="/admin/projects" element={<ManageProjects />} />
             <Route path="/admin/add-project" element={<AddProject />} />
             <Route path="/admin/projects/:id" element={<ViewProjectsById />} />
+ <Route path="/admin/edit-project/:id" element={<EditProjects />} />{/* The Key Code */}
             <Route path="/admin/edituser/:id" element={<EditUser />} />
+
         </Routes>
     );
 }
