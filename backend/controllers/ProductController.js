@@ -1,0 +1,178 @@
+import Product from '../models/Products.js';
+    import fs from 'fs';
+    import path from 'path';
+    import { fileURLToPath } from 'url';
+
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(path.dirname(__filename));
+
+    // Add a new product
+    const addProducts = async (req, res) => {
+        try {
+            const { name, description, price, category, stock } = req.body;
+
+            let imagePaths = [];
+            if (req.files && req.files.length > 0) {
+                imagePaths = req.files.map(file => `/uploads/${file.filename}`);
+            }
+
+            const newProduct = new Product({
+                name,
+                description,
+                price,
+                images: imagePaths,
+                category,
+                stock
+            });
+
+            await newProduct.save();
+            res.status(201).json({ message: 'Product created successfully', product: newProduct });
+        } catch (error) {
+            console.error('Error in addProduct:', error);
+            res.status(500).json({ message: 'Error creating product', error: error.message });
+        }
+    };
+
+    // Get all products
+    const getProducts = async (req, res) => {
+        try {
+            const products = await Product.find();
+            res.status(200).json(products);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+            res.status(500).json({ message: 'Error fetching products', error: error.message });
+        }
+    };
+
+    // Get single product by ID
+    const getProductById = async (req, res) => {
+        try {
+            const product = await Product.findById(req.params.id);
+            if (!product) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+            res.status(200).json(product);
+        } catch (error) {
+            console.error(`Error fetching product by ID ${req.params.id}:`, error);
+            res.status(500).json({ message: 'Error fetching product', error: error.message });
+        }
+    };
+
+    // Update product by ID (similar to updateProjectById)
+    const updateProductsById = async (req, res) => {
+        try {
+            const productId = req.params.id;
+            const { name, description, price, category, stock, replaceImages } = req.body;
+            const productToUpdate = await Product.findById(productId);
+
+            if (!productToUpdate) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+
+            let imagePaths = productToUpdate.images || []; // Keep existing images by default
+
+            // Determine if images should be replaced based on the flag and if new files are present
+            const shouldReplaceImages = replaceImages === 'true' && req.files && req.files.length > 0;
+
+            if (shouldReplaceImages) {
+                // 1. Delete old image files from the server (best practice)
+                if (productToUpdate.images && productToUpdate.images.length > 0) {
+                    productToUpdate.images.forEach(imgPath => {
+                        try {
+                            // Construct the full path relative to the backend root
+                            const fullPath = path.join(__dirname, imgPath);
+                            if (fs.existsSync(fullPath)) {
+                                fs.unlinkSync(fullPath);
+                                console.log(`Deleted old image: ${fullPath}`);
+                            } else {
+                                console.warn(`Old image not found, skipping delete: ${fullPath}`);
+                            }
+                        } catch (unlinkErr) {
+                            // Log deletion errors but don't necessarily stop the update
+                            console.error(`Error deleting old image ${imgPath}:`, unlinkErr);
+                        }
+                    });
+                }
+
+                // 2. Set imagePaths to the paths of the NEWLY uploaded files
+                imagePaths = req.files.map(file => `/uploads/${file.filename}`);
+            }
+            // If replaceImages is 'false' or no new files uploaded, imagePaths remains the existing ones
+
+            // Prepare update data
+            const updateData = {
+                name: name || productToUpdate.name, // Use existing if not provided
+                description: description || productToUpdate.description,
+                price: price || productToUpdate.price,
+                category: category || productToUpdate.category,
+                stock: stock !== undefined ? stock : productToUpdate.stock, // Handle empty string correctly
+                images: imagePaths // Update with new or existing paths
+            };
+
+            const updatedProduct = await Product.findByIdAndUpdate(
+                productId,
+                updateData,
+                { new: true, runValidators: true } // Return the updated document and run schema validators
+            );
+
+            if (!updatedProduct) {
+                // Should not happen if findById found it, but good practice
+                return res.status(404).json({ message: 'Product not found after update attempt' });
+            }
+
+            res.status(200).json({ message: 'Product updated successfully', product: updatedProduct });
+        } catch (error) {
+            console.error(`Error updating product ${req.params.id}:`, error); // Log error
+            // Handle potential validation errors from Mongoose
+            if (error.name === 'ValidationError') {
+                return res.status(400).json({ message: 'Validation failed', errors: error.errors });
+            }
+            res.status(500).json({ message: 'Error updating product', error: error.message });
+        }
+    };
+
+    // Delete product by ID (similar to deleteProjectById)
+    const deleteProductsById = async (req, res) => {
+        try {
+            const productId = req.params.id;
+            const product = await Product.findById(productId); // Find first to get image paths
+
+            if (!product) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+
+            // Delete associated image files from the server (best practice)
+            if (product.images && product.images.length > 0) {
+                product.images.forEach(imgPath => {
+                    try {
+                        const fullPath = path.join(__dirname, imgPath);
+                        if (fs.existsSync(fullPath)) {
+                            fs.unlinkSync(fullPath);
+                            console.log(`Deleted image on product delete: ${fullPath}`);
+                        } else {
+                            console.warn(`Image not found on product delete, skipping: ${fullPath}`);
+                        }
+                    } catch (unlinkErr) {
+                        console.error(`Error deleting image ${imgPath} during product delete:`, unlinkErr);
+                    }
+                });
+            }
+
+            // Delete the product document from the database
+            await Product.findByIdAndDelete(productId);
+
+            res.status(200).json({ message: 'Product deleted successfully' });
+        } catch (error) {
+            console.error(`Error deleting product ${req.params.id}:`, error); // Log error
+            res.status(500).json({ message: 'Error deleting product', error: error.message });
+        }
+    };
+
+    export {
+        getProducts,
+        addProducts,
+        getProductById,
+        updateProductsById,
+        deleteProductsById
+    };
+    

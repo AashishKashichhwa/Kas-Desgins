@@ -1,0 +1,41 @@
+/* Add these styles or create EditProduct.css */
+.edit-product-container {
+    /* Optional: Add specific styles for the edit container if needed */
+}
+
+.existing-images-preview .add-product-label {
+    margin-bottom: 10px;
+    display: block;
+}
+
+.image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Space between preview images */
+    margin-bottom: 15px;
+}
+
+.current-product-image-preview {
+    max-width: 100px; /* Adjust preview size */
+    max-height: 100px;
+    height: auto;
+    border: 1px solid #555; /* Optional border */
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.selected-new-files {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+.selected-new-files ul {
+    list-style: none;
+    padding-left: 15px;
+    margin-top: 5px;
+}
+
+.selected-new-files li {
+    margin-bottom: 3px;
+}

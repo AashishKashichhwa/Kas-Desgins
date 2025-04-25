@@ -16,7 +16,7 @@ const ViewBookings = ({ bookings = [], handleDelete }) => {
     return (
         <div className="history-container">
             <section className="history" id="history">
-                <h2 className="section-title">Reservation History</h2>
+                {/* <h2 className="section-title">Reservation History</h2> */}
                 {!bookings || bookings.length === 0 ? (
                     <h4 className="validation">No previous reservations.</h4>
                 ) : (

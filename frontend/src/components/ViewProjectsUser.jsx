@@ -16,8 +16,9 @@ const ViewProjectsUser = () => {
         }, []);
     
         const handleProjectClick = (id) => {
-            navigate(`/admin/projects/${id}`);
+            navigate(`/projects/${id}`); // ✅ User-friendly route
         };
+        
     
         return (
             <div className="project-grid-container">

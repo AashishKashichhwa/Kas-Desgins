@@ -14,6 +14,15 @@ import {
     deleteProjectById
 } from '../controllers/projectController.js';
 
+
+    import {
+        getProducts,
+        addProducts,
+        getProductById,
+        updateProductsById,
+        deleteProductsById
+    } from '../controllers/ProductController.js';
+
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -54,5 +63,13 @@ router.post('/projects/add', upload.array('images', MAX_IMAGE_COUNT), addProject
 router.get('/projects/:id', getProjectById);
 router.put('/projects/:id', updateProjectById);
 router.delete('/projects/:id', deleteProjectById);
+
+
+// Product routes
+router.get('/products', getProducts);
+router.post('/products/add', upload.array('images', 10), addProducts);
+router.get('/products/:id', getProductById);
+router.put('/products/:id', updateProductsById);
+router.delete('/products/:id', deleteProductsById);
 
 export default router;

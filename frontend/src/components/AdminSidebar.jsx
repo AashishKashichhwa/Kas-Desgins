@@ -64,6 +64,14 @@ const AdminSidebar = () => {
                     </NavLink>
                 </li>
                 <li className="sidebar-item">
+                    <NavLink
+                        to="/admin/products"
+                        className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
+                    >
+                        Manage Products
+                    </NavLink>
+                </li>
+                <li className="sidebar-item">
                     <button onClick={handleLogout} className="sidebar-link logout-button">Logout</button>
                 </li>
             </ul>

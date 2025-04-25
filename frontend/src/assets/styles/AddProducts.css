@@ -1,6 +1,6 @@
-/* AddProject.css */
+/* AddProducts.css */
 
-.add-project-container {
+.add-product-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -11,14 +11,14 @@
     width: 100%;
 }
 
-.add-project-title {
+.add-product-title {
     margin-bottom: 1.5rem;
     font-size: 2rem;
     color: white;
     padding-bottom: 0.5rem;
 }
 
-.add-project-form {
+.add-product-form {
     width: 96%;
     max-width: 600px;
     background-color: #111;
@@ -27,19 +27,19 @@
     border-radius: 8px;
 }
 
-.add-project-group {
+.add-product-group {
     margin-bottom: 1.5rem;
 }
 
-.add-project-label {
+.add-product-label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
     color: white;
 }
 
-.add-project-input,
-.add-project-textarea {
+.add-product-input,
+.add-product-textarea {
     width: 96%;
     padding: 0.75rem;
     border: 1px solid white;
@@ -49,12 +49,12 @@
     font-size: 1rem;
 }
 
-.add-project-textarea {
+.add-product-textarea {
     resize: vertical;
     min-height: 100px;
 }
 
-.add-project-button {
+.add-product-button {
     background-color: green;
     color: white;
     border: none;
@@ -65,11 +65,11 @@
     transition: background-color 0.3s ease;
 }
 
-.add-project-button:hover {
+.add-product-button:hover {
     background-color: #00cc00;
 }
 
-/* frontend/src/assets/styles/AddProject.css */
+/* frontend/src/assets/styles/AddProducts.css */
 .selected-images {
     display: flex;
     flex-wrap: wrap;
@@ -105,11 +105,12 @@
     border-radius: 5px;
 }
 
-.add-another-file{
+.add-another-file {
     cursor: pointer;
     margin-top: 10px;
     color: blue;
 }
+
 .remove-field-button {
     background-color: #f44336;
     color: white;

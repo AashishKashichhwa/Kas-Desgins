@@ -107,11 +107,11 @@ const EditBooking = () => {
     };
 
     return (
-        <div className="reservation-form-container">
-            <h2>Edit Booking</h2>
+        <div className="reservationFormContainer">
+            {/* <h2>Edit Booking</h2> */}
             <form onSubmit={handleSubmit} id="reservationForm" className="reservationForm-form">
                 <fieldset className="fieldset">
-                    <legend>Edit Reservation Information</legend>
+                    <legend>Edit Booking Information</legend>
 
                     <label htmlFor="name">Name:</label>
                     <input
@@ -180,12 +180,14 @@ const EditBooking = () => {
                         <option value="Cancel">Cancel</option>
                         <option value="Booked">Booked</option>  {/* ADD Booked */}
                     </select>
-
+                    <div className="form-actions">
                     <button type="submit" className="reserve-btn" disabled={loading}>
                         {loading ? 'Updating...' : 'Update'}
                     </button>
                     <button type="button" className="reset-btn" onClick={clearForm}>Reset</button>
+                    </div>
                 </fieldset>
+
             </form>
 
             {message && (
