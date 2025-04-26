@@ -6,32 +6,18 @@ import DbCon from './utlis/db.js';
 import AuthRoutes from './routes/AuthRoutes.js';
 import AdminRoutes from './routes/AdminRoutes.js';
 import otherRoutes from './routes/routes.js';
-import multer from 'multer'; // Import multer
-import path from 'path'; // Import path (for handling file paths)
-import { fileURLToPath } from 'url'; // Import fileURLToPath
+import CartRoutes from './routes/CartRoutes.js'; // ✅ Import cart routes
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-// Configure multer for file uploads
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, 'uploads')); // Use absolute path
-    },
-    filename: (req, file, cb) => {
-        const ext = path.extname(file.originalname);
-        cb(null, Date.now() + ext); // Generate unique filenames
-    }
-});
-
-const upload = multer({ storage: storage });
-
-// mongo Db
+// MongoDB Connection
 DbCon();
+
+// Middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
@@ -39,20 +25,25 @@ app.use(cors({
     origin: 'http://localhost:3000'
 }));
 
+// API Routes
 app.use('/api/auth', AuthRoutes);
 app.use('/api/admin', AdminRoutes);
-app.use('/api', otherRoutes);
+app.use('/api/cart', CartRoutes); // ✅ Use cart routes here
+app.use('/api', otherRoutes);     // Includes products, projects, contacts
 
-// Make the 'uploads' folder accessible (serve static files)
+// Serve static files from /uploads
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-
+// Root Route
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
+// Start Server
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-    console.log('PORT:', process.env.PORT);
-    console.log('MONGODB_URL:', process.env.MONGODB_URL);
+    console.log(`✅ Server running on http://localhost:${PORT}`);
+    console.log('📦 PORT:', process.env.PORT);
+    console.log('🛢️  MONGODB_URL:', process.env.MONGODB_URL);
 });

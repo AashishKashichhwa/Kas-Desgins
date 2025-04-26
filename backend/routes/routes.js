@@ -72,4 +72,5 @@ router.get('/products/:id', getProductById);
 router.put('/products/:id', updateProductsById);
 router.delete('/products/:id', deleteProductsById);
 
+
 export default router;

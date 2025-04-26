@@ -14,51 +14,55 @@ const AddProducts = () => {
     const [product3DVisualization, setProduct3DVisualization] = useState('');
     const navigate = useNavigate();
 
-    let currentId = 1;
+    let currentId = 1; // We will use this to generate unique field IDs
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+// AddProducts Component
+const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        try {
-            const formData = new FormData();
-            formData.append('name', productName);
-            formData.append('description', productDescription);
-            formData.append('price', productPrice);
-            formData.append('category', category);
-            formData.append('stock', stock);
-            formData.append('product3DVisualization', product3DVisualization);
+    try {
+        const formData = new FormData();
+        formData.append('name', productName);
+        formData.append('description', productDescription);
+        formData.append('price', productPrice);
+        formData.append('category', category);
+        formData.append('stock', stock);
+        formData.append('product3DVisualization', product3DVisualization); // Ensure this field is set properly
 
-            imageFields.forEach((fieldId) => {
-                const fileInput = document.getElementById(`productImage-${fieldId}`);
-                if (fileInput && fileInput.files.length > 0) {
-                    Array.from(fileInput.files).forEach(file => formData.append('images', file));
-                }
-            });
-
-            const res = await axios.post('http://localhost:4000/api/products/add', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-
-            if (res.status === 201) {
-                toast.success(res.data.message);
-                setProductName('');
-                setProductDescription('');
-                setProductPrice('');
-                setCategory('');
-                setImageFields([0]);
-                setStock('');
-                setProduct3DVisualization('');
-                navigate('/admin/products');
-            } else {
-                toast.error('Failed to add product.');
+        // Handle images dynamically
+        imageFields.forEach((fieldId) => {
+            const fileInput = document.getElementById(`productImage-${fieldId}`);
+            if (fileInput && fileInput.files.length > 0) {
+                Array.from(fileInput.files).forEach(file => formData.append('images', file));
             }
-        } catch (error) {
-            console.error('Error adding product:', error);
-            toast.error('Error adding product');
+        });
+
+        const res = await axios.post('http://localhost:4000/api/products/add', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        if (res.status === 201) {
+            toast.success(res.data.message);
+            // Reset the form fields after a successful submission
+            setProductName('');
+            setProductDescription('');
+            setProductPrice('');
+            setCategory('');
+            setImageFields([0]); // Reset the image fields
+            setStock('');
+            setProduct3DVisualization(''); // Reset the 3D visualization input
+            navigate('/admin/products');
+        } else {
+            toast.error('Failed to add product.');
         }
-    };
+    } catch (error) {
+        console.error('Error adding product:', error);
+        toast.error('Error adding product');
+    }
+};
+
 
     const handleAddImageField = () => {
         setImageFields((prevFields) => [...prevFields, currentId++]);

@@ -1,14 +1,14 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import ViewProducts from '../components/ViewProducts'
+import ViewProductsUser from '../components/ViewProductsUser'
 
 const Products = () => {
   return (
     <div>
       <Navbar/>
       <h2>Products</h2>
-      <ViewProducts/>
+      <ViewProductsUser/>
       <Footer/>
     </div>
   )

@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { post } from '../services/ApiEndpoint';
 import { Logout } from '../redux/AuthSlice';
 import { toast } from 'react-hot-toast';
+import { FaShoppingCart } from 'react-icons/fa'; // 🛒 Import cart icon
 import '../assets/styles/Navbar.css';
 
 const Navbar = () => {
@@ -27,25 +28,32 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-container">
-                    <Link to="/"><div className="logo">Kas Design</div></Link>
+                <Link to="/"><div className="logo">Kas Design</div></Link>
                 
                 <ul className="nav-links">
                     <li><Link to="/">Home</Link></li>
-                    {/* <li><Link to="/services">Services</Link></li> */}
                     <li><Link to="/projects">Projects</Link></li>
-                    <li><Link to="/products">Products</Link></li>
                     <li><Link to="/about">About Us</Link></li>
                     <li><Link to="/contact">Contact Us</Link></li>
+                    <li className="products-link">
+                        <Link to="/products">Products</Link>
+                        {/* 🛒 Cart Icon next to Products */}
+                        <Link to="/cart" className="cart-icon">
+                            <FaShoppingCart size={22} />
+                        </Link>
+                    </li>
                 </ul>
+
                 <div className="auth-section">
                     {user ? (
                         <div className="logged-in-auth">
-                           <Link to="/" className="logoutBtn" onClick={handleLogout}>Logout</Link>
+                            {/* Logout and Username */}
+                            <Link to="/" className="logoutBtn" onClick={handleLogout}>Logout</Link>
                             <span className="welcome-text">{user.name}</span>
                         </div>
                     ) : (
                         <div className="login-signup">
-                           <Link to="/login">Login</Link> | <Link to="/register">Sign Up</Link>
+                            <Link to="/login">Login</Link> | <Link to="/register">Sign Up</Link>
                         </div>
                     )}
                 </div>

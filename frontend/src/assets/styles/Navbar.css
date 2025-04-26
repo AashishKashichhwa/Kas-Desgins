@@ -25,6 +25,7 @@
      gap:20px;
       margin:0;
       padding:0;
+      align-items: center;
   }
 
   .nav-links li a {
@@ -67,4 +68,47 @@
 .welcome-text{
     color: white;
     padding-left: 20px;
+}
+
+/* Navbar.css */
+
+/* Add styles for the Cart Icon */
+.cart-icon {
+    position: relative;
+    display: inline-block;
+    color: white;
+    font-size: 1.2em;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+    margin-left: 10px; /* Space between Products link and cart icon */
+}
+
+.cart-icon:hover {
+    color: #000; /* Black icon on hover */
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+/* Optional: Add a notification badge for the cart */
+.cart-icon::after {
+    /* content: "3";  Replace with dynamic count from cart state */
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red; /* Red notification circle */
+    color: white;
+    font-size: 0.8em;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 4px 6px;
+    /* width: 20px;
+    height: 20px; */
+    text-align: center;
+}
+
+/* Align Cart icon next to the Products link */
+.products-link {
+    display: flex;
+    align-items: center;
 }

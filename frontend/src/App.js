@@ -36,6 +36,9 @@ import ViewProjectsByIdUsers from './components/ViewProjectsByIdUsers';
    //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
 import EditProjects from './components/EditProjects';         //Edit project also is required, with it, the whole code runs
 
+import AddToCart from './pages/AddToCart';
+
+
 function App() {
     const user = useSelector((state) => state.Auth.user);
     const dispatch = useDispatch();
@@ -55,17 +58,16 @@ function App() {
 function AppContent({ user }) {
     const navigate = useNavigate();
     const location = useLocation();
-
     useEffect(() => {
-        const publicPaths = ['/', '/login', '/contact', '/about', '/projects', '/products', '/services', '/register'];
+        const publicPaths = ['/', '/login', '/contact', '/about', '/projects', '/products', '/services', '/register', '/cart'];
     
-        // Check if it's a project detail page (e.g., /projects/12345)
         const isProjectDetailPage = /^\/projects\/[^/]+$/.test(location.pathname);
+        const isProductDetailPage = /^\/products\/[^/]+$/.test(location.pathname);
     
-        if (!user) {
-            if (!publicPaths.includes(location.pathname) && !isProjectDetailPage) {
-                navigate('/login');
-            }
+        const isPublic = publicPaths.includes(location.pathname) || isProjectDetailPage || isProductDetailPage;
+    
+        if (!user && !isPublic) {
+            navigate('/login');
         } else if (user) {
             if (user.role === 'admin' &&
                 !location.pathname.startsWith('/admin') &&
@@ -73,8 +75,7 @@ function AppContent({ user }) {
                 navigate('/admin');
             } else if (user.role !== 'admin' &&
                 !location.pathname.startsWith('/userhome') &&
-                !publicPaths.includes(location.pathname) &&
-                !isProjectDetailPage) {
+                !isPublic) {
                 navigate('/userhome');
             }
         }
@@ -94,6 +95,8 @@ function AppContent({ user }) {
                 <Route path="projects/:id" element={<ViewProjectsByIdUsers />} />
                 <Route path="services" element={<Services />} />
                 <Route path="register" element={<Register />} />
+                {/* <Route path="add-to-cart" element={<AddToCart />} /> */}
+                <Route path="/cart" element={<AddToCart />} />
             </Route>
 
             <Route path="/userhome" element={<UserLayout />}>
