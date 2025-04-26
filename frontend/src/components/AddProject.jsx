@@ -60,8 +60,10 @@ const AddProject = ({ fetchProjects }) => {
 
     return (
         <div className="add-project-container">
-            <h2 className="add-project-title">Add New Project</h2>
+                                          {/* Cross Button */}
+                                          <button className="closebutton" onClick={() => navigate('/admin/projects')}>×</button>
             <form onSubmit={handleSubmit} className="add-project-form">
+            <h2 className="add-project-title">Add New Project</h2>
                 <div className="add-project-group">
                     <label htmlFor="projectName">Project Name:</label>
                     <input type="text" id="projectName" value={projectName} onChange={(e) => setProjectName(e.target.value)} required className="add-project-input" />

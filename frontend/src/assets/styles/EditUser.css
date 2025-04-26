@@ -39,7 +39,23 @@
     margin-bottom: 10px;
 }
 
-.edit-user-container button {
+.closeButton {
+    position: absolute;
+    /* top: 40px; */
+    right: 480px;
+    background: none;
+    border: none;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.closeButton:hover {
+    color: #ff4d4d; /* Optional: a nice hover effect (red) */
+}
+
+.update {
     background-color: #5cb85c;
     color: white;
     padding: 10px 15px;
@@ -49,7 +65,7 @@
     font-size: 16px;
 }
 
-.edit-user-container button:hover {
+.update:hover {
     background-color: #449d44;
 }
 
@@ -61,3 +77,4 @@
     border-radius: 4px;
     background-color: #fdd;
 }
+

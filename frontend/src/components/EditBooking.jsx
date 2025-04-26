@@ -108,6 +108,8 @@ const EditBooking = () => {
 
     return (
         <div className="reservationFormContainer">
+            {/* Cross Button */}
+            <button className="closebtn" onClick={() => navigate('/admin/bookings')}>×</button>
             {/* <h2>Edit Booking</h2> */}
             <form onSubmit={handleSubmit} id="reservationForm" className="reservationForm-form">
                 <fieldset className="fieldset">
@@ -181,10 +183,10 @@ const EditBooking = () => {
                         <option value="Booked">Booked</option>  {/* ADD Booked */}
                     </select>
                     <div className="form-actions">
-                    <button type="submit" className="reserve-btn" disabled={loading}>
-                        {loading ? 'Updating...' : 'Update'}
-                    </button>
-                    <button type="button" className="reset-btn" onClick={clearForm}>Reset</button>
+                        <button type="submit" className="reserve-btn" disabled={loading}>
+                            {loading ? 'Updating...' : 'Update'}
+                        </button>
+                        <button type="button" className="reset-btn" onClick={clearForm}>Reset</button>
                     </div>
                 </fieldset>
 

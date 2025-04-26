@@ -1,11 +1,11 @@
-// frontend/src/components/ViewProjectsByIdUsers.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // <-- added useNavigate
 import { get } from '../services/ApiEndpoint';
 import '../assets/styles/ViewProjectsById.css'; // Ensure this CSS supports a gallery
 
 const ViewProjectsByIdUsers = () => {
     const { id } = useParams();
+    const navigate = useNavigate(); // <-- initialize navigate
     const [project, setProject] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -50,6 +50,9 @@ const ViewProjectsByIdUsers = () => {
 
     return (
         <div className="project-details-container">
+            {/* Cross Button */}
+            <button className="close-button" onClick={() => navigate('/projects')}>×</button>
+
             <div className="project-details-contents">
 
                 <h2 className="project-detail-title">{project.name}</h2>
@@ -60,27 +63,24 @@ const ViewProjectsByIdUsers = () => {
                     </div>
 
                     {project.images && project.images.length > 0 ? (
-                        // Multiple Images
                         <div className="project-image-gallery">
                             <h3>Images:</h3>
-                            <div className="imagebox"> {/* Container for the image and buttons */}
-                                <button className="image-button back" onClick={goToPrevious}>‹</button> {/* Previous button */}
+                            <div className="imagebox">
+                                <button className="image-button back" onClick={goToPrevious}>‹</button>
                                 <img
                                     src={`http://localhost:4000${project.images[currentImageIndex]}`}
                                     alt={`${project.name} -  ${currentImageIndex + 1}`}
                                     className="project-gallery-image"
                                 />
-                                <button className="image-button next" onClick={goToNext}>›</button> {/* Next button */}
+                                <button className="image-button next" onClick={goToNext}>›</button>
                             </div>
                         </div>
                     ) : project.image ? (
-                        // Single Image (Legacy Support)
                         <div className="project-image-gallery">
                             <h3>Image:</h3>
                             <img src={`http://localhost:4000${project.image}`} alt={project.name} className="project-gallery-image" />
                         </div>
                     ) : (
-                        // No Image
                         <h1>No Images</h1>
                     )}
                 </div>

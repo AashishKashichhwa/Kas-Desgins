@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { get } from '../services/ApiEndpoint';
 import '../assets/styles/ViewProductsById.css';
 
@@ -9,6 +9,7 @@ const ViewProductsById = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const navigate = useNavigate(); // <-- initialize navigate
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -50,6 +51,8 @@ const ViewProductsById = () => {
     return (
         <div className="product-details-container">
             <div className="product-details-contents">
+                  {/* Cross Button */}
+            <button className="close-button" onClick={() => navigate('/admin/products')}>×</button>
                 <h2 className="product-detail-title">{product.name}</h2>
                 <div className="product-details-content">
                     <div className="product-info">

@@ -67,6 +67,8 @@ const EditUser = () => {
 
     return (
         <div className="edit-user-container">
+            {/* Cross Button */}
+            <button className="closeButton" onClick={() => navigate('/admin/users')}>×</button>
             <h2>Edit User</h2>
             {error && <div className="error-message">{error}</div>}
             <div className="form-group">
@@ -98,7 +100,7 @@ const EditUser = () => {
                     <option value="admin">Admin</option>
                 </select>
             </div>
-            <button onClick={handleUpdate} disabled={loading}>
+            <button className='update' onClick={handleUpdate} disabled={loading}>
                 {loading ? 'Updating...' : 'Update'}
             </button>
         </div>

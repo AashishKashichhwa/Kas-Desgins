@@ -119,3 +119,20 @@ select {
     color: #4caf50;
     font-weight: bold;
 }
+
+.closebtn {
+    position: absolute;
+    top: 40px;
+    right: 400px;
+    background: none;
+    border: none;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.closebtn:hover {
+    color: #ff4d4d; /* Optional: a nice hover effect (red) */
+}
+

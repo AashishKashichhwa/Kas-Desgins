@@ -97,8 +97,10 @@ const EditProducts = ({ fetchProducts }) => {
 
     return (
         <div className="add-product-container edit-product-container">
-            <h2 className="add-product-title">Edit Product</h2>
+            {/* Cross Button */}
+            <button className="closebutton" onClick={() => navigate('/admin/products')}>×</button>
             <form onSubmit={handleSubmit} className="add-product-form">
+                <h2 className="add-product-title">Edit Product</h2>
                 <div className="add-product-group">
                     <label htmlFor="productName">Product Name:</label>
                     <input

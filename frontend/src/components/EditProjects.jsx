@@ -107,8 +107,10 @@ const EditProject = ({ fetchProjects }) => {
 
     return (
         <div className="add-project-container edit-project-container">
-            <h2 className="add-project-title">Edit Project</h2>
+                              {/* Cross Button */}
+                              <button className="closebutton" onClick={() => navigate('/admin/projects')}>×</button>
             <form onSubmit={handleSubmit} className="add-project-form">
+            <h2 className="add-project-title">Edit Project</h2>
                 {/* Fields for Name, Description, Category */}
                 <div className="add-project-group">
                     <label htmlFor="projectName">Project Name:</label>

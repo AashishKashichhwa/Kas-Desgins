@@ -1,6 +1,6 @@
 // frontend/src/components/ViewProjectsById.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { get } from '../services/ApiEndpoint';
 import '../assets/styles/ViewProjectsById.css'; // Ensure this CSS supports a gallery
 
@@ -10,6 +10,7 @@ const ViewProjectsById = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const navigate = useNavigate(); // <-- initialize navigate
 
     useEffect(() => {
         const fetchProject = async () => {
@@ -51,7 +52,8 @@ const ViewProjectsById = () => {
     return (
         <div className="project-details-container">
             <div className="project-details-contents">
-
+            {/* Cross Button */}
+            <button className="close-button" onClick={() => navigate('/admin/projects')}>×</button>
                 <h2 className="project-detail-title">{project.name}</h2>
                 <div className="project-details-content">
                     <div className="project-info">

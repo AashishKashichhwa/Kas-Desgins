@@ -16,52 +16,52 @@ const AddProducts = () => {
 
     let currentId = 1; // We will use this to generate unique field IDs
 
-// AddProducts Component
-const handleSubmit = async (e) => {
-    e.preventDefault();
+    // AddProducts Component
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    try {
-        const formData = new FormData();
-        formData.append('name', productName);
-        formData.append('description', productDescription);
-        formData.append('price', productPrice);
-        formData.append('category', category);
-        formData.append('stock', stock);
-        formData.append('product3DVisualization', product3DVisualization); // Ensure this field is set properly
+        try {
+            const formData = new FormData();
+            formData.append('name', productName);
+            formData.append('description', productDescription);
+            formData.append('price', productPrice);
+            formData.append('category', category);
+            formData.append('stock', stock);
+            formData.append('product3DVisualization', product3DVisualization); // Ensure this field is set properly
 
-        // Handle images dynamically
-        imageFields.forEach((fieldId) => {
-            const fileInput = document.getElementById(`productImage-${fieldId}`);
-            if (fileInput && fileInput.files.length > 0) {
-                Array.from(fileInput.files).forEach(file => formData.append('images', file));
+            // Handle images dynamically
+            imageFields.forEach((fieldId) => {
+                const fileInput = document.getElementById(`productImage-${fieldId}`);
+                if (fileInput && fileInput.files.length > 0) {
+                    Array.from(fileInput.files).forEach(file => formData.append('images', file));
+                }
+            });
+
+            const res = await axios.post('http://localhost:4000/api/products/add', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            if (res.status === 201) {
+                toast.success(res.data.message);
+                // Reset the form fields after a successful submission
+                setProductName('');
+                setProductDescription('');
+                setProductPrice('');
+                setCategory('');
+                setImageFields([0]); // Reset the image fields
+                setStock('');
+                setProduct3DVisualization(''); // Reset the 3D visualization input
+                navigate('/admin/products');
+            } else {
+                toast.error('Failed to add product.');
             }
-        });
-
-        const res = await axios.post('http://localhost:4000/api/products/add', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
-
-        if (res.status === 201) {
-            toast.success(res.data.message);
-            // Reset the form fields after a successful submission
-            setProductName('');
-            setProductDescription('');
-            setProductPrice('');
-            setCategory('');
-            setImageFields([0]); // Reset the image fields
-            setStock('');
-            setProduct3DVisualization(''); // Reset the 3D visualization input
-            navigate('/admin/products');
-        } else {
-            toast.error('Failed to add product.');
+        } catch (error) {
+            console.error('Error adding product:', error);
+            toast.error('Error adding product');
         }
-    } catch (error) {
-        console.error('Error adding product:', error);
-        toast.error('Error adding product');
-    }
-};
+    };
 
 
     const handleAddImageField = () => {
@@ -70,8 +70,10 @@ const handleSubmit = async (e) => {
 
     return (
         <div className="add-product-container">
-            <h2 className="add-product-title">Add New Product</h2>
+            {/* Cross Button */}
+            <button className="closebutton" onClick={() => navigate('/admin/products')}>×</button>
             <form onSubmit={handleSubmit} className="add-product-form">
+                <h2 className="add-product-title">Add New Product</h2>
                 <div className="add-product-group">
                     <label htmlFor="productName">Product Name:</label>
                     <input type="text" id="productName" value={productName} onChange={(e) => setProductName(e.target.value)} required className="add-product-input" />

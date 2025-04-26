@@ -143,3 +143,19 @@ iframe{
     position: absolute;
 
 }
+
+.close-button {
+    position: absolute;
+    top: 30px;
+    right: 300px;
+    background: none;
+    border: none;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.close-button:hover {
+    color: #ff4d4d; /* Optional: a nice hover effect (red) */
+}

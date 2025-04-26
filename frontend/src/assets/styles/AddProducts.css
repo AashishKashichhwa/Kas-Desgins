@@ -120,3 +120,19 @@
     cursor: pointer;
     margin-left: 5px;
 }
+
+.closebutton {
+    position: absolute;
+    top: 40px;
+    right: 410px;
+    background: none;
+    border: none;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.closebutton:hover {
+    color: #ff4d4d; /* Optional: a nice hover effect (red) */
+}
