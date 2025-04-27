@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
 
 // Start Server
 app.listen(PORT, () => {
-    console.log(`✅ Server running on http://localhost:${PORT}`);
-    console.log('📦 PORT:', process.env.PORT);
-    console.log('🛢️  MONGODB_URL:', process.env.MONGODB_URL);
+    console.log(`Server running on http://localhost:${PORT}`);
+    console.log('PORT:', process.env.PORT);
+    console.log('MONGODB_URL:', process.env.MONGODB_URL);
 });

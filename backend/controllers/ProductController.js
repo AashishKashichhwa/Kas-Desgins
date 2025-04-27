@@ -73,50 +73,39 @@ const updateProductsById = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        let imagePaths = productToUpdate.images || []; // Keep existing images by default
-
-        // Determine if images should be replaced based on the flag and if new files are present
+        let imagePaths = productToUpdate.images || [];
         const shouldReplaceImages = replaceImages === 'true' && req.files && req.files.length > 0;
 
         if (shouldReplaceImages) {
-            // 1. Delete old image files from the server (best practice)
             if (productToUpdate.images && productToUpdate.images.length > 0) {
                 productToUpdate.images.forEach(imgPath => {
                     try {
                         const fullPath = path.join(__dirname, imgPath);
                         if (fs.existsSync(fullPath)) {
                             fs.unlinkSync(fullPath);
-                            console.log(`Deleted old image: ${fullPath}`);
-                        } else {
-                            console.warn(`Old image not found, skipping delete: ${fullPath}`);
                         }
                     } catch (unlinkErr) {
-                        // Log deletion errors but don't necessarily stop the update
-                        console.error(`Error deleting old image ${imgPath}:`, unlinkErr);
+                        console.error(`Error deleting old image:`, unlinkErr);
                     }
                 });
             }
-
-            // 2. Set imagePaths to the paths of the NEWLY uploaded files
             imagePaths = req.files.map(file => path.join('/uploads', file.filename));
         }
 
-        // Prepare update data with product3DVisualization
+        const parsedPrice = price !== undefined ? Number(price) : undefined;
+        const parsedStock = stock !== undefined ? Number(stock) : undefined;
+
         const updateData = {
-            name: name || productToUpdate.name,
-            description: description || productToUpdate.description,
-            price: price || productToUpdate.price,
-            category: category || productToUpdate.category,
-            stock: stock !== undefined ? stock : productToUpdate.stock,
+            name: name !== undefined ? name : productToUpdate.name,
+            description: description !== undefined ? description : productToUpdate.description,
+            price: parsedPrice !== undefined ? parsedPrice : productToUpdate.price,
+            category: category !== undefined ? category : productToUpdate.category,
+            stock: parsedStock !== undefined ? parsedStock : productToUpdate.stock,
             images: imagePaths,
-            product3DVisualization: product3DVisualization || productToUpdate.product3DVisualization, // Update the 3D model URL/path
+            product3DVisualization: product3DVisualization !== undefined ? product3DVisualization : productToUpdate.product3DVisualization,
         };
 
-        const updatedProduct = await Product.findByIdAndUpdate(
-            productId,
-            updateData,
-            { new: true, runValidators: true }
-        );
+        const updatedProduct = await Product.findByIdAndUpdate(productId, updateData, { new: true, runValidators: true });
 
         if (!updatedProduct) {
             return res.status(404).json({ message: 'Product not found after update attempt' });
@@ -124,13 +113,14 @@ const updateProductsById = async (req, res) => {
 
         res.status(200).json({ message: 'Product updated successfully', product: updatedProduct });
     } catch (error) {
-        console.error(`Error updating product ${req.params.id}:`, error);
+        console.error(`Error updating product:`, error);
         if (error.name === 'ValidationError') {
             return res.status(400).json({ message: 'Validation failed', errors: error.errors });
         }
         res.status(500).json({ message: 'Error updating product', error: error.message });
     }
 };
+
 
 // Delete product by ID
 const deleteProductsById = async (req, res) => {

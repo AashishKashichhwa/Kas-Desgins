@@ -61,7 +61,7 @@ router.get('/projects', getProjects);
 const MAX_IMAGE_COUNT = 10; // Adjust the maximum number of images as needed
 router.post('/projects/add', upload.array('images', MAX_IMAGE_COUNT), addProject);
 router.get('/projects/:id', getProjectById);
-router.put('/projects/:id', updateProjectById);
+router.put('/projects/:id', upload.array('images', 10), updateProjectById);
 router.delete('/projects/:id', deleteProjectById);
 
 
@@ -69,7 +69,7 @@ router.delete('/projects/:id', deleteProjectById);
 router.get('/products', getProducts);
 router.post('/products/add', upload.array('images', 10), addProducts);
 router.get('/products/:id', getProductById);
-router.put('/products/:id', updateProductsById);
+router.put('/products/:id', upload.array('images', 10), updateProductsById);
 router.delete('/products/:id', deleteProductsById);
 
 

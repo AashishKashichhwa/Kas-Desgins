@@ -61,76 +61,63 @@ const getProjectById = async (req, res) => {
 };
 
 // Update project by ID
+// Update project by ID
 const updateProjectById = async (req, res) => {
     try {
         const projectId = req.params.id;
         const { name, description, category, project3DVisualization, replaceImages } = req.body;
+
         const projectToUpdate = await Project.findById(projectId);
 
         if (!projectToUpdate) {
             return res.status(404).json({ message: 'Project not found' });
         }
 
-        let imagePaths = projectToUpdate.images || []; // Keep existing images by default
+        let updatedImagePaths = projectToUpdate.images || [];
 
-        // Determine if images should be replaced based on the flag and if new files are present
         const shouldReplaceImages = replaceImages === 'true' && req.files && req.files.length > 0;
 
         if (shouldReplaceImages) {
-            // 1. Delete old image files from the server (best practice)
-            if (projectToUpdate.images && projectToUpdate.images.length > 0) {
-                projectToUpdate.images.forEach(imgPath => {
-                    try {
-                        // Construct the full path relative to the backend root
-                        const fullPath = path.join(__dirname, imgPath);
-                        if (fs.existsSync(fullPath)) {
-                            fs.unlinkSync(fullPath);
-                            console.log(`Deleted old image: ${fullPath}`);
-                        } else {
-                            console.warn(`Old image not found, skipping delete: ${fullPath}`);
-                        }
-                    } catch (unlinkErr) {
-                        // Log deletion errors but don't necessarily stop the update
-                        console.error(`Error deleting old image ${imgPath}:`, unlinkErr);
+            // Delete old images
+            for (const imgPath of projectToUpdate.images) {
+                try {
+                    const fullPath = path.join(__dirname, imgPath);
+                    if (fs.existsSync(fullPath)) {
+                        fs.unlinkSync(fullPath);
+                        console.log(`Deleted old image: ${fullPath}`);
                     }
-                });
+                } catch (unlinkErr) {
+                    console.error(`Error deleting old image ${imgPath}:`, unlinkErr);
+                }
             }
 
-            // 2. Set imagePaths to the paths of the NEWLY uploaded files
-            imagePaths = req.files.map(file => `/uploads/${file.filename}`);
-        }
-        // If replaceImages is 'false' or no new files uploaded, imagePaths remains the existing ones
-
-        // Prepare update data
-        const updateData = {
-            name: name || projectToUpdate.name, // Use existing if not provided
-            description: description || projectToUpdate.description,
-            category: category || projectToUpdate.category,
-            project3DVisualization: project3DVisualization !== undefined ? project3DVisualization : projectToUpdate.project3DVisualization, // Handle empty string correctly
-            images: imagePaths // Update with new or existing paths
-        };
-
-        const updatedProject = await Project.findByIdAndUpdate(
-            projectId,
-            updateData,
-            { new: true, runValidators: true } // Return the updated document and run schema validators
-        );
-
-        if (!updatedProject) {
-             // Should not happen if findById found it, but good practice
-             return res.status(404).json({ message: 'Project not found after update attempt' });
+            // Save new images
+            updatedImagePaths = req.files.map(file => `/uploads/${file.filename}`);
         }
 
-        res.status(200).json({ message: 'Project updated successfully', project: updatedProject });
+        // Update project fields
+        projectToUpdate.name = name !== undefined ? name : projectToUpdate.name;
+        projectToUpdate.description = description !== undefined ? description : projectToUpdate.description;
+        projectToUpdate.category = category !== undefined ? category : projectToUpdate.category;
+        projectToUpdate.project3DVisualization = project3DVisualization !== undefined ? project3DVisualization : projectToUpdate.project3DVisualization;
+        projectToUpdate.images = updatedImagePaths;
+
+        // Save the updated project
+        await projectToUpdate.save();
+
+        res.status(200).json({ message: 'Project updated successfully', project: projectToUpdate });
+
     } catch (error) {
-        console.error(`Error updating project ${req.params.id}:`, error); // Log error
-        // Handle potential validation errors from Mongoose
+        console.error(`Error updating project ${req.params.id}:`, error);
+
         if (error.name === 'ValidationError') {
-             return res.status(400).json({ message: 'Validation failed', errors: error.errors });
+            return res.status(400).json({ message: 'Validation failed', errors: error.errors });
         }
+
         res.status(500).json({ message: 'Error updating project', error: error.message });
     }
 };
+
 
 
 // Delete project by ID
