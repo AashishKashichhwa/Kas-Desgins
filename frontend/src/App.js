@@ -37,6 +37,9 @@ import ViewProjectsByIdUsers from './components/ViewProjectsByIdUsers';
 import EditProjects from './components/EditProjects';         //Edit project also is required, with it, the whole code runs
 
 import AddToCart from './pages/AddToCart';
+import ViewBookings from './components/ViewBookings';
+import ViewBookingsById from './components/ViewBookingsById';
+import EditBookingUser from './components/EditBookingUser';
 
 
 function App() {
@@ -97,6 +100,8 @@ function AppContent({ user }) {
                 <Route path="register" element={<Register />} />
                 {/* <Route path="add-to-cart" element={<AddToCart />} /> */}
                 <Route path="/cart" element={<AddToCart />} />
+                <Route path="/edit-booking/:id" element={<EditBookingUser />} />
+
             </Route>
 
             <Route path="/userhome" element={<UserLayout />}>
@@ -106,7 +111,10 @@ function AppContent({ user }) {
             <Route path="/admin" element={<AdminHome />} />
             <Route path="/admin/home" element={<AdminHome />} />
             <Route path="/admin/bookings" element={<ManageBookings />} />
+            <Route path="/admin/bookings" element={<ViewBookings />} />
+            <Route path="/admin/bookings/:id" element={<ViewBookingsById />} />
             <Route path="/admin/editbooking/:id" element={<EditBooking />} />
+            <Route path="/admin/edit-booking/:id" element={<EditBooking />} />
             <Route path="/admin/users" element={<ManageUsers />} />
             <Route path="/admin/products" element={<ManageProducts />} />
             <Route path="/admin/add-product" element={<AddProducts />} />

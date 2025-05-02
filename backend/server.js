@@ -6,7 +6,8 @@ import DbCon from './utlis/db.js';
 import AuthRoutes from './routes/AuthRoutes.js';
 import AdminRoutes from './routes/AdminRoutes.js';
 import otherRoutes from './routes/routes.js';
-import CartRoutes from './routes/CartRoutes.js'; // ✅ Import cart routes
+import CartRoutes from './routes/CartRoutes.js';
+import BookingRoutes from './routes/BookingRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -25,20 +26,27 @@ app.use(cors({
     origin: 'http://localhost:3000'
 }));
 
+// Request logging middleware
+app.use((req, res, next) => {
+    console.log(`Incoming ${req.method} request for ${req.path}`);
+    next();
+});
+
 // API Routes
 app.use('/api/auth', AuthRoutes);
 app.use('/api/admin', AdminRoutes);
-app.use('/api/cart', CartRoutes); // ✅ Use cart routes here
-app.use('/api', otherRoutes);     // Includes products, projects, contacts
+app.use('/api/cart', CartRoutes);
+app.use('/api/bookings', BookingRoutes); // Simplified route mounting
+app.use('/api', otherRoutes);
 
-// Serve static files from /uploads
+// Static files
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Root Route
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.send('Server is running');
 });
 
 // Start Server

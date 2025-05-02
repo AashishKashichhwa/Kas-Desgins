@@ -1,81 +1,102 @@
-.history-container {
-    margin-top: 2rem;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+/* ViewProjects.css */
+
+.project-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust as needed */
+    gap: 20px;
+    padding: 20px;
+    justify-items: center;
 }
 
-.section-title {
-    text-align: center;
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 1.5rem;
-}
-
-.validation {
-    text-align: center;
-    color: #999;
-    font-size: 1.1rem;
-    padding: 1rem;
-}
-
-.history-table {
+.project-card {
     width: 100%;
-    border-collapse: collapse;
-}
-
-.history-table th,
-.history-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #444;
-}
-
-.history-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    color: #444;
-}
-
-/* .history-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-} */
-
-/* .history-table tr:hover {
-    background-color: #f1f1f1;
-} */
-
-.action {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.edit-btn,
-.delete-btn {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    font-weight: 500;
+    max-width: 400px;
+    height: auto; /* Adjust as needed */
+    background-color: #131212;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    padding: 15px; /* Added padding */
+    box-sizing: border-box; /* Added box-sizing */
     color: #fff;
 }
 
-.edit-btn {
+.project-card:hover {
+    transform: translateY(-5px);
+}
+
+.project-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+}
+
+.project-card:hover .project-actions {
+    opacity: 1;
+}
+
+.edit-button,
+.delete-button {
+    padding: 4px 8px;
+    font-size: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.edit-button {
     background-color: #3498db;
 }
 
-.edit-btn:hover {
+.edit-button:hover {
     background-color: #2980b9;
 }
 
-.delete-btn {
+.delete-button {
     background-color: #e74c3c;
 }
 
-.delete-btn:hover {
+.delete-button:hover {
     background-color: #c0392b;
+}
+
+.project-info {
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.project-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.customer-name,
+.project-type {
+    font-size: 14px;
+}
+.project-status {
+    font-size: 14px;
+    font-weight: bolder;
+}
+
+@media (max-width: 768px) {
+    .project-grid-container {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
 }

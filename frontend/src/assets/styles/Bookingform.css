@@ -9,29 +9,42 @@ body {
     padding: 0;
 }
 
-.reservation-form-container {
+.booking-form-container {
     background-color: #2a2a2a;
     padding: 2rem;
     border-radius: 12px;
     width: 90%;
-    max-width: 600px;
-    /* margin: 2rem auto; */
+    max-width: 900px; /* Increased max-width for two-column layout */
+    margin: 2rem auto; /* Added margin for centering */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
-.reservationForm-form {
+.booking-form {
     width: 100%;
+    display: grid; /* Enable CSS Grid */
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    grid-gap: 1.5rem; /* Gap between columns */
+}
+
+.booking-form-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    grid-column: 1 / span 2; /* Span across both columns */
 }
 
 /* Fieldset and Legend */
-.fieldset {
+.form-section {
     border: 1px solid #444;
     border-radius: 8px;
     padding: 1.5rem;
+    margin-bottom: 0; /* Remove margin from fieldset, as the grid handles spacing */
     /* background-color: #1f1f1f; */
 }
 
-legend {
+.form-section legend {
     font-size: 1.2rem;
     font-weight: bold;
     color: #ffffff;
@@ -40,19 +53,19 @@ legend {
 }
 
 /* Form groups */
-.form-groups {
+.booking-form-group {
     margin-bottom: 1.25rem;
 }
 
-.form-groups label {
+.booking-form-group label {
     display: block;
     margin-bottom: 0.5rem;
     color: #cccccc;
     font-weight: 500;
 }
 
-.form-groups input,
-.form-groups textarea {
+.booking-form-group input,
+.booking-form-group textarea {
     width: 100%;
     padding: 0.8rem;
     background-color: #535353;
@@ -64,12 +77,12 @@ legend {
     box-sizing: border-box;
 }
 
-.form-groups input:focus,
-.form-groups textarea:focus {
+.booking-form-group input:focus,
+.booking-form-group textarea:focus {
     border-color: #4caf50;
 }
 
-textarea {
+.booking-form-textarea {
     resize: vertical;
     min-height: 100px;
 }
@@ -92,6 +105,11 @@ textarea {
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 1.5rem;
+    grid-column: 1 / span 2; /* Span across both columns */
+}
+
+.form-actions button{
+    width: 100%;
 }
 
 .reserve-btn,
@@ -139,4 +157,50 @@ textarea {
 .error{
     color: red;
     margin-bottom: 10px;
+}
+
+/* close Button */
+
+.closebutton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.closebutton:hover {
+    color: #ccc;
+}
+
+/* Bookingform.css */
+
+/* Image Input with Remove Button */
+.image-input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.image-input-container .booking-form-input {
+    flex-grow: 1;
+    margin-right: 0.5rem;
+}
+
+.remove-image-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.remove-image-button:hover {
+    background-color: #d32f2f;
 }

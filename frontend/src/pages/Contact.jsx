@@ -257,7 +257,7 @@
 /// Contact.jsx
 import React from 'react';
 import BookingForm from '../components/BookingForm';
-import ViewBookings from '../components/ViewBookings';
+import ViewBookingsUser from '../components/ViewBookingsUser';
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import '../assets/styles/Contact.css';
@@ -269,13 +269,13 @@ const Contact = () => {
         <main className="content" role="main">
             <Navbar/>
 
-            <h1 className="slogan">Make a reservation, we will contact you soon!</h1>
+            {/* <h1 className="slogan">Make a reservation, we will contact you soon!</h1> */}
             <div className='bookingContent'>
                 <BookingForm />
-                <img src={roomImage} alt="Room" className="image" />
+                {/* <img src={roomImage} alt="Room" className="image" /> */}
 
             </div>
-            <ViewBookings />
+            <ViewBookingsUser />
 
             <Footer />
         </main>
