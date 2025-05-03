@@ -1,302 +1,213 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { instance } from '../services/ApiEndpoint';
-import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../assets/styles/Bookingform.css';
+import { useNavigate, useParams } from 'react-router-dom';
+import { get } from '../services/ApiEndpoint';
 
-const EditBookingUser = ({ bookingId, onSubmit }) => { // Receive onSubmit prop
-    const [formData, setFormData] = useState({
-        projectName: '',
-        roomType: '',
-        roomSqft: '',
-        roomDetails: '',
-        name: '',
-        phone: '',
-        date: '',
-        time: '',
-        message: '',
-        images: [],
-    });
-    const [formErrors, setFormErrors] = useState({});
+const EditBookingUser = () => {
+    const { id } = useParams();
+    const [projectName, setProjectName] = useState('');
+    const [roomType, setRoomType] = useState('');
+    const [roomSqft, setRoomSqft] = useState('');
+    const [roomDetails, setRoomDetails] = useState('');
+    const [existingImages, setExistingImages] = useState([]);
     const [imageFields, setImageFields] = useState([0]);
+    const [name, setName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [date, setDate] = useState('');
+    const [time, setTime] = useState('');
+    const [message, setMessage] = useState('');
     const navigate = useNavigate();
     let currentId = 1;
 
     useEffect(() => {
-        if (bookingId) {
-            fetchBookingData();
-        }
-    }, [bookingId]);
+        const fetchBooking = async () => {
+            try {
+                const res = await get(`/api/bookings/${id}`);
+                const data = res.data;
 
-    const fetchBookingData = async () => {
-        try {
-            const res = await instance.get(`/api/bookings/${bookingId}`);
-            if (res.status === 200) {
-                setFormData(res.data);
+                if (res.status === 200) {
+                    setProjectName(data.projectName || '');
+                    setRoomType(data.roomType || '');
+                    setRoomSqft(data.roomSqft || '');
+                    setRoomDetails(data.roomDetails || '');
+                    setName(data.name || '');
+                    setPhoneNumber(data.phoneNumber || '');
+                    setDate(data.date ? data.date.split('T')[0] : ''); // Fix for date format
+                    setTime(data.time || '');
+                    setMessage(data.message || '');
+
+                    setExistingImages(data.images || []);
+                    setImageFields([0]);
+                    currentId = 1;
+                } else {
+                    toast.error('Failed to fetch booking.');
+                }
+            } catch (error) {
+                console.error(error);
+                toast.error('Failed to fetch booking.');
             }
-        } catch (err) {
-            console.error("Error fetching booking data", err);
-            toast.error("Error fetching booking data");
+        };
+
+        fetchBooking();
+    }, [id]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const formData = new FormData();
+            formData.append('projectName', projectName);
+            formData.append('roomType', roomType);
+            formData.append('roomSqft', roomSqft);
+            formData.append('roomDetails', roomDetails);
+            formData.append('name', name);
+            formData.append('phoneNumber', phoneNumber);
+            formData.append('date', date);
+            formData.append('time', time);
+            formData.append('message', message);
+
+            let newFilesSelected = false;
+            imageFields.forEach((fieldId) => {
+                const fileInput = document.getElementById(`bookingImage-${fieldId}`);
+                if (fileInput && fileInput.files.length > 0) {
+                    newFilesSelected = true;
+                    Array.from(fileInput.files).forEach((file) => formData.append('images', file));
+                }
+            });
+
+            formData.append('replaceImages', newFilesSelected ? 'true' : 'false');
+
+            const res = await axios.put(`http://localhost:4000/api/bookings/${id}`, formData);
+
+            if (res.status === 200) {
+                toast.success(res.data.message || 'Booking updated successfully!');
+                navigate('/user/bookings');
+            } else {
+                toast.error(res.data.message || 'Failed to update booking.');
+            }
+        } catch (error) {
+            console.error('Error updating booking:', error);
+            toast.error(error.response?.data?.message || 'Error updating booking');
         }
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-        }));
-    };
-
-    const handleImageChange = (e, fieldId) => {
-        const selectedFiles = Array.from(e.target.files);
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            images: [...prevFormData.images, ...selectedFiles],
-        }));
     };
 
     const handleAddImageField = () => {
         setImageFields((prevFields) => [...prevFields, currentId++]);
     };
 
-    const handleRemoveImageField = (fieldId) => {
-        setImageFields((prevFields) => prevFields.filter((id) => id !== fieldId));
-
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            images: prevFormData.images.filter((_, index) => {
-                const fileInput = document.getElementById(`roomImage-${fieldId}`);
-                return !fileInput || !fileInput.files || !Array.from(fileInput.files).includes(prevFormData.images[index]);
-            }),
-        }));
-    };
-
-    const validateForm = () => {
-        let errors = {};
-        if (!formData.projectName.trim()) errors.projectName = 'Project Name is required';
-        if (!formData.roomType.trim()) errors.roomType = 'Room Type is required';
-        if (!formData.roomSqft.trim()) errors.roomSqft = 'Room Sqft is required';
-        if (!formData.roomDetails.trim()) errors.roomDetails = 'Room Details is required';
-        if (!formData.name.trim()) errors.name = 'Your Name is required';
-        if (!formData.phone.trim()) {
-            errors.phone = 'Phone number is required';
-        } else if (!/^[0-9]{10}$/.test(formData.phone)) {
-            errors.phone = 'Please enter a valid 10-digit phone number';
-        }
-        if (!formData.date) errors.date = 'Date is required';
-        if (!formData.time) errors.time = 'Time is required';
-        setFormErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-
-    const clearForm = () => {
-        setFormData({
-            projectName: '',
-            roomType: '',
-            roomSqft: '',
-            roomDetails: '',
-            name: '',
-            phone: '',
-            date: '',
-            time: '',
-            message: '',
-            images: [],
-        });
-        setFormErrors({});
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!validateForm()) return;
-
-        try {
-            const formDataToSend = new FormData();
-
-            // Append all form fields
-            formDataToSend.append('projectName', formData.projectName);
-            formDataToSend.append('roomType', formData.roomType);
-            formDataToSend.append('roomSqft', formData.roomSqft);
-            formDataToSend.append('roomDetails', formData.roomDetails);
-            formDataToSend.append('name', formData.name);
-            formDataToSend.append('phone', formData.phone);
-            formDataToSend.append('date', formData.date);
-            formDataToSend.append('time', formData.time);
-            formDataToSend.append('message', formData.message);
-
-            // Append all images
-            formData.images.forEach(image => {
-                formDataToSend.append('images', image);
-            });
-
-            // Make the API call
-            const res = await instance.post('/api/bookings', formDataToSend, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            if (res.status === 201) {
-                toast.success('Booking submitted successfully!');
-                navigate('/my-bookings');
-            }
-        } catch (error) {
-            console.error('Booking submission error:', error);
-            toast.error(error.response?.data?.message || 'Failed to submit booking');
-        }
-        onSubmit(formDataToSend); // Call the onSubmit prop
-    };
-
     return (
-        <form onSubmit={handleSubmit} className="booking-form">
-            <h2 className="booking-form-title">Submit a Booking Request</h2>
+        <div className="booking-form-container">
+            <button className="closebutton" onClick={() => navigate('/user/bookings')}>×</button>
+            <form onSubmit={handleSubmit} className="booking-form">
+                <h2 className="booking-form-title">Edit Booking</h2>
 
-            <fieldset className="form-section">
-                <legend>Project Information</legend>
                 <div className="booking-form-group">
-                    <label htmlFor="projectName">Project Name:</label>
-                    <input
-                        type="text"
-                        id="projectName"
-                        name="projectName"
-                        value={formData.projectName}
-                        onChange={handleChange}
-                        className={formErrors.projectName ? 'error-input' : 'booking-form-input'}
-                    />
-                    {formErrors.projectName && <span className="error">{formErrors.projectName}</span>}
+                    <label>Project Name:</label>
+                    <input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} required />
                 </div>
+
                 <div className="booking-form-group">
-                    <label htmlFor="roomType">Room Type:</label>
-                    <input
-                        type="text"
-                        id="roomType"
-                        name="roomType"
-                        value={formData.roomType}
-                        onChange={handleChange}
-                        className={formErrors.roomType ? 'error-input' : 'booking-form-input'}
-                    />
-                    {formErrors.roomType && <span className="error">{formErrors.roomType}</span>}
+                    <label>Room Type:</label>
+                    <input type="text" value={roomType} onChange={(e) => setRoomType(e.target.value)} required />
                 </div>
+
                 <div className="booking-form-group">
-                    <label htmlFor="roomSqft">Room Sqft:</label>
-                    <input
-                        type="text"
-                        id="roomSqft"
-                        name="roomSqft"
-                        value={formData.roomSqft}
-                        onChange={handleChange}
-                        className={formErrors.roomSqft ? 'error-input' : 'booking-form-input'}
-                    />
-                    {formErrors.roomSqft && <span className="error">{formErrors.roomSqft}</span>}
+                    <label>Room Sqft:</label>
+                    <input type="text" value={roomSqft} onChange={(e) => setRoomSqft(e.target.value)} required />
                 </div>
+
                 <div className="booking-form-group">
-                    <label htmlFor="roomDetails">Room Details:</label>
+                    <label>Room Details:</label>
                     <textarea
-                        id="roomDetails"
-                        name="roomDetails"
-                        value={formData.roomDetails}
-                        onChange={handleChange}
-                        className={formErrors.roomDetails ? 'error-input' : 'booking-form-textarea'}
+                        className="booking-form-textarea"
+                        value={roomDetails}
+                        onChange={(e) => setRoomDetails(e.target.value)}
+                        required
                     />
-                    {formErrors.roomDetails && <span className="error">{formErrors.roomDetails}</span>}
                 </div>
 
+                {existingImages.length > 0 && (
+                    <div className="booking-form-group">
+                        <label>Current Image(s):</label>
+                        <div className="image-preview-container">
+                            {existingImages.map((imgUrl, index) => (
+                                <img
+                                    key={index}
+                                    src={`http://localhost:4000${imgUrl}`}
+                                    alt={`Room ${index + 1}`}
+                                    className="current-project-image-preview"
+                                    style={{ maxWidth: '100%', marginBottom: '0.5rem' }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 <div className="booking-form-group">
-                    <label>Room Images:</label>
+                    <label>{existingImages.length > 0 ? 'Replace Images:' : 'Upload Room Images:'}</label>
                     {imageFields.map((fieldId) => (
-                        <div key={fieldId} className="image-input-container">
+                        <div className="image-input-container" key={fieldId}>
                             <input
                                 type="file"
-                                id={`roomImage-${fieldId}`}
+                                id={`bookingImage-${fieldId}`}
                                 accept="image/*"
                                 className="booking-form-input"
                                 multiple
-                                onChange={(e) => handleImageChange(e, fieldId)}
                             />
-                            <button
-                                type="button"
-                                className="remove-image-button"
-                                onClick={() => handleRemoveImageField(fieldId)}
-                            >
-                                ×
-                            </button>
                         </div>
                     ))}
-                    <button type="button" className="add-image-button" onClick={handleAddImageField}>+ Add more</button>
+                    <button type="button" className="reserve-btn" onClick={handleAddImageField}>+ Add more</button>
                 </div>
-            </fieldset>
 
-            <fieldset className="form-section">
-                <legend>Your Contact Information</legend>
-                <div className="booking-form-group">
-                    <label htmlFor="name">Your Name:</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className={formErrors.name ? 'error-input' : 'booking-form-input'}
-                    />
-                    {formErrors.name && <span className="error">{formErrors.name}</span>}
-                </div>
-                <div className="booking-form-group">
-                    <label htmlFor="phone">Phone Number:</label>
-                    <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        pattern="[0-9]{10}"
-                        maxLength="10"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className={formErrors.phone ? 'error-input' : 'booking-form-input'}
-                    />
-                    {formErrors.phone && <span className="error">{formErrors.phone}</span>}
-                </div>
-                <div className="booking-form-group">
-                    <label htmlFor="date">Date:</label>
-                    <input
-                        type="date"
-                        id="date"
-                        name="date"
-                        value={formData.date}
-                        onChange={handleChange}
-                        className={formErrors.date ? 'error-input' : 'booking-form-input'}
-                    />
-                    {formErrors.date && <span className="error">{formErrors.date}</span>}
-                </div>
-                <div className="booking-form-group">
-                    <label htmlFor="time">Time:</label>
-                    <input
-                        type="time"
-                        id="time"
-                        name="time"
-                        value={formData.time}
-                        onChange={handleChange}
-                        className={formErrors.time ? 'error-input' : 'booking-form-input'}
-                    />
-                    {formErrors.time && <span className="error">{formErrors.time}</span>}
-                </div>
-                <div className="booking-form-group">
-                    <label htmlFor="message">Message:</label>
-                    <textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        className="booking-form-textarea"
-                    />
-                </div>
-            </fieldset>
+                <fieldset className="form-section" style={{ gridColumn: '1 / span 2' }}>
+                    <legend>Your Contact Information</legend>
 
-            <div className="form-actions">
-                <button type="submit" className="reserve-btn">Submit Booking</button>
-                <button type="button" className="reset-btn" onClick={clearForm}>Reset</button>
-            </div>
-        </form>
+                    <div className="booking-form-group">
+                        <label>Name:</label>
+                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+                    </div>
+
+                    <div className="booking-form-group">
+                        <label>Phone Number:</label>
+                        <input
+                            type="tel"
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            required
+                            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" // Example pattern (adjust for your needs)
+                            placeholder="123-456-7890"
+                            style={{ color: '#ffffff'}} 
+                        />
+                    </div>
+
+                    <div className="booking-form-group">
+                        <label>Date:</label>
+                        <input
+                            type="date"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className="booking-form-group">
+                        <label>Time:</label>
+                        <input type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
+                    </div>
+
+                    <div className="booking-form-group" style={{ gridColumn: '1 / span 2' }}>
+                        <label>Message:</label>
+                        <textarea value={message} onChange={(e) => setMessage(e.target.value)} className="booking-form-textarea" />
+                    </div>
+                </fieldset>
+
+                <div className="form-actions">
+                    <button type="submit" className="reserve-btn">Update Booking</button>
+                    <button type="button" className="reset-btn" onClick={() => navigate('/user/bookings')}>Cancel</button>
+                </div>
+            </form>
+        </div>
     );
 };
 

@@ -19,7 +19,7 @@ import UserHome from './pages/UserHome';
 import './assets/styles/style.css';
 import AdminHome from './pages/AdminHome';
 import Services from './pages/Services';
-import ManageProducts from './components/ManageProducts';  
+import ManageProducts from './components/ManageProducts';
 import AddProducts from './components/AddProducts';
 import EditProducts from './components/EditProducts'
 import ViewProductsById from './components/ViewProductsById';
@@ -38,8 +38,10 @@ import EditProjects from './components/EditProjects';         //Edit project als
 
 import AddToCart from './pages/AddToCart';
 import ViewBookings from './components/ViewBookings';
+import ViewBookingsUser from './components/ViewBookingsUser';
 import ViewBookingsById from './components/ViewBookingsById';
 import EditBookingUser from './components/EditBookingUser';
+import ViewBookingsUserById from './components/ViewBookingsUserById'
 
 
 function App() {
@@ -57,33 +59,26 @@ function App() {
         </Router>
     );
 }
-
 function AppContent({ user }) {
     const navigate = useNavigate();
     const location = useLocation();
+
     useEffect(() => {
         const publicPaths = ['/', '/login', '/contact', '/about', '/projects', '/products', '/services', '/register', '/cart'];
-    
         const isProjectDetailPage = /^\/projects\/[^/]+$/.test(location.pathname);
         const isProductDetailPage = /^\/products\/[^/]+$/.test(location.pathname);
-    
         const isPublic = publicPaths.includes(location.pathname) || isProjectDetailPage || isProductDetailPage;
-    
+
         if (!user && !isPublic) {
             navigate('/login');
         } else if (user) {
-            if (user.role === 'admin' &&
-                !location.pathname.startsWith('/admin') &&
-                location.pathname !== '/register') {
+            if (user.role === 'admin' && !location.pathname.startsWith('/admin') && location.pathname !== '/register') {
                 navigate('/admin');
-            } else if (user.role !== 'admin' &&
-                !location.pathname.startsWith('/userhome') &&
-                !isPublic) {
+            } else if (user.role !== 'admin' && !location.pathname.startsWith('/userhome') && !isPublic) {
                 navigate('/userhome');
             }
         }
     }, [user, navigate, location.pathname]);
-    
 
     return (
         <Routes>
@@ -98,14 +93,14 @@ function AppContent({ user }) {
                 <Route path="projects/:id" element={<ViewProjectsByIdUsers />} />
                 <Route path="services" element={<Services />} />
                 <Route path="register" element={<Register />} />
-                {/* <Route path="add-to-cart" element={<AddToCart />} /> */}
-                <Route path="/cart" element={<AddToCart />} />
-                <Route path="/edit-booking/:id" element={<EditBookingUser />} />
-
+                <Route path="cart" element={<AddToCart />} />
             </Route>
 
             <Route path="/userhome" element={<UserLayout />}>
                 <Route index element={<UserHome />} />
+                <Route path="bookings" element={<ViewBookingsUser />} />
+                <Route path="bookings/:id" element={<ViewBookingsUserById />} />
+                <Route path="edit-booking/:id" element={<EditBookingUser />} />
             </Route>
 
             <Route path="/admin" element={<AdminHome />} />
@@ -119,11 +114,11 @@ function AppContent({ user }) {
             <Route path="/admin/products" element={<ManageProducts />} />
             <Route path="/admin/add-product" element={<AddProducts />} />
             <Route path="/admin/products/:id" element={<ViewProductsById />} />
- <Route path="/admin/edit-product/:id" element={<EditProducts />} />
+            <Route path="/admin/edit-product/:id" element={<EditProducts />} />
             <Route path="/admin/projects" element={<ManageProjects />} />
             <Route path="/admin/add-project" element={<AddProject />} />
             <Route path="/admin/projects/:id" element={<ViewProjectsById />} />
- <Route path="/admin/edit-project/:id" element={<EditProjects />} />
+            <Route path="/admin/edit-project/:id" element={<EditProjects />} />
             <Route path="/admin/edituser/:id" element={<EditUser />} />
 
         </Routes>

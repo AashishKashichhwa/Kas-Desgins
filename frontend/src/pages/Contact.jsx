@@ -261,7 +261,7 @@ import ViewBookingsUser from '../components/ViewBookingsUser';
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import '../assets/styles/Contact.css';
-import roomImage from '../assets/images/Contact.jpg';
+// import roomImage from '../assets/images/Contact.jpg';
 
 const Contact = () => {
     return (

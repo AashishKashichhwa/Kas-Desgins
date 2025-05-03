@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 const addBooking = async (req, res) => {
     try {
         console.log('Request files:', req.files); // Debug file uploads
-        
+
         const { projectName, roomType, roomSqft, roomDetails, name, phone, date, time, message } = req.body;
 
         // Process uploaded files
@@ -31,17 +31,17 @@ const addBooking = async (req, res) => {
         });
 
         await newBooking.save();
-        res.status(201).json({ 
+        res.status(201).json({
             success: true,
             message: 'Booking created successfully',
-            booking: newBooking 
+            booking: newBooking
         });
     } catch (error) {
         console.error('Add booking error:', error);
-        res.status(500).json({ 
+        res.status(500).json({
             success: false,
             message: 'Failed to create booking',
-            error: error.message 
+            error: error.message
         });
     }
 };
@@ -72,7 +72,7 @@ const getBookingById = async (req, res) => {
 const updateBookingById = async (req, res) => {
     try {
         const bookingId = req.params.id;
-        const { costEstimate, status } = req.body;
+        const { costEstimate, status, costApproval } = req.body;  // Include costApproval in the destructured request body
 
         const bookingToUpdate = await Booking.findById(bookingId);
 
@@ -85,6 +85,14 @@ const updateBookingById = async (req, res) => {
         }
         if (status !== undefined) {
             bookingToUpdate.status = status;
+        }
+
+        // Handle costApproval update.  Crucially, validate against enum values
+        if (costApproval !== undefined) {
+            if (!['Not Approved', 'Approved'].includes(costApproval)) {
+                return res.status(400).json({ message: 'Invalid costApproval value. Must be "Not Approved" or "Approved".' });
+            }
+            bookingToUpdate.costApproval = costApproval;
         }
 
         await bookingToUpdate.save();
@@ -135,10 +143,72 @@ const deleteBookingById = async (req, res) => {
     }
 };
 
+
+const sendQuotation = async (req, res) => {
+    try {
+        const booking = await Booking.findById(req.params.id);
+        if (!booking) {
+            return res.status(404).json({ message: 'Booking not found' });
+        }
+
+        const { costEstimate } = req.body;
+        if (!costEstimate) {
+            return res.status(400).json({ message: 'Cost estimate is required' });
+        }
+
+        booking.costEstimate = costEstimate;
+        booking.status = 'AwaitingCostApproval';
+        await booking.save();
+
+        res.status(200).json({ message: 'Quotation sent successfully', booking });
+    } catch (error) {
+        console.error('Error sending quotation:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+const submitFinalDesign = async (req, res) => {
+    try {
+        console.log('FILES:', req.files);
+        console.log('BODY:', req.body);
+
+        const bookingId = req.params.id;
+        // Access files using the correct fieldname
+        const finalImages = req.files?.map(file => `/uploads/${file.filename}`) || []; // Check finalImages or finalDesignImages
+        const { final3DPreview } = req.body;
+
+        const booking = await Booking.findById(bookingId);
+        if (!booking) {
+            return res.status(404).json({ message: 'Booking not found' });
+        }
+
+        // Assign the filepaths to the finalDesigns field
+        booking.finalDesignImages = finalImages; // finalImages contains the value
+        booking.final3DPreview = final3DPreview;
+        booking.status = 'AwaitingFinalDesign'; // This line was wrong, it is now corrected
+
+        console.log('booking before save:', booking); // 👈 Add this line
+
+        await booking.save();
+
+        res.status(200).json({
+            message: 'Final design submitted successfully',
+            booking
+        });
+    } catch (error) {
+        console.error('Error submitting final design:', error); // Log full error
+        res.status(500).json({
+            message: 'Failed to submit final design',
+            error: error.message
+        });
+    }
+};
+
 export {
     getBookings,
     addBooking,
     getBookingById,
     updateBookingById,
-    deleteBookingById
+    deleteBookingById,
+    sendQuotation,
+    submitFinalDesign // 👈 Add this
 };

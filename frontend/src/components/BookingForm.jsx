@@ -1,35 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { instance } from '../services/ApiEndpoint';
+import { instance } from '../services/ApiEndpoint'; // Import Axios instance <----- I used from what you used
 import { useNavigate } from 'react-router-dom';
 import '../assets/styles/Bookingform.css';
 
-const BookingForm = ({ isAdmin = false, bookingId = null }) => { // Pass isAdmin prop
-    const [formData, setFormData] = useState({ /* ... */ });
+const BookingForm = () => {
+    const [formData, setFormData] = useState({
+        projectName: '',
+        roomType: '',
+        roomSqft: '',
+        roomDetails: '',
+        name: '',
+        phone: '',
+        date: '',
+        time: '',
+        message: '',
+        images: [],
+    });
     const [formErrors, setFormErrors] = useState({});
-    const [booking, setBooking] = useState(null) // set data after getting from API
     const navigate = useNavigate();
     const [imageFields, setImageFields] = useState([0]);
     let currentId = 1;
 
-useEffect(()=>{
-if(bookingId){
-    fetchBookingData()
-}
-},[])
-
-const fetchBookingData = async()=>{
-    try{
-        const res = await instance.get(`/api/bookings/${bookingId}`)
-        if(res.status===200){
-            setBooking(res.data)
-            setFormData(res.data)
-        }
-    }
-    catch(err){
-    console.log("Error fetching booking data",err)
-    }
-}
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevFormData) => ({
@@ -69,6 +61,11 @@ const fetchBookingData = async()=>{
             formData.images.forEach(image => {
                 formDataToSend.append('images', image);
             });
+
+            // Debug: Log form data entries
+            for (let [key, value] of formDataToSend.entries()) {
+                console.log(key, value);
+            }
 
             // Make the API call
             const res = await instance.post('/api/bookings', formDataToSend, {
@@ -155,7 +152,6 @@ const fetchBookingData = async()=>{
                             value={formData.projectName}
                             onChange={handleChange}
                             className={formErrors.projectName ? 'error-input' : 'booking-form-input'}
-                            disabled={isAdmin}
                         />
                         {formErrors.projectName && <span className="error">{formErrors.projectName}</span>}
                     </div>
@@ -168,7 +164,6 @@ const fetchBookingData = async()=>{
                             value={formData.roomType}
                             onChange={handleChange}
                             className={formErrors.roomType ? 'error-input' : 'booking-form-input'}
-                             disabled={isAdmin}
                         />
                         {formErrors.roomType && <span className="error">{formErrors.roomType}</span>}
                     </div>
@@ -181,7 +176,6 @@ const fetchBookingData = async()=>{
                             value={formData.roomSqft}
                             onChange={handleChange}
                             className={formErrors.roomSqft ? 'error-input' : 'booking-form-input'}
-                             disabled={isAdmin}
                         />
                         {formErrors.roomSqft && <span className="error">{formErrors.roomSqft}</span>}
                     </div>
@@ -193,7 +187,6 @@ const fetchBookingData = async()=>{
                             value={formData.roomDetails}
                             onChange={handleChange}
                             className={formErrors.roomDetails ? 'error-input' : 'booking-form-textarea'}
-                             disabled={isAdmin}
                         />
                         {formErrors.roomDetails && <span className="error">{formErrors.roomDetails}</span>}
                     </div>
@@ -209,19 +202,17 @@ const fetchBookingData = async()=>{
                                     className="booking-form-input"
                                     multiple
                                     onChange={(e) => handleImageChange(e, fieldId)}
-                                     disabled={isAdmin}
                                 />
                                 <button
                                     type="button"
                                     className="remove-image-button"
                                     onClick={() => handleRemoveImageField(fieldId)}
-                                     disabled={isAdmin}
                                 >
                                     ×
                                 </button>
                             </div>
                         ))}
-                        <button type="button" className="add-image-button" onClick={handleAddImageField} disabled={isAdmin}>+ Add more</button>
+                        <button type="button" className="add-image-button" onClick={handleAddImageField}>+ Add more</button>
                     </div>
                 </fieldset>
 
@@ -236,7 +227,6 @@ const fetchBookingData = async()=>{
                             value={formData.name}
                             onChange={handleChange}
                             className={formErrors.name ? 'error-input' : 'booking-form-input'}
-                             disabled={isAdmin}
                         />
                         {formErrors.name && <span className="error">{formErrors.name}</span>}
                     </div>
@@ -251,7 +241,6 @@ const fetchBookingData = async()=>{
                             value={formData.phone}
                             onChange={handleChange}
                             className={formErrors.phone ? 'error-input' : 'booking-form-input'}
-                             disabled={isAdmin}
                         />
                         {formErrors.phone && <span className="error">{formErrors.phone}</span>}
                     </div>
@@ -264,7 +253,6 @@ const fetchBookingData = async()=>{
                             value={formData.date}
                             onChange={handleChange}
                             className={formErrors.date ? 'error-input' : 'booking-form-input'}
-                             disabled={isAdmin}
                         />
                         {formErrors.date && <span className="error">{formErrors.date}</span>}
                     </div>
@@ -277,7 +265,6 @@ const fetchBookingData = async()=>{
                             value={formData.time}
                             onChange={handleChange}
                             className={formErrors.time ? 'error-input' : 'booking-form-input'}
-                             disabled={isAdmin}
                         />
                         {formErrors.time && <span className="error">{formErrors.time}</span>}
                     </div>
@@ -289,71 +276,14 @@ const fetchBookingData = async()=>{
                             value={formData.message}
                             onChange={handleChange}
                             className="booking-form-textarea"
-                             disabled={isAdmin}
                         />
                     </div>
                 </fieldset>
-                {isAdmin && (
-                    <fieldset className="form-section">
-                        <legend>Admin Controls</legend>
-                            <div className="booking-form-group">
-                                <label htmlFor="costEstimate">Cost Estimate:</label>
-                                <input
-                                    type="number"
-                                    id="costEstimate"
-                                    name="costEstimate"
-                                    value={formData.costEstimate}
-                                    onChange={handleChange}
-                                    className="booking-form-input"
-                                />
-                        </div>
-                            <div className="booking-form-group">
-                                <label htmlFor="status">Status:</label>
-                                <select
-                                    id="status"
-                                    name="status"
-                                    value={formData.status}
-                                    onChange={handleChange}
-                                    className="booking-form-input"
-                                >
-                                    <option value="Draft">Draft</option>
-                                    <option value="Submitted">Submitted</option>
-                                    <option value="AwaitingCostApproval">Awaiting Cost Approval</option>
-                                    <option value="Designing">Designing</option>
-                                    <option value="AwaitingFinalDesign">Awaiting Final Design</option>
-                                    <option value="Completed">Completed</option>
-                                    <option value="Canceled">Canceled</option>
-                                </select>
-                            </div>
-                             <div className="booking-form-group">
-                            <label htmlFor="costApproval">Cost Approval:</label>
-                            <select
-                                id="costApproval"
-                                name="costApproval"
-                                value={formData.costApproval === null ? '' : formData.costApproval.toString()}
-                                onChange={handleChange}
-                                className="booking-form-input"
-                            >
-                                <option value="">Select</option>
-                                <option value="true">True</option>
-                                <option value="false">False</option>
-                            </select>
-                        </div>
-                     </fieldset>
-                    )}
 
-                     {!isAdmin &&(
-                         <div className="form-actions">
-                            <button type="submit" className="reserve-btn">Submit Booking</button>
-                            <button type="button" className="reset-btn" onClick={clearForm}>Reset</button>
-                    </div>
-                     )}
-
-                {isAdmin && (
-                    <div className="form-actions">
-                        <button type="button" className="save-btn" onClick={handleSubmit}>Save Changes</button>
-                    </div>
-                )}
+                <div className="form-actions">
+                    <button type="submit" className="reserve-btn">Submit Booking</button>
+                    <button type="button" className="reset-btn" onClick={clearForm}>Reset</button>
+                </div>
             </form>
         </div>
     );

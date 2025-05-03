@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { instance } from '../services/ApiEndpoint';
-import { toast } from 'react-hot-toast';
 import { useNavigate, Link } from 'react-router-dom';
-import '../assets/styles/ViewProjects.css'; // Assuming similar styling
+import { toast } from 'react-hot-toast';
+import { instance } from '../services/ApiEndpoint';
+import '../assets/styles/ViewProjects.css';
 
 const ViewBookingsUser = () => {
     const [bookings, setBookings] = useState([]);
@@ -16,7 +16,6 @@ const ViewBookingsUser = () => {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
                 });
-                // Filter bookings for the current user (you'll need to implement this on the backend)
                 setBookings(res.data);
             } catch (error) {
                 console.error('Error fetching bookings:', error);
@@ -27,14 +26,15 @@ const ViewBookingsUser = () => {
     }, []);
 
     const handleBookingClick = (id) => {
-        navigate(`/bookings/${id}`); // Navigate to booking details
+        navigate(`/userhome/bookings/${id}`);
     };
 
     const handleEdit = (id) => {
-        navigate(`/edit-booking/${id}`);
+        navigate(`/userhome/edit-booking/${id}`);
     };
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (id, e) => {
+        e.stopPropagation();
         try {
             await instance.delete(`/api/bookings/${id}`, {
                 headers: {
@@ -42,7 +42,7 @@ const ViewBookingsUser = () => {
                 }
             });
             toast.success("Booking deleted successfully");
-            fetchBookings(); // Refresh the booking list
+            setBookings(bookings.filter(booking => booking._id !== id));
         } catch (error) {
             console.error('Error deleting booking:', error);
             toast.error("Error deleting booking");
@@ -55,27 +55,58 @@ const ViewBookingsUser = () => {
                 <BookingCard
                     key={booking._id}
                     booking={booking}
-                    onClick={handleBookingClick}
-                    handleDelete={handleDelete}
-                    handleEdit={handleEdit}
+                    onClick={() => handleBookingClick(booking._id)}
+                    onDelete={(e) => handleDelete(booking._id, e)}
+                    onEdit={() => handleEdit(booking._id)}
                 />
             ))}
         </div>
     );
 };
 
-const BookingCard = ({ booking, onClick, handleDelete, handleEdit }) => {
+const BookingCard = ({ booking, onClick, onDelete, onEdit }) => {
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    useEffect(() => {
+        let intervalId;
+        const imageCount = booking.images ? booking.images.length : 0;
+
+        if (imageCount > 1) {
+            intervalId = setInterval(() => {
+                setCurrentImageIndex(prevIndex => (prevIndex + 1) % imageCount);
+            }, 3000);
+        }
+
+        return () => clearInterval(intervalId);
+    }, [booking.images]);
+
     return (
-        <div className="project-card">
+        <div className="project-card" onClick={onClick}>
             <div className="project-actions">
-                <button onClick={() => handleEdit(booking._id)} className="edit-button">Edit</button>
-                <button onClick={() => handleDelete(booking._id)} className="delete-button">Delete</button>
+                <button 
+                    className="edit-button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onEdit();
+                    }}
+                >
+                    Edit
+                </button>
+                <button 
+                    className="delete-button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(e);
+                    }}
+                >
+                    Delete
+                </button>
             </div>
 
-            <div className="project-image-container" onClick={() => onClick(booking._id)}>
+            <div className="project-image-container">
                 {booking.images && booking.images.length > 0 ? (
                     <img
-                        src={`http://localhost:4000${booking.images[0]}`}
+                        src={`http://localhost:4000${booking.images[currentImageIndex]}`}
                         alt={booking.projectName}
                         className="project-image"
                     />
