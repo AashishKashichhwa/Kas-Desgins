@@ -87,7 +87,7 @@ const getBookingById = async (req, res) => {
 const updateBookingById = async (req, res) => {
     try {
         const bookingId = req.params.id;
-        const { costEstimate, status, costApproval } = req.body;  // Include costApproval in the destructured request body
+        const { costEstimate, status, costApproval, designModificationComments } = req.body;  // Include designModificationComments
 
         const bookingToUpdate = await Booking.findById(bookingId);
 
@@ -99,6 +99,9 @@ const updateBookingById = async (req, res) => {
             bookingToUpdate.costEstimate = costEstimate;
         }
         if (status !== undefined) {
+             if (!['Draft', 'Submitted', 'AwaitingCostApproval', 'Designing', 'AwaitingFinalDesign', 'Completed', 'Canceled'].includes(status)) {
+                    return res.status(400).json({ message: 'Invalid status value.' });
+                }
             bookingToUpdate.status = status;
         }
 
@@ -108,6 +111,9 @@ const updateBookingById = async (req, res) => {
                 return res.status(400).json({ message: 'Invalid costApproval value. Must be "Not Approved" or "Approved".' });
             }
             bookingToUpdate.costApproval = costApproval;
+        }
+      if (designModificationComments !== undefined) {
+            bookingToUpdate.designModificationComments = designModificationComments;
         }
 
         await bookingToUpdate.save();
@@ -123,7 +129,6 @@ const updateBookingById = async (req, res) => {
         res.status(500).json({ message: 'Error updating booking', error: error.message });
     }
 };
-
 const deleteBookingById = async (req, res) => {
     try {
         const bookingId = req.params.id;
@@ -206,13 +211,13 @@ const submitFinalDesign = async (req, res) => {
         await booking.save();
 
         res.status(200).json({
-            message: 'Final design submitted successfully',
+            message: 'Design submitted successfully',
             booking
         });
     } catch (error) {
-        console.error('Error submitting final design:', error); // Log full error
+        console.error('Error submitting design:', error); // Log full error
         res.status(500).json({
-            message: 'Failed to submit final design',
+            message: 'Failed to submit design',
             error: error.message
         });
     }

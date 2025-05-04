@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { instance } from '../services/ApiEndpoint';
 import { toast } from 'react-hot-toast';
-import '../assets/styles/ViewBookingsById.css'; // Use the same CSS as ViewBookingsById
+import '../assets/styles/ViewBookingsById.css';
 
 const ViewBookingsUserById = () => {
     const { id } = useParams();
@@ -10,8 +10,26 @@ const ViewBookingsUserById = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [showApprovalOptions, setShowApprovalOptions] = useState(false); //State to handle cost approval visibility
+    const [showApprovalOptions, setShowApprovalOptions] = useState(false);
     const navigate = useNavigate();
+    const [showRedesignForm, setShowRedesignForm] = useState(false);
+    const [redesignComments, setRedesignComments] = useState('');
+    const [designApproval, setDesignApproval] = useState(null);
+    const [showApprovalDropdown, setShowApprovalDropdown] = useState(false);
+    const approvalDropdownRef = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (approvalDropdownRef.current && !approvalDropdownRef.current.contains(event.target)) {
+                setShowApprovalDropdown(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     useEffect(() => {
         const fetchBooking = async () => {
@@ -38,30 +56,24 @@ const ViewBookingsUserById = () => {
 
     const goToPrevious = () => {
         setCurrentImageIndex((prev) =>
-            booking.images
-                ? (prev - 1 + booking.images.length) % booking.images.length
-                : 0
+            booking.images ? (prev - 1 + booking.images.length) % booking.images.length : 0
         );
     };
 
     const goToNext = () => {
         setCurrentImageIndex((prev) =>
-            booking.images
-                ? (prev + 1) % booking.images.length
-                : 0
+            booking.images ? (prev + 1) % booking.images.length : 0
         );
     };
+
     const handleCostApproval = async (approvalStatus) => {
         try {
-            await instance.put(`/api/bookings/${id}`, {
-                costApproval: approvalStatus
-            }, {
+            await instance.put(`/api/bookings/${id}`, { costApproval: approvalStatus }, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
             toast.success(`Design ${approvalStatus === 'Approved' ? 'approved' : 'disapproved'}`);
-            //Refresh the booking after approval/disapproval
             const updatedBooking = await instance.get(`/api/bookings/${id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -72,6 +84,49 @@ const ViewBookingsUserById = () => {
         } catch (err) {
             console.error('Error updating cost approval:', err);
             toast.error('Failed to update cost approval.');
+        }
+    };
+
+    const handleRedesignSubmit = async () => {
+        try {
+            await instance.put(`/api/bookings/${id}`, { designModificationComments: redesignComments }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            toast.success('Redesign request submitted successfully!');
+            const updatedBooking = await instance.get(`/api/bookings/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setBooking(updatedBooking.data);
+            setShowRedesignForm(false);
+        } catch (err) {
+            console.error('Error submitting redesign request:', err);
+            toast.error('Failed to submit redesign request.');
+        }
+    };
+
+    const handleDesignApprovalChange = async (approval) => {
+        try {
+            const status = approval === 'yes' ? 'Completed' : 'AwaitingFinalDesign';
+            await instance.put(`/api/bookings/${id}`, { status }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            toast.success(`Design ${approval === 'yes' ? 'Approved' : 'Rejected'}`);
+            const updatedBooking = await instance.get(`/api/bookings/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setBooking(updatedBooking.data);
+            setShowApprovalDropdown(false);
+        } catch (error) {
+            console.error('Error updating design approval:', error);
+            toast.error('Failed to update design approval.');
         }
     };
 
@@ -117,7 +172,7 @@ const ViewBookingsUserById = () => {
                                 <select
                                     value={booking.costApproval}
                                     onChange={(e) => handleCostApproval(e.target.value)}
-                                    className="status-select"
+                                    className="status-select-cost"
                                 >
                                     <option value="Approved">Approve</option>
                                     <option value="Not Approved">Disapprove</option>
@@ -136,6 +191,48 @@ const ViewBookingsUserById = () => {
                         <p><strong>Message:</strong> {booking.message}</p>
                     </div>
                 </div>
+
+                <div className="design-approval right-button" ref={approvalDropdownRef}>
+                    <button
+                        onClick={() => setShowApprovalDropdown(!showApprovalDropdown)}
+                        className="inline-button-approve"
+                        aria-label="Toggle design approval dropdown"
+                    >
+                        {showApprovalDropdown ? '×' : 'Approve Design'}
+                    </button>
+                    {showApprovalDropdown && (
+                            <div className="approval-dropdown">
+                                <select
+                                    value={designApproval}
+                                    onChange={(e) => handleDesignApprovalChange(e.target.value)}
+                                    className="status-select-approval"
+                                >
+                                    <option value="">Select option</option>
+                                    <option value="yes">Approve</option>
+                                    <option value="no">Request Changes</option>
+                                </select>
+                            </div>
+                        )}
+            
+                </div>
+
+
+                <button onClick={() => setShowRedesignForm(!showRedesignForm)} className="inline-button">
+                    {showRedesignForm ? '×' : 'Request Redesign'}
+                </button>
+
+                {showRedesignForm && (
+                    <div className="redesign-form">
+                        <h3>Request Design Modification</h3>
+                        <textarea
+                            value={redesignComments}
+                            onChange={(e) => setRedesignComments(e.target.value)}
+                            placeholder="Enter your design modification comments here..."
+                        />
+                        <button onClick={handleRedesignSubmit} className="inline-button">Submit Redesign Request</button>
+                    </div>
+                )}
+
 
                 {/* Room Image */}
                 <div className="view-booking-section">
@@ -186,16 +283,16 @@ const ViewBookingsUserById = () => {
                     ) : (
                         <h1>No Final Design Images</h1>
                     )}
-
                     {booking.final3DPreview && (
                         <div className="booking-3d-visualization">
                             <h3>Final 3D Visualization:</h3>
                             <div
                                 className="booking-iframe-container"
-                                dangerouslySetInnerHTML={{ __html: booking.project3DVisualization }}
+                                dangerouslySetInnerHTML={{ __html: booking.final3DPreview }}
                             />
                         </div>
                     )}
+
                 </div>
 
                 {/* 3D Visualization Preview */}
@@ -208,6 +305,8 @@ const ViewBookingsUserById = () => {
                         />
                     </div>
                 )}
+
+
             </div>
         </div>
     );

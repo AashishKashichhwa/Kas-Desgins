@@ -343,10 +343,61 @@ iframe {
 }
 .status-select-cost {
     margin-top: 10px;
-    margin-left: 55%;
+    margin-left: 49%;
     border-radius: 4px;
     background-color: #333;
     color: #eee;
     box-sizing: border-box;
 }
 
+/* ViewBookingsById.css */
+
+.action-buttons {
+    /* display: flex; */
+    justify-content: 5px; /* Puts space between the buttons */
+    align-items: center;
+    margin-bottom: 10px; /* Add some space below the buttons */
+}
+
+
+
+.redesign-form {
+    margin-top: 10px; /* Add some space above the form */
+}
+
+.redesign-form textarea {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.status-select-approval{
+    margin-top: 6px;
+    margin-left: 2%;
+    border-radius: 4px;
+    background-color: #333;
+    color: #eee;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.inline-button-approve{
+    margin-bottom: 5px;
+}
+
+.inline-button-approve {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 0.8em;
+    vertical-align: middle;
+    margin-bottom: 10px;
+}
+
+.inline-button-approve {
+    background-color:  #0b6cd3;
+}
