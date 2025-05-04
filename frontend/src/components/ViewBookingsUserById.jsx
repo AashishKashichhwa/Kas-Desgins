@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { instance } from '../services/ApiEndpoint';
 import { toast } from 'react-hot-toast';
-import '../assets/styles/ViewBookingsById.css';
+import '../assets/styles/ViewBookingsById.css'; // Use the same CSS as ViewBookingsById
 
 const ViewBookingsUserById = () => {
     const { id } = useParams();
@@ -10,11 +10,13 @@ const ViewBookingsUserById = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [showApprovalOptions, setShowApprovalOptions] = useState(false); //State to handle cost approval visibility
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchBooking = async () => {
             setLoading(true);
+            setError('');
             try {
                 const res = await instance.get(`/api/bookings/${id}`, {
                     headers: {
@@ -49,12 +51,27 @@ const ViewBookingsUserById = () => {
                 : 0
         );
     };
-
     const handleCostApproval = async (approvalStatus) => {
-        if (approvalStatus === 'Approved') {
-            navigate(`/payment/${id}`);
-        } else {
-            toast.success('Design disapproved');
+        try {
+            await instance.put(`/api/bookings/${id}`, {
+                costApproval: approvalStatus
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            toast.success(`Design ${approvalStatus === 'Approved' ? 'approved' : 'disapproved'}`);
+            //Refresh the booking after approval/disapproval
+            const updatedBooking = await instance.get(`/api/bookings/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setBooking(updatedBooking.data);
+            setShowApprovalOptions(false);
+        } catch (err) {
+            console.error('Error updating cost approval:', err);
+            toast.error('Failed to update cost approval.');
         }
     };
 
@@ -62,29 +79,69 @@ const ViewBookingsUserById = () => {
     if (error) return <p className="error-message">{error}</p>;
     if (!booking) return <p>Booking not found.</p>;
 
+    const costEstimate = booking?.costEstimate || 0;
+    const canEditApproval = costEstimate > 0;
+
     return (
-        <div className="booking-details-container">
-            <div className="booking-details-contents">
+        <div className="view-booking-details-container">
+            <div className="view-booking-details-contents">
                 <button className="close-button" onClick={() => navigate('/user/bookings')}>×</button>
                 <h2 className="booking-detail-title">Your Booking</h2>
 
-                <div className="booking-details-content">
-                    <div className="booking-info">
+                {/* Project Information */}
+                <div className="info-container">
+                    {/* Project Information */}
+                    <div className="info-column">
+                        <h3>Project Information</h3>
                         <p><strong>Project Name:</strong> {booking.projectName}</p>
                         <p><strong>Room Type:</strong> {booking.roomType}</p>
                         <p><strong>Room Size:</strong> {booking.roomSqft} sqft</p>
                         <p><strong>Room Details:</strong> {booking.roomDetails}</p>
+                        <p><strong>Design Cost Estimate:</strong> NRs. {costEstimate}</p>
+                        <p><strong>Status:</strong> {booking.status}</p>
+                        <p>
+                            <strong>Cost Approval Status:</strong> {booking.costApproval}
+                            <button
+                                className="inline-button"
+                                onClick={() => setShowApprovalOptions(!showApprovalOptions)}
+                                disabled={!canEditApproval}
+                                title={canEditApproval ? "" : "Wait for Admin to send Design Cost Estimate"}
+                                style={{
+                                    cursor: canEditApproval ? "pointer" : "not-allowed",
+                                    opacity: canEditApproval ? 1 : 0.6
+                                }}
+                            >
+                                {canEditApproval ? "Edit Approval" : "Wait for Admin to send Design Cost Estimate"}
+                            </button>
+                            {showApprovalOptions && (
+                                <select
+                                    value={booking.costApproval}
+                                    onChange={(e) => handleCostApproval(e.target.value)}
+                                    className="status-select"
+                                >
+                                    <option value="Approved">Approve</option>
+                                    <option value="Not Approved">Disapprove</option>
+                                </select>
+                            )}
+                        </p>
+                    </div>
+
+                    {/* Customer Contact Information */}
+                    <div className="info-column">
+                        <h3>Customer Contact Information</h3>
                         <p><strong>Name:</strong> {booking.name}</p>
                         <p><strong>Phone Number:</strong> {booking.phoneNumber}</p>
                         <p><strong>Date:</strong> {new Date(booking.date).toLocaleDateString()}</p>
                         <p><strong>Time:</strong> {booking.time}</p>
                         <p><strong>Message:</strong> {booking.message}</p>
                     </div>
+                </div>
 
-                    {/* Image Gallery */}
+                {/* Room Image */}
+                <div className="view-booking-section">
+                    <h3>Room Image</h3>
                     {booking.images && booking.images.length > 0 ? (
                         <div className="booking-image-gallery">
-                            <h3>Images:</h3>
                             <div className="imagebox">
                                 <button className="image-button back" onClick={goToPrevious}>‹</button>
                                 <img
@@ -105,33 +162,46 @@ const ViewBookingsUserById = () => {
                             />
                         </div>
                     ) : (
-                        <h1>No Images</h1>
+                        <h1>No Room Images</h1>
                     )}
                 </div>
 
-                {/* Cost Estimation and Approval */}
-                <div>
-                    <p><strong>Cost Estimate:</strong> ${booking.costEstimate}</p>
-                    <p><strong>Approval Status:</strong> {booking.costApproval}</p>
-                    <p><strong>Status:</strong> {booking.status}</p>
-                    <button
-                        onClick={() => handleCostApproval('Approved')}
-                        disabled={booking.costApproval === 'Approved'}
-                    >
-                        Approve Design Estimation
-                    </button>
-                    <button
-                        onClick={() => handleCostApproval('Not Approved')}
-                        disabled={booking.costApproval === 'Not Approved'}
-                    >
-                        Disapprove Design Estimation
-                    </button>
+                {/* Design Image and 3D Preview */}
+                <div className="view-booking-section">
+                    <h3>Design Image and 3D Preview</h3>
+                    {booking.finalDesignImages && booking.finalDesignImages.length > 0 ? (
+                        <div className="booking-image-gallery">
+                            <h3>Final Design Images:</h3>
+                            <div className="imagebox">
+                                {booking.finalDesignImages.map((image, index) => (
+                                    <img
+                                        key={index}
+                                        src={`http://localhost:4000${image}`}
+                                        alt={`Final Design - ${index + 1}`}
+                                        className="booking-gallery-image"
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    ) : (
+                        <h1>No Final Design Images</h1>
+                    )}
+
+                    {booking.final3DPreview && (
+                        <div className="booking-3d-visualization">
+                            <h3>Final 3D Visualization:</h3>
+                            <div
+                                className="booking-iframe-container"
+                                dangerouslySetInnerHTML={{ __html: booking.project3DVisualization }}
+                            />
+                        </div>
+                    )}
                 </div>
 
-                {/* 3D Preview (if available) */}
+                {/* 3D Visualization Preview */}
                 {booking.project3DVisualization && (
-                    <div className="booking-3d-visualization">
-                        <h3>3D Visualization:</h3>
+                    <div className="view-booking-section">
+                        <h3>3D Visualization</h3>
                         <div
                             className="booking-iframe-container"
                             dangerouslySetInnerHTML={{ __html: booking.project3DVisualization }}

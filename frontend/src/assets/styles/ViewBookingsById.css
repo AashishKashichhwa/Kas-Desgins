@@ -1,75 +1,89 @@
-/* Container for the booking details page */
-.booking-details-container {
+/* Existing CSS */
+/* General Styles */
+.view-booking-details-container {
     width: 100%;
     background-color: #000;
 }
 
-body {
-    width: 100%;
-    background-color: #000;
-}
-
-.booking-details-contents {
-    max-width: 900px;
-    margin: 0px auto;
-    margin-top: 20px;
+.view-booking-details-contents {
+    max-width: 1200px;
+    margin: 20px auto;
     padding: 20px;
-    background-color: #000;
-    border: 1px solid #fff;
+    background-color: #111;
+    border: 1px solid #444;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
     color: #fff;
 }
 
-.booking-detail-title {
-    font-size: 24px;
+.view-booking-detail-title {
+    font-size: 28px;
     font-weight: bold;
     color: #fff;
-    margin-bottom: 15px;
-}
-
-.booking-details-content {
+    text-align: center;
     margin-bottom: 20px;
 }
 
-.booking-info {
+/* Flex Layout for Project & Customer Info */
+.info-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.info-column {
+    width: 45%;
+    background-color: #222;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+.info-column h3 {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #666;
+    padding-bottom: 5px;
+}
+
+.info-column p {
     font-size: 16px;
     color: #ddd;
     line-height: 1.6;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 }
 
+/* Image Styles */
 .booking-image-gallery {
     margin-bottom: 20px;
 }
 
 .booking-image-gallery h3 {
-    font-size: 18px;
+    font-size: 1.3em;
     font-weight: bold;
     color: #fff;
     margin-bottom: 10px;
 }
 
 .booking-gallery-image {
-    width: 890px;
-    max-width: 890px;
-    height: 500px;
-    object-fit: cover;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
     background-color: transparent;
     cursor: pointer;
     transition: opacity 0.8s;
-    z-index: 1;
 }
 
-/* 3D Visualization */
+/* 3D Visualization Styles */
 .booking-3d-visualization {
     margin-bottom: 20px;
 }
 
 .booking-3d-visualization h3 {
-    font-size: 18px;
+    font-size: 1.3em;
     font-weight: bold;
     color: #fff;
     margin-bottom: 10px;
@@ -85,22 +99,35 @@ body {
 }
 
 iframe {
-    border-top-width: 0px;
-    border-bottom-width: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-    width: 890px;
-    height: 500px;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    width: 100%;
+    height: 100%;
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    .booking-gallery-image {
+/* Responsiveness */
+@media (max-width: 992px) {
+    .info-container {
+        flex-direction: column;
+    }
+
+    .info-column {
         width: 100%;
-        max-width: none;
+        margin-bottom: 15px;
+    }
+
+    .booking-gallery-image {
+        height: auto;
+    }
+
+    .booking-iframe-container {
+        height: 400px;
     }
 }
 
+/* Image Gallery - Navigation */
 .imagebox {
     position: relative;
     width: 100%;
@@ -134,23 +161,24 @@ iframe {
     position: absolute;
 }
 
+/* Close Button */
 .close-button {
     position: absolute;
-    top: 30px;
-    right: 300px;
+    top: 15px;
+    right: 15px;
     background: none;
     border: none;
-    font-size: 40px;
+    font-size: 30px;
     color: white;
     cursor: pointer;
     z-index: 10;
 }
 
 .close-button:hover {
-    color: #ff4d4d; /* Optional: a nice hover effect (red) */
+    color: #ff4d4d;
 }
 
-
+/* Final Design Field */
 .final-design-field {
     display: flex;
     align-items: center;
@@ -158,6 +186,7 @@ iframe {
     margin-bottom: 8px;
 }
 
+/* Remove Image */
 .remove-image-button {
     background-color: #f44336;
     color: white;
@@ -171,3 +200,153 @@ iframe {
 .remove-image-button:hover {
     background-color: #d32f2f;
 }
+
+/* Submit Design and Edit Button */
+
+
+.submit-design-button,.toggle-button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 5px;
+  }
+  
+  .submit-design-button:hover,.toggle-button:hover  {
+    background-color: #0056b3;
+  }
+  
+
+
+
+/* Admin Controls */
+.admin-controls {
+    background-color: #222;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 20px;
+}
+
+.admin-controls h3 {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+/* Section Header */
+.view-booking-section h3 {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #666;
+    padding-bottom: 5px;
+}
+
+.inline-button {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 0.8em;
+    vertical-align: middle;
+}
+
+.inline-button:hover {
+    background-color:  #0b6cd3;
+}
+
+.quotation-submit-button {
+    background-color:#007bff;
+    border: none;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 0.8em;
+    vertical-align: middle;
+}
+
+.quotation-submit-button:hover {
+    background-color: #777;
+}
+
+.editDesign {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 5px;
+  }
+  
+  .editDesign:hover {
+    background-color: #0056b3;
+  }
+  
+
+  /* Existing CSS ... */
+
+/* Specific Button Styles */
+.edit-quotation-button,
+.change-status-button,
+.submit-designs-button,
+.edit-designs-button,
+.editApproval-button {
+    background-color: #3498db; /* A pleasant blue */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    margin-right: 5px;
+}
+
+.edit-quotation-button:hover,
+.change-status-button:hover,
+.submit-designs-button:hover,
+.edit-designs-button:hover,
+.editApproval-button:hover {
+    background-color: #2980b9; /* A darker shade of blue */
+}
+/* Add it */
+.status-select {
+    margin-top: 10px;
+    margin-left: 55%;
+    border-radius: 4px;
+    background-color: #333;
+    color: #eee;
+    box-sizing: border-box;
+}
+.status-select-cost {
+    margin-top: 10px;
+    margin-left: 55%;
+    border-radius: 4px;
+    background-color: #333;
+    color: #eee;
+    box-sizing: border-box;
+}
+

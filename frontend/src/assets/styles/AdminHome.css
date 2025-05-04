@@ -149,3 +149,21 @@
 .edit-button:hover {
   background-color: #0056b3;
 }
+
+.deleteBtn {
+  background-color: #dc3545; /* Bootstrap's red color */
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 5px; /* Consistent with other buttons */
+}
+
+.deleteBtn:hover {
+  background-color: #c82333; /* A darker shade of red */
+}

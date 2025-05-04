@@ -34,7 +34,7 @@ const Navbar = () => {
                     <li><Link to="/">Home</Link></li>
                     <li><Link to="/projects">Projects</Link></li>
                     <li><Link to="/about">About Us</Link></li>
-                    <li><Link to="/contact">Contact Us</Link></li>
+                    <li><Link to="/contact">Booking</Link></li>
                     <li className="products-link">
                         <Link to="/products">Products</Link>
                         {/* 🛒 Cart Icon next to Products */}

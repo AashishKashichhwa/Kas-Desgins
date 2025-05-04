@@ -137,7 +137,7 @@ const BookingForm = () => {
 
     return (
         <div className="booking-form-container">
-            <button className="closebutton" onClick={() => navigate('/')}>×</button>
+            {/* <button className="closebutton" onClick={() => navigate('/')}>×</button> */}
             <form onSubmit={handleSubmit} className="booking-form">
                 <h2 className="booking-form-title">Submit a Booking Request</h2>
 

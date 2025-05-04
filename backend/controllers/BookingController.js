@@ -55,6 +55,21 @@ const getBookings = async (req, res) => {
         res.status(500).json({ message: 'Error fetching bookings', error: error.message });
     }
 };
+const getBookingsUser = async (req, res) => {
+    try {
+        // Retrieve the user ID from the request (assuming it's passed in the query)
+        const userId = req.user._id; //We can use the token
+        console.log('User id', userId)
+
+        // Fetch only bookings associated with the logged-in user
+        const bookings = await Booking.find({ userId: userId });
+
+        res.status(200).json(bookings);
+    } catch (error) {
+        console.error('Error fetching bookings:', error);
+        res.status(500).json({ message: 'Error fetching bookings', error: error.message });
+    }
+};
 
 const getBookingById = async (req, res) => {
     try {
@@ -203,12 +218,46 @@ const submitFinalDesign = async (req, res) => {
     }
 };
 
+const editDesignById = async (req, res) => {
+    try {
+        console.log('EditDesign FILES:', req.files);
+        console.log('EditDesign BODY:', req.body);
+
+        const bookingId = req.params.id;
+        const finalImages = req.files?.map(file => `/uploads/${file.filename}`) || [];
+        const { final3DPreview } = req.body;
+
+        const booking = await Booking.findById(bookingId);
+        if (!booking) {
+            return res.status(404).json({ message: 'Booking not found' });
+        }
+
+        booking.finalDesignImages = finalImages;
+        booking.final3DPreview = final3DPreview;
+
+        await booking.save();
+
+        res.status(200).json({
+            message: 'Final design updated successfully',
+            booking
+        });
+    } catch (error) {
+        console.error('Error updating final design:', error);
+        res.status(500).json({
+            message: 'Failed to update final design',
+            error: error.message
+        });
+    }
+};
+
 export {
     getBookings,
+    getBookingsUser,
     addBooking,
     getBookingById,
     updateBookingById,
     deleteBookingById,
     sendQuotation,
-    submitFinalDesign // 👈 Add this
+    submitFinalDesign,
+    editDesignById // 👈 Add this to the export
 };

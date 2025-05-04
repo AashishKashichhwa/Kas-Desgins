@@ -11,7 +11,7 @@ const ViewBookingsUser = () => {
     useEffect(() => {
         const fetchBookings = async () => {
             try {
-                const res = await instance.get('/api/bookings', {
+                const res = await instance.get('/api/bookings/user', {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }

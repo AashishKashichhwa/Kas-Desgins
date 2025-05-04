@@ -7,9 +7,7 @@ import '../assets/styles/ViewProjects.css'; // Assuming similar styling
 const ViewBookings = () => {
     const [bookings, setBookings] = useState([]);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchBookings = async () => {
+const fetchBookings = async () => {
             try {
                 const res = await instance.get('/api/bookings', {
                     headers: {
@@ -22,6 +20,8 @@ const ViewBookings = () => {
                 toast.error('Failed to load bookings');
             }
         };
+    useEffect(() => {
+       
         fetchBookings();
     }, []);
 
@@ -37,7 +37,7 @@ const ViewBookings = () => {
                 }
             });
             toast.success("Booking deleted successfully");
-            fetchBookings(); // Refresh the booking list
+            fetchBookings();
         } catch (error) {
             console.error('Error deleting booking:', error);
             toast.error("Error deleting booking");
@@ -58,21 +58,21 @@ const ViewBookings = () => {
     );
 };
 
-const BookingCard = ({ booking, onClick, handleDelete }) => {
-    // const [currentImageIndex, setCurrentImageIndex] = useState(0);
+const BookingCard = ({ booking, handleDelete, onClick }) => {
+        const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    // useEffect(() => {
-    //     let intervalId;
-    //     const imageCount = booking.images ? booking.images.length : 0;
+        useEffect(() => {
+            let intervalId;
+            const imageCount = booking.images ? booking.images.length : 0;
 
-    //     if (imageCount > 1) {
-    //         intervalId = setInterval(() => {
-    //             setCurrentImageIndex(prevIndex => (prevIndex + 1) % imageCount);
-    //         }, 3000);
-    //     }
+            if (imageCount > 1) {
+                intervalId = setInterval(() => {
+                    setCurrentImageIndex(prevIndex => (prevIndex + 1) % imageCount);
+                }, 3000);
+            }
 
-    //     return () => clearInterval(intervalId);
-    // }, [booking.images]);
+            return () => clearInterval(intervalId);
+        }, [booking.images]);
 
     return (
         <div className="project-card">
@@ -84,7 +84,7 @@ const BookingCard = ({ booking, onClick, handleDelete }) => {
             <div className="project-image-container" onClick={() => onClick(booking._id)}>
                 {booking.images && booking.images.length > 0 ? (
                     <img
-                        src={`http://localhost:4000${booking.images[0]}`}
+                        src={`http://localhost:4000${booking.images[currentImageIndex]}`}
                         alt={booking.projectName}
                         className="project-image"
                     />
