@@ -255,6 +255,99 @@ const editDesignById = async (req, res) => {
     }
 };
 
+const updateCostApproval = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { costApproval } = req.body;
+
+        // Validate input
+        if (!['Pending', 'Approved', 'Not Approved'].includes(costApproval)) {
+            return res.status(400).json({ 
+                message: 'Invalid cost approval status',
+                validStatuses: ['Pending', 'Approved', 'Not Approved']
+            });
+        }
+
+        const booking = await Booking.findByIdAndUpdate(
+            id,
+            { costApproval },
+            { new: true, runValidators: true }
+        );
+
+        if (!booking) {
+            return res.status(404).json({ message: 'Booking not found' });
+        }
+
+        res.json({
+            message: 'Cost approval updated successfully',
+            booking
+        });
+
+    } catch (error) {
+        console.error('Error updating cost approval:', error);
+        res.status(500).json({ 
+            message: 'Error updating cost approval',
+            error: error.message
+        });
+    }
+};
+
+const verifyPayment = async (req, res) => {
+    try {
+        const booking = await Booking.findById(req.params.id);
+        if (!booking) {
+            console.log("Booking Not found")
+            return res.status(404).json({
+                verified: false,
+                message: 'Booking not found'
+            });
+        }
+        console.log("Booking found, checking payment status: ", booking.paymentStatus);
+        res.json({
+            verified: booking.paymentStatus === 'Paid',
+            booking
+        });
+    } catch (error) {
+        console.error('Payment verification error:', error);
+        res.status(500).json({
+            verified: false,
+            error: 'Error verifying payment'
+        });
+    }
+};
+
+const performPaymentUpdate = async ({ id, paymentStatus, costApproval, status, paymentDate }) => {
+    console.log('Updating payment for booking ID:', id); // Add this
+
+    if (!['Paid', 'Unpaid'].includes(paymentStatus)) {
+        throw new Error('Invalid payment status');
+    }
+
+    const booking = await Booking.findByIdAndUpdate(
+        id,
+        { paymentStatus, costApproval, status, paymentDate },
+        { new: true, runValidators: true }
+    );
+
+    if (!booking) {
+        throw new Error('Booking not found');
+    }
+
+    console.log('Booking after payment update:', booking); // Add this
+    return booking;
+};
+
+
+const updatePayment = async (req, res) => {
+    try {
+        const booking = await performPaymentUpdate({ id: req.params.id, ...req.body });
+        res.json({ message: 'Payment Updated Successfully', booking });
+    } catch (error) {
+        console.error('Error updating payment status:', error);
+        res.status(500).json({ message: 'Error updating payment status', error: error.message });
+    }
+};
+
 export {
     getBookings,
     getBookingsUser,
@@ -264,5 +357,9 @@ export {
     deleteBookingById,
     sendQuotation,
     submitFinalDesign,
-    editDesignById // 👈 Add this to the export
+    editDesignById,
+    updateCostApproval,
+    verifyPayment,
+    updatePayment,
+    performPaymentUpdate
 };

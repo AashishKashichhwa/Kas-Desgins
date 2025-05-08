@@ -29,10 +29,10 @@ const BookingSchema = new mongoose.Schema({
         type: Number,
         default: 0 // Add a default value
     },
-      costApproval: {  // Customer Approval for Designs
+    costApproval: {
         type: String,
-        enum: ['Not Approved', 'Approved'], // Use an enum for clarity
-        default: 'Not Approved' // Default to "Not Approved"
+        enum: ['Pending', 'Approved', 'Not Approved'],
+        default: 'Not Approved'
     },
 
     // Status Tracking
@@ -45,9 +45,14 @@ const BookingSchema = new mongoose.Schema({
     // Financials (General Project Payment)
     paymentStatus: {
         type: String,
-        enum: ['Unpaid', 'Partial', 'Paid'],
+        enum: ['Paid', 'Unpaid'],
         default: 'Unpaid'
     },
+
+    stripePaymentId: {
+        type: String,
+        index: true // Add an index on the stripePaymentId field
+      },
 
     finalDesignImages: [{ // Admin-uploaded design images
         type: String

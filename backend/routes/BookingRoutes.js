@@ -1,4 +1,3 @@
-// routes/bookingRoutes.js
 import express from 'express';
 import {
     getBookings,
@@ -9,8 +8,11 @@ import {
     deleteBookingById,
     sendQuotation,
     submitFinalDesign,
-    editDesignById
+    editDesignById,
+    updateCostApproval
 } from '../controllers/BookingController.js';
+import {createCheckoutSession} from '../controllers/CheckoutController.js'
+import {stripeWebhook} from '../controllers/WebhookController.js'
 
 
 import multer from 'multer';
@@ -49,5 +51,11 @@ router.delete('/:id', deleteBookingById);
 router.put('/:id/send-quotation', isAdmin, sendQuotation);
 router.put('/:id/submit-design', isAdmin, upload.array('finalDesignImages', 10), submitFinalDesign);
 router.put('/:id/edit-design', isAdmin, upload.array('finalDesignImages', 10), editDesignById);
+router.post('/:id/create-checkout-session', isUser, createCheckoutSession);
+// Add this new route
+router.put('/:id/cost-approval', isUser, updateCostApproval);
+router.post('/webhook', stripeWebhook); // No express.raw here
+
+
 
 export default router;

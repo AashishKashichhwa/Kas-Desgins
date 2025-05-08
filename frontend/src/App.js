@@ -13,7 +13,6 @@ import PublicLayout from './layout/PublicLayout';
 import UserLayout from './layout/UserLayout';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from './redux/AuthSlice';
-//Take to note all from these are import
 
 import UserHome from './pages/UserHome';
 import './assets/styles/style.css';
@@ -21,28 +20,31 @@ import AdminHome from './pages/AdminHome';
 import Services from './pages/Services';
 import ManageProducts from './components/ManageProducts';
 import AddProducts from './components/AddProducts';
-import EditProducts from './components/EditProducts'
+import EditProducts from './components/EditProducts';
 import ViewProductsById from './components/ViewProductsById';
 import ViewProductsByIdUsers from './components/ViewProductsByIdUsers';
 
-import ManageProjects from './components/ManageProjects';  //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
-import ManageUsers from './components/ManageUsers';  //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
-import ManageBookings from './components/ManageBookings';  //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
-import AddProject from './components/AddProject';   //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
-import EditUser from './components/EditUser';   //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
-import EditBooking from './components/EditBooking';  //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
+import ManageProjects from './components/ManageProjects';
+import ManageUsers from './components/ManageUsers';
+import ManageBookings from './components/ManageBookings';
+import AddProject from './components/AddProject';
+import EditUser from './components/EditUser';
+import EditBooking from './components/EditBooking';
 import ViewProjectsById from './components/ViewProjectsById';
 import ViewProjectsByIdUsers from './components/ViewProjectsByIdUsers';
-   //The pages you are getting to use here will mark errors if is not import, in those files and in these code!
-import EditProjects from './components/EditProjects';         //Edit project also is required, with it, the whole code runs
+import EditProjects from './components/EditProjects';
 
 import AddToCart from './pages/AddToCart';
 import ViewBookings from './components/ViewBookings';
 import ViewBookingsUser from './components/ViewBookingsUser';
 import ViewBookingsById from './components/ViewBookingsById';
 import EditBookingUser from './components/EditBookingUser';
-import ViewBookingsUserById from './components/ViewBookingsUserById'
+import ViewBookingsUserById from './components/ViewBookingsUserById';
 
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import PaymentSuccess from './components/PaymentSuccess';
+import PaymentFailed from './components/PaymentFailed';
 
 function App() {
     const user = useSelector((state) => state.Auth.user);
@@ -52,13 +54,20 @@ function App() {
         dispatch(updateUser());
     }, [dispatch]);
 
+    const stripePromise = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
+        ? loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
+        : Promise.resolve(null);
+
     return (
-        <Router>
-            <Toaster />
-            <AppContent user={user} />
-        </Router>
+        <Elements stripe={stripePromise}>
+            <Router>
+                <Toaster />
+                <AppContent user={user} />
+            </Router>
+        </Elements>
     );
 }
+
 function AppContent({ user }) {
     const navigate = useNavigate();
     const location = useLocation();
@@ -67,14 +76,15 @@ function AppContent({ user }) {
         const publicPaths = ['/', '/login', '/contact', '/about', '/projects', '/products', '/services', '/register', '/cart'];
         const isProjectDetailPage = /^\/projects\/[^/]+$/.test(location.pathname);
         const isProductDetailPage = /^\/products\/[^/]+$/.test(location.pathname);
-        const isPublic = publicPaths.includes(location.pathname) || isProjectDetailPage || isProductDetailPage;
+        const isPaymentSuccessOrFailed = location.pathname === '/paymentsuccess' || location.pathname === '/paymentfailed';
+        const isPublic = publicPaths.includes(location.pathname) || isProjectDetailPage || isProductDetailPage || isPaymentSuccessOrFailed;
 
         if (!user && !isPublic) {
             navigate('/login');
         } else if (user) {
-            if (user.role === 'admin' && !location.pathname.startsWith('/admin') && location.pathname !== '/register') {
+            if (user.role === 'admin' && !location.pathname.startsWith('/admin') && location.pathname !== '/register' && !isPaymentSuccessOrFailed) {
                 navigate('/admin');
-            } else if (user.role !== 'admin' && !location.pathname.startsWith('/userhome') && !isPublic) {
+            } else if (user.role !== 'admin' && !location.pathname.startsWith('/userhome') && !isPublic && !isPaymentSuccessOrFailed) {
                 navigate('/userhome');
             }
         }
@@ -95,6 +105,9 @@ function AppContent({ user }) {
                 <Route path="register" element={<Register />} />
                 <Route path="cart" element={<AddToCart />} />
             </Route>
+
+            <Route path="/paymentsuccess" element={<PaymentSuccess />} />
+            <Route path="/paymentfailed" element={<PaymentFailed />} />
 
             <Route path="/userhome" element={<UserLayout />}>
                 <Route index element={<UserHome />} />
@@ -120,7 +133,6 @@ function AppContent({ user }) {
             <Route path="/admin/projects/:id" element={<ViewProjectsById />} />
             <Route path="/admin/edit-project/:id" element={<EditProjects />} />
             <Route path="/admin/edituser/:id" element={<EditUser />} />
-
         </Routes>
     );
 }
