@@ -59,6 +59,7 @@
     color: white;
      text-decoration: none; /* remove the underline */
     font-size: 1.1em;
+    padding-left: 20px;
 }
 
 .logoutBtn:hover {
@@ -111,4 +112,55 @@
 .products-link {
     display: flex;
     align-items: center;
+}
+
+.logged-in-auth{
+    display: flex;
+}
+
+.loggedData{
+    top: 2px;
+}
+
+/* Style for the notification icon container */
+.notification-icon {
+    position: relative;
+    display: inline-block;
+    color: white;
+    font-size: 1.2em;
+    /* padding: 8px; */
+    border-radius: 50%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+    margin-left: 10px; /* Space between Products link and cart icon */
+}
+.notification-icon:hover {
+    color: #dbd7d7; /* Black icon on hover */
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+/* Badge for unread notifications */
+.badge {
+    position: absolute;
+    top: 10px;
+    background-color: #ff0000;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px;
+}
+
+/* Responsive adjustment for the badge */
+@media (max-width: 768px) {
+    .badge {
+        width: 16px;
+        height: 16px;
+        font-size: 10px;
+    }
 }

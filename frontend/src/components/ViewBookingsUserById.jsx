@@ -23,11 +23,13 @@ const ViewBookingsUserById = () => {
     const [bookingId, setBookingId] = useState(bookingIdFromParams || id);
     const navigate = useNavigate();
     const [paymentVerificationLoading, setPaymentVerificationLoading] = useState(false);
+    const [designApprovalButtonText, setDesignApprovalButtonText] = useState('Approve Design/Request Redesign');
 
     useEffect(() => {
         function handleClickOutside(event) {
             if (approvalDropdownRef.current && !approvalDropdownRef.current.contains(event.target)) {
                 setShowApprovalDropdown(false);
+                setDesignApprovalButtonText('Approve Design/Request Redesign');
             }
         }
 
@@ -158,7 +160,8 @@ const ViewBookingsUserById = () => {
     const handleRedesignSubmit = async () => {
         try {
             await instance.put(`/api/bookings/${bookingId}`, {
-                designModificationComments: redesignComments
+                designModificationComments: redesignComments,
+                status: 'AwaitingFinalDesign' // Update status here
             }, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -172,6 +175,8 @@ const ViewBookingsUserById = () => {
             });
             setBooking(updatedBooking.data);
             setShowRedesignForm(false);
+            setShowApprovalDropdown(false);
+            setDesignApprovalButtonText('Approve Design/Request Redesign');
         } catch (err) {
             console.error('Error submitting redesign request:', err);
             toast.error('Failed to submit redesign request.');
@@ -194,6 +199,8 @@ const ViewBookingsUserById = () => {
             });
             setBooking(updatedBooking.data);
             setShowApprovalDropdown(false);
+            setShowRedesignForm(false);
+            setDesignApprovalButtonText('Approve Design/Request Redesign');
         } catch (error) {
             console.error('Error updating design approval:', error);
             toast.error('Failed to update design approval.');
@@ -239,6 +246,22 @@ const ViewBookingsUserById = () => {
         }
     };
 
+    const handleRequestRedesignClick = () => {
+        setShowApprovalDropdown(false);
+        setShowRedesignForm(true);
+        setDesignApprovalButtonText('×'); // Change button to "×" when redesign is requested
+    };
+
+    const toggleApprovalDropdown = () => {
+        setShowApprovalDropdown(!showApprovalDropdown);
+        //setDesignApprovalButtonText('×');  // Keep button text same as before opening it. if user select redesign it is changed already
+    };
+
+    const handleCloseRedesignForm = () => {
+        setShowRedesignForm(false);
+        setDesignApprovalButtonText('Approve Design/Request Redesign'); //Reset button text
+    };
+
     if (loading) return <p>Loading booking details...</p>;
     if (error) return <p className="error-message">{error}</p>;
     if (!booking) return <p>Booking not found.</p>;
@@ -259,7 +282,7 @@ const ViewBookingsUserById = () => {
                         <p><strong>Room Type:</strong> {booking.roomType}</p>
                         <p><strong>Room Size:</strong> {booking.roomSqft} sqft</p>
                         <p><strong>Room Details:</strong> {booking.roomDetails}</p>
-                        <p><strong>Design Cost Estimate:</strong> NRs. {costEstimate}</p>
+                        <p><strong>Design Cost Estimate:</strong> Rs. {costEstimate}</p>
                         <p><strong>Status:</strong> {booking.status}</p>
                         {/* Payment Status Display */}
                         <div className="payment-status">
@@ -321,37 +344,47 @@ const ViewBookingsUserById = () => {
                     </div>
                 </div>
 
-                {/* Rest of your existing UI components remain unchanged */}
+                {/* Design Image and 3D Preview */}
                 <div className="design-approval right-button" ref={approvalDropdownRef}>
                     <button
-                        onClick={() => setShowApprovalDropdown(!showApprovalDropdown)}
+                        onClick={showRedesignForm ? handleCloseRedesignForm : toggleApprovalDropdown}
                         className="inline-button-approve"
                         aria-label="Toggle design approval dropdown"
                     >
-                        {showApprovalDropdown ? '×' : 'Approve Design'}
+                        {designApprovalButtonText}
                     </button>
-                    {showApprovalDropdown && (
+                    {showApprovalDropdown && !showRedesignForm && (
                         <div className="approval-dropdown">
                             <select
                                 value={designApproval}
-                                onChange={(e) => handleDesignApprovalChange(e.target.value)}
+                                onChange={(e) => {
+                                    const selectedValue = e.target.value;
+                                    if (selectedValue === 'redesign') {
+                                        handleRequestRedesignClick();
+                                    } else {
+                                        handleDesignApprovalChange(selectedValue);
+                                    }
+                                }}
                                 className="status-select-approval"
                             >
                                 <option value="">Select option</option>
                                 <option value="yes">Approve</option>
-                                <option value="no">Request Changes</option>
+                                <option value="redesign">Request Redesign</option>
                             </select>
                         </div>
                     )}
                 </div>
 
-                <button onClick={() => setShowRedesignForm(!showRedesignForm)} className="inline-button">
-                    {showRedesignForm ? '×' : 'Request Redesign'}
-                </button>
+
 
                 {showRedesignForm && (
                     <div className="redesign-form">
-                        <h3>Request Design Modification</h3>
+                        <div className="redesign-form-header">
+                            <div className="redesign-form-title">Request Design Modification</div>
+                            <button onClick={handleCloseRedesignForm} className="close-button">
+                                ×
+                            </button>
+                        </div>
                         <textarea
                             value={redesignComments}
                             onChange={(e) => setRedesignComments(e.target.value)}
@@ -397,6 +430,7 @@ const ViewBookingsUserById = () => {
                         <div className="booking-image-gallery">
                             <h3>Final Design Images:</h3>
                             <div className="imagebox">
+                            <button className="image-button back" onClick={goToPrevious}>‹</button>
                                 {booking.finalDesignImages.map((image, index) => (
                                     <img
                                         key={index}
@@ -405,6 +439,7 @@ const ViewBookingsUserById = () => {
                                         className="booking-gallery-image"
                                     />
                                 ))}
+                                <button className="image-button next" onClick={goToNext}>›</button>
                             </div>
                         </div>
                     ) : (

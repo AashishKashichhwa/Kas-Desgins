@@ -1,0 +1,31 @@
+.notifications-page {
+    padding: 2rem;
+    max-width: 600px;
+    margin: auto;
+}
+
+.notification-list {
+    list-style: none;
+    padding: 0;
+}
+
+.notification-list li {
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.notification-list li.unread {
+    background-color: #fff3cd;
+    font-weight: bold;
+}
+
+.notification-list li.read {
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+.contents{
+    height: 600px;
+}

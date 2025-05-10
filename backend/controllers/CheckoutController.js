@@ -36,7 +36,7 @@ const createCheckoutSession = async (req, res) => {
             payment_method_types: ['card'],
             line_items: [{
                 price_data: {
-                    currency: 'usd',
+                    currency: 'npr', // Changed currency to Nepali Rupees
                     product_data: {
                         name: booking.projectName || 'Interior Design Service',
                     },

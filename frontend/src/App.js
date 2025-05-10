@@ -13,7 +13,6 @@ import PublicLayout from './layout/PublicLayout';
 import UserLayout from './layout/UserLayout';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from './redux/AuthSlice';
-
 import UserHome from './pages/UserHome';
 import './assets/styles/style.css';
 import AdminHome from './pages/AdminHome';
@@ -23,7 +22,6 @@ import AddProducts from './components/AddProducts';
 import EditProducts from './components/EditProducts';
 import ViewProductsById from './components/ViewProductsById';
 import ViewProductsByIdUsers from './components/ViewProductsByIdUsers';
-
 import ManageProjects from './components/ManageProjects';
 import ManageUsers from './components/ManageUsers';
 import ManageBookings from './components/ManageBookings';
@@ -33,18 +31,19 @@ import EditBooking from './components/EditBooking';
 import ViewProjectsById from './components/ViewProjectsById';
 import ViewProjectsByIdUsers from './components/ViewProjectsByIdUsers';
 import EditProjects from './components/EditProjects';
-
 import AddToCart from './pages/AddToCart';
 import ViewBookings from './components/ViewBookings';
 import ViewBookingsUser from './components/ViewBookingsUser';
 import ViewBookingsById from './components/ViewBookingsById';
 import EditBookingUser from './components/EditBookingUser';
 import ViewBookingsUserById from './components/ViewBookingsUserById';
-
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import PaymentSuccess from './components/PaymentSuccess';
 import PaymentFailed from './components/PaymentFailed';
+import AdminNotification from './components/AdminNotification';
+
+import Notifications from './pages/Notifications'; // Import the Notifications page
 
 function App() {
     const user = useSelector((state) => state.Auth.user);
@@ -106,6 +105,9 @@ function AppContent({ user }) {
                 <Route path="cart" element={<AddToCart />} />
             </Route>
 
+            {/* New Route for Notifications */}
+            <Route path="/notifications" element={<Notifications />} /> {/* Notifications page route */}
+
             <Route path="/paymentsuccess" element={<PaymentSuccess />} />
             <Route path="/paymentfailed" element={<PaymentFailed />} />
 
@@ -114,6 +116,7 @@ function AppContent({ user }) {
                 <Route path="bookings" element={<ViewBookingsUser />} />
                 <Route path="bookings/:id" element={<ViewBookingsUserById />} />
                 <Route path="edit-booking/:id" element={<EditBookingUser />} />
+                <Route path="notifications" element={<Notifications />} /> {/* User Notifications */}
             </Route>
 
             <Route path="/admin" element={<AdminHome />} />
@@ -133,6 +136,7 @@ function AppContent({ user }) {
             <Route path="/admin/projects/:id" element={<ViewProjectsById />} />
             <Route path="/admin/edit-project/:id" element={<EditProjects />} />
             <Route path="/admin/edituser/:id" element={<EditUser />} />
+            <Route path="/admin/notifications" element={<AdminNotification />} /> {/* Admin Notifications */}
         </Routes>
     );
 }

@@ -7,6 +7,11 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import { createNotification } from './NotificationController.js';
+
+// backend/controllers/BookingController.js
+import User from '../models/User.js'; // Import your User model
+
 const addBooking = async (req, res) => {
     try {
         console.log('Request files:', req.files); // Debug file uploads
@@ -31,6 +36,25 @@ const addBooking = async (req, res) => {
         });
 
         await newBooking.save();
+
+        // Create a single notification for all admins
+        await createNotification(
+            null,             // userId: null - Not specific to a user
+            'admin',          // role: 'admin' - Target all admins
+            newBooking._id,    // bookingId
+            'new_booking',    // type
+            `New booking submitted by ${req.user.name} for project ${projectName}.`
+        );
+
+        // Create notification for the user
+        await createNotification(
+            req.user._id,     // userId: User specific ID
+            null,         // role: null - Not specific to a Role
+            newBooking._id,     // bookingId
+            'booking_submitted',// type
+            `Your booking for project ${projectName} submitted successfully. You will get the cost estimation of project soon.`
+        );
+
         res.status(201).json({
             success: true,
             message: 'Booking created successfully',
@@ -43,6 +67,109 @@ const addBooking = async (req, res) => {
             message: 'Failed to create booking',
             error: error.message
         });
+    }
+};
+
+const updateBookingById = async (req, res) => {
+    try {
+        const bookingId = req.params.id;
+        const { costEstimate, status, costApproval, designModificationComments } = req.body;
+
+        const bookingToUpdate = await Booking.findById(bookingId);
+
+        if (!bookingToUpdate) {
+            return res.status(404).json({ message: 'Booking not found' });
+        }
+
+        if (costEstimate !== undefined) {
+            bookingToUpdate.costEstimate = costEstimate;
+        }
+        if (status !== undefined) {
+            if (!['Draft', 'Submitted', 'AwaitingCostApproval', 'Designing', 'AwaitingFinalDesign', 'Completed', 'Canceled'].includes(status)) {
+                return res.status(400).json({ message: 'Invalid status value.' });
+            }
+            bookingToUpdate.status = status;
+        }
+
+        if (costApproval !== undefined) {
+            if (!['Not Approved', 'Approved'].includes(costApproval)) {
+                return res.status(400).json({ message: 'Invalid costApproval value. Must be "Not Approved" or "Approved".' });
+            }
+            bookingToUpdate.costApproval = costApproval;
+        }
+
+        if (designModificationComments !== undefined) {
+            bookingToUpdate.designModificationComments = designModificationComments;
+        }
+
+        await bookingToUpdate.save();
+        let notificationMessage = '';
+
+        if (status === 'Submitted') {
+            notificationMessage = `Booking ${bookingToUpdate.projectName} has been submitted and is awaiting review.`;
+
+            // Create a single notification for all admins
+            await createNotification(
+                null,             // userId: null - Not specific to a user
+                'admin',          // role: 'admin' - Target all admins
+                bookingToUpdate._id,    // bookingId
+                'new_booking',    // type
+                notificationMessage
+            );
+
+        } else if (status === 'AwaitingCostApproval' && costEstimate !== undefined) {
+            notificationMessage = `A cost estimate of $${costEstimate} has been provided for your project ${bookingToUpdate.projectName}.`;
+
+            await createNotification(
+                req.user._id,     // userId: User specific ID
+                null,         // role: null - Not specific to a Role
+                bookingToUpdate._id, // Booking ID
+                'cost_estimate_provided', // Notification Type
+                notificationMessage  // Notification Message
+            );
+        } else if (status === 'Completed') {
+            notificationMessage = `Your project ${bookingToUpdate.projectName} has been completed.`;
+
+            await createNotification(
+                null,         // role: null - Not specific to a Role
+                'admin',
+                bookingToUpdate._id, // Booking ID
+                'project_completed', // Notification Type
+                `User ${bookingToUpdate.name} has approved the final design for project ${bookingToUpdate.projectName}. Project is now completed.`  // Notification Message
+            );
+        } else if ( status === 'AwaitingFinalDesign') {
+            notificationMessage = `Your project ${bookingToUpdate.projectName} is awaiting final design.`;
+
+            await createNotification(
+                null,         // role: null - Not specific to a Role
+                'admin',
+                bookingToUpdate._id, // Booking ID
+                'awaiting_final_design', // Notification Type
+                `User ${bookingToUpdate.name} has requested final design for project ${bookingToUpdate.projectName}.`  // Notification Message
+            );
+        }
+         else if (status === 'Canceled') {
+            notificationMessage = `Your project ${bookingToUpdate.projectName} has been canceled. Please contact support for more information.`;
+
+            // Create a single notification for all admins
+            await createNotification(
+                null,             // userId: null - Not specific to a user
+                'admin',          // role: 'admin' - Target all admins
+                bookingToUpdate._id,    // bookingId
+                'booking_cancelled',    // type
+                notificationMessage
+            );
+        }
+
+        res.status(200).json({ message: 'Booking updated successfully', booking: bookingToUpdate });
+    } catch (error) {
+        console.error(`Error updating booking ${req.params.id}:`, error);
+
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ message: 'Validation failed', errors: error.errors });
+        }
+
+        res.status(500).json({ message: 'Error updating booking', error: error.message });
     }
 };
 
@@ -84,51 +211,6 @@ const getBookingById = async (req, res) => {
     }
 };
 
-const updateBookingById = async (req, res) => {
-    try {
-        const bookingId = req.params.id;
-        const { costEstimate, status, costApproval, designModificationComments } = req.body;  // Include designModificationComments
-
-        const bookingToUpdate = await Booking.findById(bookingId);
-
-        if (!bookingToUpdate) {
-            return res.status(404).json({ message: 'Booking not found' });
-        }
-
-        if (costEstimate !== undefined) {
-            bookingToUpdate.costEstimate = costEstimate;
-        }
-        if (status !== undefined) {
-             if (!['Draft', 'Submitted', 'AwaitingCostApproval', 'Designing', 'AwaitingFinalDesign', 'Completed', 'Canceled'].includes(status)) {
-                    return res.status(400).json({ message: 'Invalid status value.' });
-                }
-            bookingToUpdate.status = status;
-        }
-
-        // Handle costApproval update.  Crucially, validate against enum values
-        if (costApproval !== undefined) {
-            if (!['Not Approved', 'Approved'].includes(costApproval)) {
-                return res.status(400).json({ message: 'Invalid costApproval value. Must be "Not Approved" or "Approved".' });
-            }
-            bookingToUpdate.costApproval = costApproval;
-        }
-      if (designModificationComments !== undefined) {
-            bookingToUpdate.designModificationComments = designModificationComments;
-        }
-
-        await bookingToUpdate.save();
-
-        res.status(200).json({ message: 'Booking updated successfully', booking: bookingToUpdate });
-    } catch (error) {
-        console.error(`Error updating booking ${req.params.id}:`, error);
-
-        if (error.name === 'ValidationError') {
-            return res.status(400).json({ message: 'Validation failed', errors: error.errors });
-        }
-
-        res.status(500).json({ message: 'Error updating booking', error: error.message });
-    }
-};
 const deleteBookingById = async (req, res) => {
     try {
         const bookingId = req.params.id;
@@ -163,7 +245,6 @@ const deleteBookingById = async (req, res) => {
     }
 };
 
-
 const sendQuotation = async (req, res) => {
     try {
         const booking = await Booking.findById(req.params.id);
@@ -180,6 +261,15 @@ const sendQuotation = async (req, res) => {
         booking.status = 'AwaitingCostApproval';
         await booking.save();
 
+        // Create notification for the user that the cost estimate has been provided
+        await createNotification(
+            booking.userId,  // userId: send to user
+            null,          // role: null - Not specific to a Role
+            booking._id,      // bookingId
+            'cost_estimate_provided', // type
+            `A cost estimate has been provided for your project ${booking.projectName}. Please review and approve.`
+        );
+
         res.status(200).json({ message: 'Quotation sent successfully', booking });
     } catch (error) {
         console.error('Error sending quotation:', error);
@@ -192,8 +282,7 @@ const submitFinalDesign = async (req, res) => {
         console.log('BODY:', req.body);
 
         const bookingId = req.params.id;
-        // Access files using the correct fieldname
-        const finalImages = req.files?.map(file => `/uploads/${file.filename}`) || []; // Check finalImages or finalDesignImages
+        const finalImages = req.files?.map(file => `/uploads/${file.filename}`) || [];
         const { final3DPreview } = req.body;
 
         const booking = await Booking.findById(bookingId);
@@ -201,21 +290,29 @@ const submitFinalDesign = async (req, res) => {
             return res.status(404).json({ message: 'Booking not found' });
         }
 
-        // Assign the filepaths to the finalDesigns field
-        booking.finalDesignImages = finalImages; // finalImages contains the value
+        booking.finalDesignImages = finalImages;
         booking.final3DPreview = final3DPreview;
-        booking.status = 'AwaitingFinalDesign'; // This line was wrong, it is now corrected
+        booking.status = 'AwaitingFinalDesign';
 
-        console.log('booking before save:', booking); // 👈 Add this line
+        console.log('booking before save:', booking);
 
         await booking.save();
+
+        // Send notification to user
+        await createNotification(
+            booking.userId,
+            null,
+            booking._id,
+            'final_design_ready',
+            `The design for your project ${booking.projectName} is now available. Please review and provide your approval.`
+        );
 
         res.status(200).json({
             message: 'Design submitted successfully',
             booking
         });
     } catch (error) {
-        console.error('Error submitting design:', error); // Log full error
+        console.error('Error submitting design:', error);
         res.status(500).json({
             message: 'Failed to submit design',
             error: error.message
@@ -242,6 +339,15 @@ const editDesignById = async (req, res) => {
 
         await booking.save();
 
+        // Send notification to user
+        await createNotification(
+            booking.userId,
+            null,
+            booking._id,
+            'final_design_updated',
+            `The design for your project ${booking.projectName} is now updated. Please review and provide your approval.`
+        );
+
         res.status(200).json({
             message: 'Final design updated successfully',
             booking
@@ -260,9 +366,8 @@ const updateCostApproval = async (req, res) => {
         const { id } = req.params;
         const { costApproval } = req.body;
 
-        // Validate input
         if (!['Pending', 'Approved', 'Not Approved'].includes(costApproval)) {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 message: 'Invalid cost approval status',
                 validStatuses: ['Pending', 'Approved', 'Not Approved']
             });
@@ -285,7 +390,7 @@ const updateCostApproval = async (req, res) => {
 
     } catch (error) {
         console.error('Error updating cost approval:', error);
-        res.status(500).json({ 
+        res.status(500).json({
             message: 'Error updating cost approval',
             error: error.message
         });
@@ -337,7 +442,6 @@ const performPaymentUpdate = async ({ id, paymentStatus, costApproval, status, p
     return booking;
 };
 
-
 const updatePayment = async (req, res) => {
     try {
         const booking = await performPaymentUpdate({ id: req.params.id, ...req.body });
@@ -347,6 +451,8 @@ const updatePayment = async (req, res) => {
         res.status(500).json({ message: 'Error updating payment status', error: error.message });
     }
 };
+
+
 
 export {
     getBookings,

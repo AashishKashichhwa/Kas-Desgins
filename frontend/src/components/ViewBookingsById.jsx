@@ -111,6 +111,7 @@ const ViewBookingsById = () => {
         e.preventDefault();
         try {
             const formData = new FormData();
+            formData.append('final3DPreview', final3DPreview);
 
             finalDesignFields.forEach((fieldId) => {
                 const fileInput = document.getElementById(`finalDesignImage-${fieldId}`);
@@ -201,7 +202,7 @@ const ViewBookingsById = () => {
                         <p><strong>Room Size:</strong> {booking.roomSqft} sqft</p>
                         <p><strong>Room Details:</strong> {booking.roomDetails}</p>
                         <p>
-                            <strong>Design Cost Estimate:</strong> ${booking ? booking.costEstimate : ''}
+                            <strong>Design Cost Estimate:</strong> Rs. {booking ? booking.costEstimate : ''}
                             <button onClick={() => setShowQuotationInput(!showQuotationInput)} className="inline-button">
                                 {booking ? (booking.costEstimate ? "Edit Quotation" : "Add Quotation") : ''}
                             </button>
@@ -262,7 +263,7 @@ const ViewBookingsById = () => {
                         </button>
                     )}
                 </div>
-  {showEditForm && (
+                {showEditForm && (
                     <div className="view-booking-section">
                         <h3>Edit Design</h3>
                         <form onSubmit={handleEditDesignSubmit}>
@@ -305,7 +306,7 @@ const ViewBookingsById = () => {
                         </form>
                     </div>
                 )}
-                  {showSubmitForm && (
+                {showSubmitForm && (
                     <div className="view-booking-section">
                         <h3>Submit Final Design</h3>
                         <form onSubmit={handleFinalDesignSubmit}>
@@ -332,6 +333,16 @@ const ViewBookingsById = () => {
                                 <button type="button" onClick={handleAddFinalDesignField} className="add-image-button">
                                     + Add more
                                 </button>
+                            </div>
+                            <div className="form-group">
+
+                                <label htmlFor="final3DPreview">3D Visualization (Iframe Code):</label>
+                                <textarea
+                                    id="final3DPreview"
+                                    value={final3DPreview}
+                                    onChange={(e) => setFinal3DPreview(e.target.value)}
+                                    className="final-design-textarea"
+                                />
                             </div>
 
                             <button type="submit" className="submit-design-button">Submit Designs</button>

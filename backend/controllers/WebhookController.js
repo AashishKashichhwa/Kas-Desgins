@@ -1,52 +1,8 @@
 import Stripe from 'stripe';
 import Booking from '../models/Booking.js';
-import {performPaymentUpdate} from './BookingController.js'
+import { createNotification } from './NotificationController.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-// const fulfillOrder = async (session) => {
-//     console.log('Fulfilling order for session:', session.id);
-
-//     try {
-//         const bookingId = session.metadata.booking_id;
-
-//         // Check if the booking has already been processed for this payment intent
-//         const existingBooking = await Booking.findOne({
-//             _id: bookingId,
-//             stripePaymentId: session.payment_intent,
-//         });
-
-//         if (existingBooking) {
-//             console.log(`Booking ${bookingId} already processed for payment intent ${session.payment_intent}. Skipping.`);
-//             return existingBooking; // Or return null, depending on your logic
-//         }
-
-//         const booking = await Booking.findOneAndUpdate(
-//             { _id: bookingId },
-//             {
-//                 paymentStatus: 'Paid',
-//                 costApproval: 'Approved',
-//                 status: 'Designing',
-//                 paymentDate: new Date(),
-//                 stripePaymentId: session.payment_intent,
-//             },
-//             { new: true }
-//         );
-
-//         if (!booking) {
-//             console.error('Booking not found:', bookingId);
-//             return;
-//         }
-
-//         console.log(`Booking ${booking._id} updated successfully`);
-//         return booking;
-//     } catch (error) {
-//         console.error('Error fulfilling order:', error);
-//         throw error;
-//     }
-// };
-
-
 
 export const stripeWebhook = async (req, res) => {
     const sig = req.headers['stripe-signature'];
@@ -90,6 +46,24 @@ export const stripeWebhook = async (req, res) => {
                     console.error('Booking not found during update:', bookingId);
                     return res.status(404).json({ error: 'Booking not found' });
                 }
+                // Send notification to admin
+                await createNotification(
+                    null,
+                    'admin', // role: 'admin' - Target all admins
+                    bookingId,
+                    'payment_received',
+                    `Payment received for booking ${booking.projectName} from ${booking.name}. Design work can now begin.`
+                );
+
+                // Send notification to user
+                await createNotification(
+                    booking.userId,
+                    null,
+                    bookingId,
+                    'payment_confirmation',
+                    `Your payment for booking ${booking.projectName} has been received. Our design team is now working on your project.`
+                );
+
 
                 console.log('Booking updated:', updatedBooking);
                 return res.status(200).json({ received: true });
@@ -104,5 +78,5 @@ export const stripeWebhook = async (req, res) => {
         return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
-    res.status(200).json({ received: true });
+    res.status(200).json({ received: true })
 };
