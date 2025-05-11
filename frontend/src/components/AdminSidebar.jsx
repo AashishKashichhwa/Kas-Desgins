@@ -1,5 +1,3 @@
-// src/component/AdminSideBar.jsx
-
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,6 +5,8 @@ import { toast } from 'react-hot-toast';
 import '../assets/styles/Sidebar.css';
 import { post } from '../services/ApiEndpoint';
 import { Logout } from '../redux/AuthSlice';
+import { persistor } from '../redux/Store'; // Import the persistor
+import { clearNotifications } from '../redux/notificationsSlice'; // Import clearNotifications
 
 const AdminSidebar = () => {
     const navigate = useNavigate();
@@ -26,12 +26,25 @@ const AdminSidebar = () => {
         try {
             const request = await post('/api/auth/logout');
             if (request.status === 200) {
-                dispatch(Logout());
-                toast.success(request.data.message);
-                navigate('/login');
+                // Clear persisted state and dispatch logout actions
+                persistor.purge()
+                    .then(() => {
+                        dispatch(clearNotifications()); // Dispatch the action
+                        dispatch(Logout());
+                        toast.success(request.data.message);
+                        navigate('/login');
+                    })
+                    .catch((error) => {
+                        console.error("Error purging persisted state:", error);
+                        toast.error("Logout failed. Please try again.");
+                    });
+            } else {
+                console.error("Logout API failed:", request.status);
+                toast.error("Logout failed. Please try again.");
             }
         } catch (error) {
             console.log(error);
+            toast.error("Logout failed. Please try again.");
         }
     };
 

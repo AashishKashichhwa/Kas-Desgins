@@ -13,8 +13,7 @@ body {
     margin: 0px auto;
     margin-top: 20px;
     padding: 20px;
-    background-color: #000;
-    border: 1px solid #fff;
+    background-color: #282828;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
     color: #fff;
@@ -138,7 +137,7 @@ iframe {
     position: absolute;
 }
 
-.close-button {
+.close-button-prdouct {
     position: absolute;
     top: 30px;
     right: 300px;

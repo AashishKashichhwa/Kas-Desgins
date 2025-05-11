@@ -78,6 +78,8 @@ const getNotifications = async (req, res) => {
    }
 };
 
+// In both AdminNotification.jsx and UserNotifications.jsx, update the handleMarkAsRead function:
+
 const markAsRead = async (req, res) => {
     try {
         const { id } = req.params;
@@ -93,7 +95,6 @@ const markAsRead = async (req, res) => {
         res.status(500).json({ message: 'Error marking notification as read', error: error.message });
     }
 };
-
    const deleteNotification = async (req, res) => {
    try {
        const { id } = req.params;

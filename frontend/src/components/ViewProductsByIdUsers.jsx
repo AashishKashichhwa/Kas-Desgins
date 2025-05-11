@@ -52,13 +52,13 @@ const ViewProductsByIdUsers = () => {
         <div className="product-details-container">
             <div className="product-details-contents">
                                   {/* Cross Button */}
-            <button className="close-button" onClick={() => navigate('/products')}>×</button>
+            <button className="close-button-prdouct" onClick={() => navigate('/products')}>×</button>
                 <h2 className="product-detail-title">{product.name}</h2>
                 <div className="product-details-content">
                     <div className="product-info">
                         <p><strong>Description:</strong> {product.description}</p>
                         <p><strong>Category:</strong> {product.category}</p>
-                        {product.price && <p><strong>Price:</strong> ${product.price}</p>}
+                        {product.price && <p><strong>Price:</strong> Rs. {product.price}</p>}
                     </div>
 
                     {product.images && product.images.length > 0 ? (

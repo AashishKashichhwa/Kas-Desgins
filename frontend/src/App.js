@@ -3,7 +3,7 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import Projects from './pages/Projects';
 import Products from './pages/Products';
-import Contact from './pages/Contact';
+import Booking from './pages/Booking';
 import Home from './pages/Home';
 import About from './pages/About';
 import Login from './pages/Login';
@@ -31,7 +31,7 @@ import EditBooking from './components/EditBooking';
 import ViewProjectsById from './components/ViewProjectsById';
 import ViewProjectsByIdUsers from './components/ViewProjectsByIdUsers';
 import EditProjects from './components/EditProjects';
-import AddToCart from './pages/AddToCart';
+import Cart from './pages/Cart';
 import ViewBookings from './components/ViewBookings';
 import ViewBookingsUser from './components/ViewBookingsUser';
 import ViewBookingsById from './components/ViewBookingsById';
@@ -72,7 +72,7 @@ function AppContent({ user }) {
     const location = useLocation();
 
     useEffect(() => {
-        const publicPaths = ['/', '/login', '/contact', '/about', '/projects', '/products', '/services', '/register', '/cart'];
+        const publicPaths = ['/', '/login', '/booking', '/about', '/projects', '/products', '/services', '/register', '/cart'];
         const isProjectDetailPage = /^\/projects\/[^/]+$/.test(location.pathname);
         const isProductDetailPage = /^\/products\/[^/]+$/.test(location.pathname);
         const isPaymentSuccessOrFailed = location.pathname === '/paymentsuccess' || location.pathname === '/paymentfailed';
@@ -94,7 +94,7 @@ function AppContent({ user }) {
             <Route path="/" element={<PublicLayout />}>
                 <Route index element={<Home />} />
                 <Route path="login" element={<Login />} />
-                <Route path="contact" element={<Contact />} />
+                <Route path="booking" element={<Booking />} />
                 <Route path="about" element={<About />} />
                 <Route path="products" element={<Products />} />
                 <Route path="products/:id" element={<ViewProductsByIdUsers />} />
@@ -102,7 +102,7 @@ function AppContent({ user }) {
                 <Route path="projects/:id" element={<ViewProjectsByIdUsers />} />
                 <Route path="services" element={<Services />} />
                 <Route path="register" element={<Register />} />
-                <Route path="cart" element={<AddToCart />} />
+                <Route path="cart" element={<Cart />} />
             </Route>
 
             {/* New Route for Notifications */}

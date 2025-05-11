@@ -24,7 +24,7 @@ const ViewProductsUser = () => {
         try {
             await post('/api/cart', { productId });
             toast.success("Added to cart successfully");
-            navigate('/add-to-cart');
+            navigate('/cart');
         } catch (error) {
             console.error('Error adding to cart:', error);
             toast.error("Failed to add to cart");
