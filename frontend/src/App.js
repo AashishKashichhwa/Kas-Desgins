@@ -44,6 +44,7 @@ import PaymentFailed from './components/PaymentFailed';
 import AdminNotification from './components/AdminNotification';
 
 import Notifications from './pages/Notifications'; // Import the Notifications page
+import CartPaymentSuccess from './components/CartPaymentSuccess'
 
 function App() {
     const user = useSelector((state) => state.Auth.user);
@@ -76,7 +77,8 @@ function AppContent({ user }) {
         const isProjectDetailPage = /^\/projects\/[^/]+$/.test(location.pathname);
         const isProductDetailPage = /^\/products\/[^/]+$/.test(location.pathname);
         const isPaymentSuccessOrFailed = location.pathname === '/paymentsuccess' || location.pathname === '/paymentfailed';
-        const isPublic = publicPaths.includes(location.pathname) || isProjectDetailPage || isProductDetailPage || isPaymentSuccessOrFailed;
+        const isCartPaymentSuccessOrFailed = location.pathname === '/cartpaymentsuccess' 
+        const isPublic = publicPaths.includes(location.pathname) || isProjectDetailPage || isProductDetailPage || isPaymentSuccessOrFailed || isCartPaymentSuccessOrFailed;
 
         if (!user && !isPublic) {
             navigate('/login');
@@ -111,6 +113,7 @@ function AppContent({ user }) {
             <Route path="/paymentsuccess" element={<PaymentSuccess />} />
             <Route path="/paymentfailed" element={<PaymentFailed />} />
 
+            <Route path="/cartpaymentsuccess" element={<CartPaymentSuccess />} />
             <Route path="/userhome" element={<UserLayout />}>
                 <Route index element={<UserHome />} />
                 <Route path="bookings" element={<ViewBookingsUser />} />

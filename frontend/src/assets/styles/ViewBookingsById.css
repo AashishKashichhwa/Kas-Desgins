@@ -162,10 +162,10 @@ iframe {
 }
 
 /* Close Button */
-.close-button {
+.close-button-booking {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 30px;
+    right: 150px;
     background: none;
     border: none;
     font-size: 30px;
@@ -174,7 +174,7 @@ iframe {
     z-index: 10;
 }
 
-.close-button:hover {
+.close-button-booking:hover {
     color: #ff4d4d;
 }
 
@@ -258,12 +258,27 @@ iframe {
     padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
-    margin-left: 10px;
+    margin-left: 150px;
     font-size: 0.8em;
     vertical-align: middle;
 }
 
 .inline-button:hover {
+    background-color:  #0b6cd3;
+}
+.pay-now-button {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    vertical-align: middle;
+}
+
+.pay-now-button:hover {
     background-color:  #0b6cd3;
 }
 
@@ -335,7 +350,7 @@ iframe {
 /* Add it */
 .status-select {
     margin-top: 10px;
-    margin-left: 55%;
+    margin-left: 66%;
     border-radius: 4px;
     background-color: #333;
     color: #eee;
@@ -343,7 +358,7 @@ iframe {
 }
 .status-select-cost {
     margin-top: 10px;
-    margin-left: 49%;
+    margin-left: 74%;
     border-radius: 4px;
     background-color: #333;
     color: #eee;

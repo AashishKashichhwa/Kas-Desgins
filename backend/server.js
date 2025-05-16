@@ -16,6 +16,7 @@ import { fileURLToPath } from 'url';
 import Stripe from 'stripe';
 import { stripeWebhook } from './controllers/WebhookController.js';
 import dotenv from 'dotenv';
+import CartWebhookRoute from './routes/CartWebhookRoute.js'; 
 
 dotenv.config();
 
@@ -32,9 +33,12 @@ app.use(cors({
 
 // Stripe Webhook Route (MUST BE BEFORE express.json())
 app.use('/api/bookings/webhook', express.raw({ type: 'application/json' }));
+// app.use('/api/bookings/webhook', );
+app.use('/api/cart/cart-webhook', express.raw({ type: 'application/json' }), CartWebhookRoute);
 
 //ADD THIS
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -80,6 +84,7 @@ app.use('/api/cart', CartRoutes);
 app.use('/api/bookings', BookingRoutes);
 app.use('/api/notifications', NotificationRoutes); // Mount the notification routes
 app.use('/api', otherRoutes);
+
 
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

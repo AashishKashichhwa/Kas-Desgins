@@ -46,7 +46,7 @@ const AddToCart = () => {
     const handleCheckout = async () => {
         try {
             await checkout(cartItems);
-            toast.success("Checkout successful!");
+            toast.success("Forwading to payment!");
             setCartItems([]);
         } catch (error) {
             toast.error("Checkout failed");

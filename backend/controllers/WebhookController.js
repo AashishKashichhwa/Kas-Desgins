@@ -31,6 +31,7 @@ export const stripeWebhook = async (req, res) => {
                 console.log('Booking found:', booking);
 
                 // Now, update the booking
+                console.log('Attempting to update booking:', bookingId); // ADD THIS LINE
                 const updatedBooking = await Booking.findByIdAndUpdate(
                     bookingId,
                     {
@@ -46,6 +47,9 @@ export const stripeWebhook = async (req, res) => {
                     console.error('Booking not found during update:', bookingId);
                     return res.status(404).json({ error: 'Booking not found' });
                 }
+
+                console.log('Booking updated successfully:', updatedBooking); // ADD THIS LINE
+
                 // Send notification to admin
                 await createNotification(
                     null,
@@ -54,6 +58,7 @@ export const stripeWebhook = async (req, res) => {
                     'payment_received',
                     `Payment received for booking ${booking.projectName} from ${booking.name}. Design work can now begin.`
                 );
+                console.log('Admin notification sent'); // Add this line
 
                 // Send notification to user
                 await createNotification(
@@ -63,15 +68,19 @@ export const stripeWebhook = async (req, res) => {
                     'payment_confirmation',
                     `Your payment for booking ${booking.projectName} has been received. Our design team is now working on your project.`
                 );
+                console.log('User notification sent'); // Add this line
 
 
                 console.log('Booking updated:', updatedBooking);
+                console.log('Payment Successfully updated for booking Id: ', bookingId);
                 return res.status(200).json({ received: true });
 
             } catch (dbError) {
                 console.error('Database update error:', dbError);
                 return res.status(500).json({ error: 'Database update failed' });
             }
+        } else {
+            console.log('Event type is not checkout.session.completed'); // ADD THIS LINE
         }
     } catch (err) {
         console.error('Error handling webhook:', err);

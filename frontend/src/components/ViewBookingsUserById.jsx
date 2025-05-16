@@ -272,7 +272,7 @@ const ViewBookingsUserById = () => {
     return (
         <div className="view-booking-details-container">
             <div className="view-booking-details-contents">
-                <button className="close-button" onClick={() => navigate('/user/bookings')}>×</button>
+                <button className="close-button-booking" onClick={() => navigate('/user/bookings')}>×</button>
                 <h2 className="booking-detail-title">Your Booking</h2>
 
                 <div className="info-container">

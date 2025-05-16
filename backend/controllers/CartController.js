@@ -61,20 +61,4 @@ export const updateCartItem = async (req, res) => {
   }
 };
 
-export const checkout = async (req, res) => {
-  try {
-    const userId = req.user._id;
-    const cartItems = await Cart.find({ userId });
-    const products = cartItems.map(item => ({
-      productId: item.productId,
-      quantity: item.quantity
-    }));
 
-    await Checkout.create({ userId, products });
-    await Cart.deleteMany({ userId });
-
-    res.json({ message: 'Checkout successful' });
-  } catch (err) {
-    res.status(500).json({ error: 'Checkout failed' });
-  }
-};

@@ -421,36 +421,6 @@ const verifyPayment = async (req, res) => {
     }
 };
 
-const performPaymentUpdate = async ({ id, paymentStatus, costApproval, status, paymentDate }) => {
-    console.log('Updating payment for booking ID:', id); // Add this
-
-    if (!['Paid', 'Unpaid'].includes(paymentStatus)) {
-        throw new Error('Invalid payment status');
-    }
-
-    const booking = await Booking.findByIdAndUpdate(
-        id,
-        { paymentStatus, costApproval, status, paymentDate },
-        { new: true, runValidators: true }
-    );
-
-    if (!booking) {
-        throw new Error('Booking not found');
-    }
-
-    console.log('Booking after payment update:', booking); // Add this
-    return booking;
-};
-
-const updatePayment = async (req, res) => {
-    try {
-        const booking = await performPaymentUpdate({ id: req.params.id, ...req.body });
-        res.json({ message: 'Payment Updated Successfully', booking });
-    } catch (error) {
-        console.error('Error updating payment status:', error);
-        res.status(500).json({ message: 'Error updating payment status', error: error.message });
-    }
-};
 
 
 
@@ -465,7 +435,5 @@ export {
     submitFinalDesign,
     editDesignById,
     updateCostApproval,
-    verifyPayment,
-    updatePayment,
-    performPaymentUpdate
+    verifyPayment
 };
