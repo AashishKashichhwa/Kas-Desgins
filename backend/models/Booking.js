@@ -5,6 +5,11 @@ const BookingSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    productId: {  // Add this field
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Products',  // Assuming your product model is named 'Products'
+        default: null,      // Optional:  Allow booking without selecting design product
+    },
     projectName: {
         type: String,
         required: true

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { get, post } from '../services/ApiEndpoint';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import '../assets/styles/ViewProducts.css';
+import '../assets/styles/ViewProductsUser.css'; // Use ViewProductsUser style for consistency
 
 const ViewProductsUser = () => {
     const [products, setProducts] = useState([]);
@@ -31,6 +31,10 @@ const ViewProductsUser = () => {
         }
     };
 
+    const handleAddToDesign = (productId) => {
+        console.log("Add to Design clicked for productId:", productId);
+        navigate(`/booking-form?productId=${productId}`);
+    };
     return (
         <div className="product-grid-container">
             {products.map(product => (
@@ -39,13 +43,14 @@ const ViewProductsUser = () => {
                     product={product}
                     onClick={handleProductClick}
                     onAddToCart={handleAddToCart}
+                    onAddToDesign={handleAddToDesign} // Pass the function
                 />
             ))}
         </div>
     );
 };
 
-const ProductCard = ({ product, onClick, onAddToCart }) => {
+const ProductCard = ({ product, onClick, onAddToCart, onAddToDesign }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
@@ -92,6 +97,12 @@ const ProductCard = ({ product, onClick, onAddToCart }) => {
                     onClick={() => onAddToCart(product._id)}
                 >
                     Add to Cart
+                </button>
+                <button
+                    className="design-button" // Added button
+                    onClick={() => onAddToDesign(product._id)} // Call the function
+                >
+                    Add to Design
                 </button>
             </div>
         </div>

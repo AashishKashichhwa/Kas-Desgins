@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+// frontend/src/components/BookingForm.jsx
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { instance } from '../services/ApiEndpoint'; // Import Axios instance <----- I used from what you used
-import { useNavigate } from 'react-router-dom';
+import { instance } from '../services/ApiEndpoint';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import '../assets/styles/Bookingform.css';
 
 const BookingForm = () => {
@@ -16,11 +17,33 @@ const BookingForm = () => {
         time: '',
         message: '',
         images: [],
+        productId: null, // Add productId to form data
     });
+    const [product, setProduct] = useState(null);  // State to hold product details
     const [formErrors, setFormErrors] = useState({});
     const navigate = useNavigate();
     const [imageFields, setImageFields] = useState([0]);
+    const [searchParams] = useSearchParams(); // Get URL parameters
     let currentId = 1;
+
+    const productIdFromURL = searchParams.get("productId");  // Get product ID from URL
+
+    useEffect(() => {
+        if (productIdFromURL) {
+            setFormData(prev => ({ ...prev, productId: productIdFromURL })); // set product id to form data
+            // Fetch product details based on productId
+            const fetchProduct = async () => {
+                try {
+                    const response = await instance.get(`/api/products/${productIdFromURL}`); // Replace with your actual API endpoint
+                    setProduct(response.data);
+                } catch (error) {
+                    console.error("Error fetching product:", error);
+                    toast.error("Failed to load product details");
+                }
+            };
+            fetchProduct();
+        }
+    }, [productIdFromURL]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -38,52 +61,60 @@ const BookingForm = () => {
         }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    // frontend/src/components/BookingForm.jsx
 
-        if (!validateForm()) return;
+const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        try {
-            const formDataToSend = new FormData();
+    if (!validateForm()) return;
 
-            // Append all form fields
-            formDataToSend.append('projectName', formData.projectName);
-            formDataToSend.append('roomType', formData.roomType);
-            formDataToSend.append('roomSqft', formData.roomSqft);
-            formDataToSend.append('roomDetails', formData.roomDetails);
-            formDataToSend.append('name', formData.name);
-            formDataToSend.append('phone', formData.phone);
-            formDataToSend.append('date', formData.date);
-            formDataToSend.append('time', formData.time);
-            formDataToSend.append('message', formData.message);
+    try {
+        const formDataToSend = new FormData();
 
-            // Append all images
-            formData.images.forEach(image => {
-                formDataToSend.append('images', image);
-            });
+        // Append all form fields
+        formDataToSend.append('projectName', formData.projectName);
+        formDataToSend.append('roomType', formData.roomType);
+        formDataToSend.append('roomSqft', formData.roomSqft);
+        formDataToSend.append('roomDetails', formData.roomDetails);
+        formDataToSend.append('name', formData.name);
+        formDataToSend.append('phone', formData.phone);
+        formDataToSend.append('date', formData.date);
+        formDataToSend.append('time', formData.time);
+        formDataToSend.append('message', formData.message);
 
-            // Debug: Log form data entries
-            for (let [key, value] of formDataToSend.entries()) {
-                console.log(key, value);
-            }
+        // Check if productId exists before appending   <---- NEW CODE START
+        if (formData.productId) {
+            formDataToSend.append('productId', formData.productId); // Include the productId
+        } // <---- NEW CODE END
+        console.log("FormData before sending:", formData);
 
-            // Make the API call
-            const res = await instance.post('/api/bookings', formDataToSend, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
+        // Append all images
+        formData.images.forEach(image => {
+            formDataToSend.append('images', image);
+        });
 
-            if (res.status === 201) {
-                toast.success('Booking submitted successfully!');
-                navigate('/my-bookings');
-            }
-        } catch (error) {
-            console.error('Booking submission error:', error);
-            toast.error(error.response?.data?.message || 'Failed to submit booking');
+        // Debug: Log form data entries
+        for (let [key, value] of formDataToSend.entries()) {
+            console.log(key, value);
         }
-    };
+
+        // Make the API call
+        const res = await instance.post('/api/bookings', formDataToSend, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+
+        if (res.status === 201) {
+            toast.success('Booking submitted successfully!');
+            navigate('/my-bookings');
+        }
+    } catch (error) {
+        console.error('Booking submission error:', error);
+        toast.error(error.response?.data?.message || 'Failed to submit booking');
+    }
+};
 
     const validateForm = () => {
         let errors = {};
@@ -115,7 +146,9 @@ const BookingForm = () => {
             time: '',
             message: '',
             images: [],
+            productId: null, // Reset product ID
         });
+        setProduct(null); // Clear product details
         setFormErrors({});
     };
 
@@ -139,6 +172,33 @@ const BookingForm = () => {
         <div className="booking-form-container">
             {/* <button className="closebutton" onClick={() => navigate('/')}>×</button> */}
             <form onSubmit={handleSubmit} className="booking-form">
+
+                {/* Selected Product Section */}
+                {product && (
+                    <fieldset className="form-section-products">
+                        <legend>Selected Design Product</legend>
+                        <div className="selected-product">
+                            {product.images && product.images.length > 0 ? (
+                                <img
+                                    src={`http://localhost:4000${product.images[0]}`}
+                                    alt={product.name}
+                                    className="selected-product-image"
+                                />
+                            ) : product.image ? (
+                                <img
+                                    src={`http://localhost:4000${product.image}`}
+                                    alt={product.name}
+                                    className="selected-product-image"
+                                />
+                            ) : (
+                                <div className="product-image-placeholder">No Image</div>
+                            )}
+                            <p className="selected-product-name">{product.name}</p>
+                            <p className="selected-product-name">{product.category}</p>
+                        </div>
+                    </fieldset>
+                )}
+
                 <h2 className="booking-form-title">Submit a Booking Request</h2>
 
                 <fieldset className="form-section">

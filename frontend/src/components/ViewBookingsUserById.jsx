@@ -24,6 +24,7 @@ const ViewBookingsUserById = () => {
     const navigate = useNavigate();
     const [paymentVerificationLoading, setPaymentVerificationLoading] = useState(false);
     const [designApprovalButtonText, setDesignApprovalButtonText] = useState('Approve Design/Request Redesign');
+    const [product, setProduct] = useState(null);
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -50,6 +51,18 @@ const ViewBookingsUserById = () => {
                     }
                 });
                 setBooking(res.data);
+
+                // Fetch product details if productId is available  <---- NEW CODE START
+                if (res.data.productId) {
+                    try {
+                        const productRes = await instance.get(`/api/products/${res.data.productId}`);
+                        setProduct(productRes.data);
+                    } catch (productErr) {
+                        console.error('Error fetching product details:', productErr);
+                        toast.error('Failed to load product details');
+                    }
+                } // <---- NEW CODE END
+
                 // Show payment button only if cost is approved but not paid yet
                 setShowPaymentButton(
                     res.data.costApproval === 'Pending' &&
@@ -392,6 +405,32 @@ const ViewBookingsUserById = () => {
                         />
                         <button onClick={handleRedesignSubmit} className="inline-button">Submit Redesign Request</button>
                     </div>
+                )}
+
+                {/* Selected Product Section */}
+                {product && (
+                    <fieldset className="form-section-products-view">
+                        <h3>Selected Design Product</h3>
+                        <div className="selected-product-view">
+                            {product.images && product.images.length > 0 ? (
+                                <img
+                                    src={`http://localhost:4000${product.images[0]}`}
+                                    alt={product.name}
+                                    className="selected-product-image-view"
+                                />
+                            ) : product.image ? (
+                                <img
+                                    src={`http://localhost:4000${product.image}`}
+                                    alt={product.name}
+                                    className="selected-product-image-view"
+                                />
+                            ) : (
+                                <div className="product-image-placeholder-view">No Image</div>
+                            )}
+                            <p className="selected-product-name-view">{product.name}</p>
+                            <p className="selected-product-name-view">{product.category}</p>
+                        </div>
+                    </fieldset>
                 )}
 
                 {/* Room Image Gallery */}

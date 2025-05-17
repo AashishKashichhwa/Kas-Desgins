@@ -45,7 +45,7 @@ import AdminNotification from './components/AdminNotification';
 
 import Notifications from './pages/Notifications'; // Import the Notifications page
 import CartPaymentSuccess from './components/CartPaymentSuccess'
-
+import BookingForm from './components/BookingForm';
 function App() {
     const user = useSelector((state) => state.Auth.user);
     const dispatch = useDispatch();
@@ -73,7 +73,7 @@ function AppContent({ user }) {
     const location = useLocation();
 
     useEffect(() => {
-        const publicPaths = ['/', '/login', '/booking', '/about', '/projects', '/products', '/services', '/register', '/cart'];
+        const publicPaths = ['/', '/login', '/booking', '/about', '/projects', '/products', '/services', '/register', '/cart', '/booking-form'];
         const isProjectDetailPage = /^\/projects\/[^/]+$/.test(location.pathname);
         const isProductDetailPage = /^\/products\/[^/]+$/.test(location.pathname);
         const isPaymentSuccessOrFailed = location.pathname === '/paymentsuccess' || location.pathname === '/paymentfailed';
@@ -105,6 +105,7 @@ function AppContent({ user }) {
                 <Route path="services" element={<Services />} />
                 <Route path="register" element={<Register />} />
                 <Route path="cart" element={<Cart />} />
+                <Route path="booking-form" element={<BookingForm />} />
             </Route>
 
             {/* New Route for Notifications */}

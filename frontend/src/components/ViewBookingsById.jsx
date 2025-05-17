@@ -20,6 +20,7 @@ const ViewBookingsById = () => {
     const [showQuotationInput, setShowQuotationInput] = useState(false);
     const [quotationInput, setQuotationInput] = useState('');
     const navigate = useNavigate();
+    const [product, setProduct] = useState(null);
 
     useEffect(() => {
         const fetchBooking = async () => {
@@ -35,6 +36,17 @@ const ViewBookingsById = () => {
                 setStatus(res.data.status);
                 setFinal3DPreview(res.data.final3DPreview || '');
                 setQuotationInput(res.data.costEstimate || '');
+
+                 // Fetch product details if productId is available     <---- NEW CODE START
+                 if (res.data.productId) {
+                    try {
+                        const productRes = await instance.get(`/api/products/${res.data.productId}`);
+                        setProduct(productRes.data);
+                    } catch (productErr) {
+                        console.error('Error fetching product details:', productErr);
+                        toast.error('Failed to load product details');
+                    }
+                }  // <---- NEW CODE END
             } catch (err) {
                 console.error("Error fetching booking by ID:", err);
                 setError("Failed to load booking details.");
@@ -349,6 +361,34 @@ const ViewBookingsById = () => {
                         </form>
                     </div>
                 )}
+
+
+                {/* Selected Product Section */}
+                {product && (
+                    <fieldset className="form-section-products-view">
+                        <h3>Selected Design Product</h3>
+                        <div className="selected-product-view">
+                            {product.images && product.images.length > 0 ? (
+                                <img
+                                    src={`http://localhost:4000${product.images[0]}`}
+                                    alt={product.name}
+                                    className="selected-product-image-view"
+                                />
+                            ) : product.image ? (
+                                <img
+                                    src={`http://localhost:4000${product.image}`}
+                                    alt={product.name}
+                                    className="selected-product-image-view"
+                                />
+                            ) : (
+                                <div className="product-image-placeholder-view">No Image</div>
+                            )}
+                            <p className="selected-product-name-view">{product.name}</p>
+                            <p className="selected-product-name-view">{product.category}</p>
+                        </div>
+                    </fieldset>
+                )}
+
                 {/* Room Image */}
                 <div className="view-booking-section">
                     <h3>Room Image</h3>

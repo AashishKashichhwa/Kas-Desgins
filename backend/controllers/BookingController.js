@@ -16,13 +16,30 @@ const addBooking = async (req, res) => {
     try {
         console.log('Request files:', req.files); // Debug file uploads
 
-        const { projectName, roomType, roomSqft, roomDetails, name, phone, date, time, message } = req.body;
+        console.log("Request Body:", req.body); // Add this line for backend debug
+        console.log("Type of Product ID", typeof (req.body.productId)); //Checking for string or objectId
 
-        // Process uploaded files
+        const { productId, projectName, roomType, roomSqft, roomDetails, name, phone, date, time, message } = req.body;
         const imagePaths = req.files?.map(file => `/uploads/${file.filename}`) || [];
+
+        // Check if productId is valid and not an empty string
+        let productIdValue = null;
+        if (productId && productId !== "null") {
+            try {
+                productIdValue = mongoose.Types.ObjectId(productId);
+            } catch (error) {
+                console.error("Invalid ProductId", error)
+                return res.status(400).json({
+                    success: false,
+                    message: 'Failed to create booking',
+                    error: "Invalid Product Id"
+                });
+            }
+        }
 
         const newBooking = new Booking({
             userId: req.user._id,
+            productId: productIdValue, // Add this line
             projectName,
             roomType,
             roomSqft,
