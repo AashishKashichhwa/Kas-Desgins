@@ -216,7 +216,7 @@ const handleSubmit = async (e) => {
                         {formErrors.projectName && <span className="error">{formErrors.projectName}</span>}
                     </div>
                     <div className="booking-form-group">
-                        <label htmlFor="roomType">Room Type:</label>
+                        <label htmlFor="roomType">Space Type:(Kitchen, Living Room)</label>
                         <input
                             type="text"
                             id="roomType"
@@ -228,7 +228,7 @@ const handleSubmit = async (e) => {
                         {formErrors.roomType && <span className="error">{formErrors.roomType}</span>}
                     </div>
                     <div className="booking-form-group">
-                        <label htmlFor="roomSqft">Room Sqft:</label>
+                        <label htmlFor="roomSqft">Room Area (Sqft):</label>
                         <input
                             type="text"
                             id="roomSqft"
@@ -240,7 +240,7 @@ const handleSubmit = async (e) => {
                         {formErrors.roomSqft && <span className="error">{formErrors.roomSqft}</span>}
                     </div>
                     <div className="booking-form-group">
-                        <label htmlFor="roomDetails">Room Details:</label>
+                        <label htmlFor="roomDetails">Room Details:(length, breadth and others)</label>
                         <textarea
                             id="roomDetails"
                             name="roomDetails"
@@ -252,7 +252,7 @@ const handleSubmit = async (e) => {
                     </div>
 
                     <div className="booking-form-group">
-                        <label>Room Images:</label>
+                        <label>Undesigned Space Images:</label>
                         {imageFields.map((fieldId) => (
                             <div key={fieldId} className="image-input-container">
                                 <input
@@ -305,7 +305,7 @@ const handleSubmit = async (e) => {
                         {formErrors.phone && <span className="error">{formErrors.phone}</span>}
                     </div>
                     <div className="booking-form-group">
-                        <label htmlFor="date">Date:</label>
+                        <label htmlFor="date">Estimated Design Date:</label>
                         <input
                             type="date"
                             id="date"
@@ -317,7 +317,7 @@ const handleSubmit = async (e) => {
                         {formErrors.date && <span className="error">{formErrors.date}</span>}
                     </div>
                     <div className="booking-form-group">
-                        <label htmlFor="time">Time:</label>
+                        <label htmlFor="time">Estimated Approval Time:</label>
                         <input
                             type="time"
                             id="time"
@@ -329,7 +329,7 @@ const handleSubmit = async (e) => {
                         {formErrors.time && <span className="error">{formErrors.time}</span>}
                     </div>
                     <div className="booking-form-group">
-                        <label htmlFor="message">Message:</label>
+                        <label htmlFor="message">Your design listing and opinions:</label>
                         <textarea
                             id="message"
                             name="message"

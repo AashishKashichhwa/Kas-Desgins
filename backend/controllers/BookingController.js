@@ -11,6 +11,7 @@ import { createNotification } from './NotificationController.js';
 
 // backend/controllers/BookingController.js
 import User from '../models/User.js'; // Import your User model
+import mongoose from 'mongoose';
 
 const addBooking = async (req, res) => {
     try {
@@ -26,7 +27,7 @@ const addBooking = async (req, res) => {
         let productIdValue = null;
         if (productId && productId !== "null") {
             try {
-                productIdValue = mongoose.Types.ObjectId(productId);
+                productIdValue = new mongoose.Types.ObjectId(productId);
             } catch (error) {
                 console.error("Invalid ProductId", error)
                 return res.status(400).json({
