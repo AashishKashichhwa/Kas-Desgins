@@ -23,10 +23,13 @@ import {
         deleteProductsById
     } from '../controllers/ProductController.js';
 
+import {getAllCheckouts, getCheckoutsByUser} from '../controllers/cartCheckoutController.js';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs'; // Import the fs module
+import { isUser, isAdmin } from '../middlewares/VerifyToken.js';
+import Checkout from '../models/Checkout.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -71,6 +74,23 @@ router.post('/products/add', upload.array('images', 10), addProducts);
 router.get('/products/:id', getProductById);
 router.put('/products/:id', upload.array('images', 10), updateProductsById);
 router.delete('/products/:id', deleteProductsById);
+
+router.get('/admin/checkouts', getAllCheckouts); // Admin only
+router.get('/userhome/checkouts', isUser, getCheckoutsByUser); // User only
+
+router.get('/checkouts', async (req, res) => {
+    try {
+        const checkouts = await Checkout.find();
+
+        res.status(200).json(checkouts);
+    } catch (error) {
+        console.error('❌ Error in GET /api/checkouts:', error); // ✅ full error log
+        res.status(500).json({
+            message: 'Error fetching checkout data',
+            error: error.message || error.toString()
+        });
+    }
+});
 
 
 export default router;

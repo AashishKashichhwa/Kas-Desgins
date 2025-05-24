@@ -18,6 +18,8 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [unreadCount, setUnreadCount] = useState(0);
+  const [showDropdown, setShowDropdown] = useState(false);
+
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -124,10 +126,24 @@ const Navbar = () => {
                 />
                 {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
               </div>
-              <div className='loggedData'>
-                <Link to="/" className="logoutBtn" onClick={handleLogout}>Logout</Link>
-                <span className="welcome-text">{user.name}</span>
+              <div className="loggedData">
+                <div className="user-dropdown">
+                  <span
+                    className="welcome-text"
+                    onClick={() => setShowDropdown(!showDropdown)}
+                  >
+                    {user.name}
+                  </span>
+                  {showDropdown && (
+                    <div className="dropdown-menu">
+                      {/* <Link to="/userhome/profile">Edit Profile</Link> */}
+                      <Link to="/userhome/myorders">View Orders</Link> {/* Navigates to ViewOrderUser.jsx */}
+                      <span className="logoutBtn" onClick={handleLogout}>Logout</span>
+                    </div>
+                  )}
+                </div>
               </div>
+
             </div>
 
           ) : (

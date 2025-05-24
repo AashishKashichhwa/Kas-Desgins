@@ -2,6 +2,8 @@
 import Stripe from 'stripe';
 import dotenv from 'dotenv';
 import Checkout from '../models/Checkout.js';
+import User from '../models/User.js'; 
+import Products from '../models/Products.js';
 
 dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -74,4 +76,41 @@ const getCheckoutBySessionId = async (req, res) => {
     }
 };
 
-export { createCartCheckoutSession, getCheckoutBySessionId };
+
+// Get all checkouts (ADMIN ONLY)
+const getAllCheckouts = async (req, res) => {
+    try {
+        const checkouts = await Checkout.find()
+            .populate('userId', 'name email') // Ensure your User schema uses 'name', not 'username'
+            .populate('products.productId', 'name price');
+
+        res.status(200).json(checkouts);
+    } catch (error) {
+        console.error("Error fetching all checkouts:", error);
+        res.status(500).json({ message: "Failed to fetch checkouts" });
+    }
+};
+
+const getCheckoutsByUser = async (req, res) => {
+    try {
+        const userId = req.user?.id || req.query.userId;
+
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID missing' });
+        }
+
+        const checkouts = await Checkout.find({ userId })
+            .populate('userId', 'name email')
+            .populate('products.productId', 'name price');
+
+        res.status(200).json(checkouts);
+    } catch (error) {
+        console.error("Error fetching user checkouts:", error);
+        res.status(500).json({ message: "Failed to fetch user checkouts" });
+    }
+};
+
+
+
+
+export { createCartCheckoutSession, getCheckoutBySessionId, getAllCheckouts, getCheckoutsByUser };

@@ -46,6 +46,9 @@ import AdminNotification from './components/AdminNotification';
 import Notifications from './pages/Notifications'; // Import the Notifications page
 import CartPaymentSuccess from './components/CartPaymentSuccess'
 import BookingForm from './components/BookingForm';
+
+import ViewOrder from './components/ViewOrder';
+import ViewOrderUser from './components/ViewOrderUser';
 function App() {
     const user = useSelector((state) => state.Auth.user);
     const dispatch = useDispatch();
@@ -121,6 +124,7 @@ function AppContent({ user }) {
                 <Route path="bookings/:id" element={<ViewBookingsUserById />} />
                 <Route path="edit-booking/:id" element={<EditBookingUser />} />
                 <Route path="notifications" element={<Notifications />} /> {/* User Notifications */}
+                <Route path="myorders" element={<ViewOrderUser />} />
             </Route>
 
             <Route path="/admin" element={<AdminHome />} />
@@ -141,6 +145,8 @@ function AppContent({ user }) {
             <Route path="/admin/edit-project/:id" element={<EditProjects />} />
             <Route path="/admin/edituser/:id" element={<EditUser />} />
             <Route path="/admin/notifications" element={<AdminNotification />} /> {/* Admin Notifications */}
+            <Route path="/admin/orders" element={<ViewOrder />} /> 
+
         </Routes>
     );
 }

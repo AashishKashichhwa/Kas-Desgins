@@ -105,6 +105,17 @@ const AdminSidebar = () => {
                         Manage Products
                     </NavLink>
                 </li>
+
+                                {/* ADD THIS ORDER LINK */}
+                                <li className="sidebar-item">
+                    <NavLink
+                        to="/admin/orders" // Route to ViewOrder.jsx
+                        className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
+                    >
+                        View Orders
+                    </NavLink>
+                </li>
+
                 <li className="sidebar-item">
                     <button onClick={handleLogout} className="sidebar-link logout-button">
                         Logout
