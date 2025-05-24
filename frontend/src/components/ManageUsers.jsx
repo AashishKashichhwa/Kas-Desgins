@@ -71,7 +71,7 @@ const ManageUsers = () => {
                                         <td>{elem.email}</td>
                                         <td>{elem.role}</td>
                                         <td class="action">
-                                            <Link to={`/admin/edituser/${elem._id}`} className="edit-button">Edit</Link> {/* Added Edit Button */}
+                                            <Link to={`/admin/edituser/${elem._id}`} className="edit-button-user">Edit</Link> {/* Added Edit Button */}
                                             <button className='deleteBtn' onClick={() => handleDelete(elem._id)}>Delete</button>
                                         </td>
                                     </tr>

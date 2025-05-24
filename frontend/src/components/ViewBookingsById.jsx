@@ -255,7 +255,7 @@ const ViewBookingsById = () => {
                     <div className="info-column">
                         <h3>Customer Contact Information</h3>
                         <p><strong>Name:</strong> {booking.name}</p>
-                        <p><strong>Phone Number:</strong> {booking.phoneNumber}</p>
+                        <p><strong>Phone Number:</strong> {booking.phone}</p>
                         <p><strong>Date:</strong> {new Date(booking.date).toLocaleDateString()}</p>
                         <p><strong>Time:</strong> {booking.time}</p>
                         <p><strong>Message:</strong> {booking.message}</p>

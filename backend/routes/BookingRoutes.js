@@ -46,7 +46,7 @@ router.get('/user', isUser, getBookingsUser);
 router.get('/',isAdmin, getBookings);
 router.post('/', isUser, upload.array('images', 10), addBooking);
 router.get('/:id', getBookingById);
-router.put('/:id', isUser, upload.array('images', 10), updateBookingById); //Ensure User is logged in before updating
+router.put('/:id', upload.array('images', 10), updateBookingById); //Ensure User is logged in before updating
 router.delete('/:id', deleteBookingById);
 router.put('/:id/send-quotation', isAdmin, sendQuotation);
 router.put('/:id/submit-design', isAdmin, upload.array('finalDesignImages', 10), submitFinalDesign);

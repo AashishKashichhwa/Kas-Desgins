@@ -108,7 +108,7 @@ const handleSubmit = async (e) => {
 
         if (res.status === 201) {
             toast.success('Booking submitted successfully!');
-            navigate('/my-bookings');
+            navigate('/booking');
         }
     } catch (error) {
         console.error('Booking submission error:', error);

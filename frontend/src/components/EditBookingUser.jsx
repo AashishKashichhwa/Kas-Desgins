@@ -14,7 +14,7 @@ const EditBookingUser = () => {
     const [existingImages, setExistingImages] = useState([]);
     const [imageFields, setImageFields] = useState([0]);
     const [name, setName] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [phone, setPhoneNumber] = useState('');
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [message, setMessage] = useState('');
@@ -33,7 +33,7 @@ const EditBookingUser = () => {
                     setRoomSqft(data.roomSqft || '');
                     setRoomDetails(data.roomDetails || '');
                     setName(data.name || '');
-                    setPhoneNumber(data.phoneNumber || '');
+                    setPhoneNumber(data.phone || '');
                     setDate(data.date ? data.date.split('T')[0] : ''); // Fix for date format
                     setTime(data.time || '');
                     setMessage(data.message || '');
@@ -62,7 +62,7 @@ const EditBookingUser = () => {
             formData.append('roomSqft', roomSqft);
             formData.append('roomDetails', roomDetails);
             formData.append('name', name);
-            formData.append('phoneNumber', phoneNumber);
+            formData.append('phoneNumber', phone);
             formData.append('date', date);
             formData.append('time', time);
             formData.append('message', message);
@@ -172,11 +172,11 @@ const EditBookingUser = () => {
                         <label>Phone Number:</label>
                         <input
                             type="tel"
-                            value={phoneNumber}
+                            value={phone}
                             onChange={(e) => setPhoneNumber(e.target.value)}
                             required
-                            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" // Example pattern (adjust for your needs)
-                            placeholder="123-456-7890"
+                            pattern="[0-9]{10}"// Example pattern (adjust for your needs)
+                            placeholder="9876543210"
                             style={{ color: '#ffffff'}} 
                         />
                     </div>

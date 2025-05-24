@@ -8,6 +8,7 @@
   border: 1px solid #333; /* Darker border */
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Darker shadow */
+  min-height: 500px;
 }
 
 .cart-container h2 {

@@ -58,7 +58,7 @@ const ViewProductsById = () => {
                     <div className="product-info">
                         <p><strong>Description:</strong> {product.description}</p>
                         <p><strong>Category:</strong> {product.category}</p>
-                        {product.price && <p><strong>Price:</strong> ${product.price}</p>}
+                        {product.price && <p><strong>Price:</strong> Rs. {product.price}</p>}
                     </div>
 
                     {product.images && product.images.length > 0 ? (

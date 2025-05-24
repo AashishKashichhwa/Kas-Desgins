@@ -77,7 +77,7 @@ const BookingCard = ({ booking, handleDelete, onClick }) => {
     return (
         <div className="project-card">
             <div className="project-actions">
-                <Link to={`/admin/edit-booking/${booking._id}`} className="edit-button">Edit</Link>
+                {/* <Link to={`/admin/edit-booking/${booking._id}`} className="edit-button">Edit</Link> */}
                 <button onClick={() => handleDelete(booking._id)} className="delete-button">Delete</button>
             </div>
 

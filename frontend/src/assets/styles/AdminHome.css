@@ -149,6 +149,23 @@
 .edit-button:hover {
   background-color: #0056b3;
 }
+.edit-button-user {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 5px;
+}
+
+.edit-button-user:hover {
+  background-color: #0056b3;
+}
 
 .deleteBtn {
   background-color: #dc3545; /* Bootstrap's red color */

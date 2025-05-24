@@ -71,6 +71,7 @@
     gap: 20px; /* Space between items */
     padding: 20px;
     justify-items: center; /* Center items horizontally */
+    min-height:500px ;
 }
 
 .project-grid-container .project-card {
